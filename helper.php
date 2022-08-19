@@ -150,11 +150,9 @@ if (!function_exists('clientPhoneNumber')) {
 
         $value = trim(str_replace(['(', ')', ' ', '-', '.', '+'], '', $value));
 
-        if (strlen($value) >= 10) {
-            $phone  = explode('.', $client->phonenumber);
-            $ddi    = str_replace(['+', ' '], '', $phone[0]);
-            $value = $ddi . $value;
-        }
+        $phone = explode('.', $client->phonenumber);
+        $ddi   = str_replace(['+', ' '], '', $phone[0]);
+        $value = $ddi . $value;
 
         return $value;
     }

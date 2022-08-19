@@ -19,7 +19,7 @@ function zapme_config(): array
     return [
         'name'        => 'ZapMe',
         'description' => 'Módulo da ZapMe para o sistema WHMCS.',
-        'version'     => '2.0.4',
+        'version'     => '2.0.5',
         'language'    => 'portuguese-br',
         'author'      => 'ZapMe'
     ];
