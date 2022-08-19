@@ -1,5 +1,5 @@
 {
-    "name": "zapmeteam/whmcs",
+    "name": "zapmeteam/whmcs-module",
     "description": "The ZapMe WHMCS Module",
     "type": "library",
     "license": "MIT",
@@ -21,7 +21,7 @@
     "authors": [
         {
             "name": "ZapMe",
-            "email": "dev@zapme.com.br"
+            "email": "contato@zapme.com.br"
         }
     ],
     "minimum-stability": "dev"
