@@ -3,7 +3,6 @@
 require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . '/helper.php';
 
-use Exception;
 use WHMCS\User\Client;
 use WHMCS\Database\Capsule;
 use ZapMeTeam\Whmcs\ZapMeModule;
@@ -11,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 if (!defined('WHMCS')) {
-    die('Denied access');
+    die;
 }
 
 function zapme_config(): array
@@ -19,7 +18,7 @@ function zapme_config(): array
     return [
         'name'        => 'ZapMe',
         'description' => 'Módulo da ZapMe para o sistema WHMCS.',
-        'version'     => '2.0.5',
+        'version'     => '2.1.0',
         'language'    => 'portuguese-br',
         'author'      => 'ZapMe'
     ];
@@ -27,55 +26,51 @@ function zapme_config(): array
 
 function zapme_activate(): array
 {
-    if (phpversion() < 7.3) {
+    if (($phpVersion = phpversion()) < 7.4) {
         return [
-            'status' => 'error',
-            'description' => 'O módulo não foi ativado: versão do PHP é incompatível (desejado: 7.3+)'
+            'status'      => 'error',
+            'description' => "PHP {$phpVersion} Incompatível. Versão Desejada: 7.4+"
         ];
     }
 
     try {
 
-        $now = date('Y-m-d H:i:s');
-
-        Capsule::schema()->dropIfExists('mod_zapme');
-        Capsule::schema()->dropIfExists('mod_zapme_templates');
-        Capsule::schema()->dropIfExists('mod_zapme_logs');
-
+        $now    = date('Y-m-d H:i:s');
         $schema = Capsule::schema();
 
+        $schema->dropIfExists('mod_zapme');
+        $schema->dropIfExists('mod_zapme_templates');
+        $schema->dropIfExists('mod_zapme_logs');
+
         $schema->create('mod_zapme', function ($table) {
-            $table->increments('id');
-            $table->longText('api');
-            $table->longText('secret');
-            $table->boolean('status')->default(0);
-            $table->boolean('logsystem')->default(1);
-            $table->boolean('logautoremove')->default(0);
-            $table->integer('clientconsentfieldid')->default(0);
-            $table->integer('clientphonefieldid')->default(0);
-            $table->text('service')->nullable();
-            $table->text('created_at');
-            $table->text('updated_at');
+            $table->id();
+            $table->string('api');
+            $table->string('secret');
+            $table->boolean('is_active')->default(false);
+            $table->boolean('log_system')->default(false);
+            $table->boolean('log_auto_remove')->default(false);
+            $table->unsignedInteger('client_consent_field_id')->nullable();
+            $table->unsignedInteger('client_phone_field_id')->nullable();
+            $table->text('account_status')->nullable();
+            $table->timestamps();
         });
 
         $schema->create('mod_zapme_templates', function ($table) {
-            $table->increments('id');
-            $table->text('code');
+            $table->id();
+            $table->string('code');
             $table->binary('message');
-            $table->boolean('allowconfiguration');
+            $table->boolean('is_active')->default(true);
+            $table->boolean('is_configurable')->default(true);
             $table->text('configurations')->nullable();
-            $table->boolean('status')->default(1);
-            $table->text('created_at');
-            $table->text('updated_at');
+            $table->timestamps();
         });
 
         $schema->create('mod_zapme_logs', function ($table) {
-            $table->increments('id');
-            $table->text('code');
-            $table->integer('clientid');
+            $table->id();
+            $table->string('code');
+            $table->unsignedInteger('client_id');
             $table->binary('message');
-            $table->text('created_at');
-            $table->text('updated_at');
+            $table->timestamps();
         });
 
         $templates = [
@@ -160,8 +155,8 @@ function zapme_activate(): array
                 $handler->table('mod_zapme_templates')->insert([
                     'code'               => $key,
                     'message'            => $value['text'],
-                    'allowconfiguration' => $value['configuration'],
-                    'status'             => 1,
+                    'is_configurable' => $value['configuration'],
+                    'is_active'             => 1,
                     'created_at'         => $now,
                     'updated_at'         => $now
                 ]);
