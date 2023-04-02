@@ -9,21 +9,21 @@ trait ShareableConstructor
      *
      * @var string
      */
-    private $url = 'https://api.zapme.com.br';
+    private string $url = 'https://api.zapme.com.br';
 
     /**
      * ZapMe API.
      *
      * @var string|null
      */
-    private $api = null;
+    private ?string $api = null;
 
     /**
      * ZapMe Secret Key.
      *
      * @var string|null
      */
-    private $secret = null;
+    private ?string $secret = null;
 
     public function __construct(string $url, string $api, string $secret)
     {

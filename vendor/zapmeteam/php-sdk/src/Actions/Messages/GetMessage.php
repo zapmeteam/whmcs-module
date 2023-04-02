@@ -23,9 +23,12 @@ class GetMessage
     }
 
     /**
-     * @throws Exception
+     * Send the request to the ZapMe.
+     *
+     * @param  int  $id
+     * @return array
      */
-    public function __invoke(int $id)
+    public function __invoke(int $id): array
     {
         $this->method('GET');
         

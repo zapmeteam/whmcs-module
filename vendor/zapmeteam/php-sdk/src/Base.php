@@ -2,11 +2,14 @@
 
 namespace ZapMeSdk;
 
-use Exception;
 use ZapMeSdk\Actions\Messages\GetMessage;
+use ZapMeSdk\Actions\Contacts\GetContact;
 use ZapMeSdk\Actions\Messages\SendMessage;
 use ZapMeSdk\Actions\Messages\GetMessages;
+use ZapMeSdk\Actions\Contacts\GetContacts;
 use ZapMeSdk\Actions\Account\AccountStatus;
+use ZapMeSdk\Actions\Contacts\CreateContact;
+use ZapMeSdk\Actions\Contacts\DestroyContact;
 
 class Base
 {
@@ -15,21 +18,21 @@ class Base
      *
      * @var string
      */
-    private $url = 'https://api.zapme.com.br';
+    private string $url = 'https://api.zapme.com.br';
 
     /**
      * ZapMe API.
      *
      * @var string|null
      */
-    private $api = null;
+    private ?string $api = null;
 
     /**
      * ZapMe Secret Key.
      *
      * @var string|null
      */
-    private $secret = null;
+    private ?string $secret = null;
 
     /**
      * Set the ZapMe URL dynamically.
@@ -87,10 +90,9 @@ class Base
     /**
      * Get the user account data.
      *
-     * @return mixed
-     * @throws Exception
+     * @return array
      */
-    public function accountStatus()
+    public function accountStatus(): array
     {
         return (new AccountStatus(
             $this->url,
@@ -106,10 +108,9 @@ class Base
      * @param  string  $message
      * @param  array  $attachment
      *
-     * @return mixed
-     * @throws Exception
+     * @return array
      */
-    public function sendMessage(string $phone, string $message, array $attachment = [])
+    public function sendMessage(string $phone, string $message, array $attachment = []): array
     {
         return (new SendMessage(
             $this->url,
@@ -125,10 +126,9 @@ class Base
      * @param  int  $page
      * @param  int  $quantity
      *
-     * @return mixed
-     * @throws Exception
+     * @return array
      */
-    public function getMessages(bool $paginate = false, int $page = 1, int $quantity = 10)
+    public function getMessages(bool $paginate = false, int $page = 1, int $quantity = 10): array
     {
         return (new GetMessages(
             $this->url,
@@ -141,12 +141,81 @@ class Base
      * Get single message.
      *
      * @param  int  $id
-     * @return mixed
-     * @throws Exception
+     *
+     * @return array
      */
-    public function getMessage(int $id)
+    public function getMessage(int $id): array
     {
         return (new GetMessage(
+            $this->url,
+            $this->api,
+            $this->secret)
+        )($id);
+    }
+
+    /**
+     * Create a contact.
+     *
+     * @param  string  $name
+     * @param  string  $phone
+     * @param  string  $status
+     * @param  mixed  $group
+     *
+     * @return array
+     */
+    public function createContact(string $name, string $phone, string $status = 'active', string $group = null): array
+    {
+        return (new CreateContact(
+            $this->url,
+            $this->api,
+            $this->secret)
+        )($name, $phone, $status, $group);
+    }
+
+    /**
+     * Get contacts.
+     *
+     * @param  bool  $paginate
+     * @param  int  $page
+     * @param  int  $quantity
+     *
+     * @return array
+     */
+    public function getContacts(bool $paginate = false, int $page = 1, int $quantity = 10): array
+    {
+        return (new GetContacts(
+            $this->url,
+            $this->api,
+            $this->secret)
+        )($paginate, $page, $quantity);
+    }
+
+    /**
+     * Get single contact.
+     *
+     * @param  int  $id
+     *
+     * @return array
+     */
+    public function getContact(int $id): array
+    {
+        return (new GetContact(
+            $this->url,
+            $this->api,
+            $this->secret)
+        )($id);
+    }
+
+    /**
+     * Destroy a contact.
+     *
+     * @param  int  $id
+     *
+     * @return array
+     */
+    public function destroyContact(int $id): array
+    {
+        return (new DestroyContact(
             $this->url,
             $this->api,
             $this->secret)

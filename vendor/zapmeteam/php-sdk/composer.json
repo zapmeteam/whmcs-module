@@ -1,13 +1,7 @@
 {
     "name": "zapmeteam/php-sdk",
-    "description": "ZapMe PHP SDK",
+    "description": "ZapMe, PHP SDK",
     "type": "library",
-    "require": {
-        "php": ">=7.3",
-        "ext-json": "*",
-        "ext-curl": "*",
-        "vlucas/phpdotenv": "^5.4"
-    },
     "license": "MIT",
     "autoload": {
         "psr-4": {
@@ -17,16 +11,23 @@
     "authors": [
         {
             "name": "ZapMe",
-            "email": "suporte@zapme.com.br"
+            "email": "contato@zapme.com.br"
         }
     ],
-    "scripts": {
-        "test": "phpunit"
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "ext-json": "*",
+        "ext-curl": "*",
+        "guzzlehttp/guzzle": "^7.0"
     },
-    "prefer-stable": true,
     "require-dev": {
+        "vlucas/phpdotenv": "^5.4",
         "phpunit/phpunit": "^9.5",
         "fakerphp/faker": "^1.20",
         "symfony/var-dumper": "^6.1"
-    }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "prefer-stable": true
 }
