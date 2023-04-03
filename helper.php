@@ -154,7 +154,7 @@ if (!function_exists('alert')) {
 
 if (!function_exists('templatesConfigurations')) {
     /**
-     * Save all template informations
+     * Save all template descriptions
      * 
      * @param string $code
      * 
@@ -165,7 +165,7 @@ if (!function_exists('templatesConfigurations')) {
         $types = [
             'invoicecreated' => [
                 'name'        => 'Fatura Criada',
-                'information' => 'Modelo de mensagem enviada quando uma fatura é criada pelo WHMCS',
+                'description' => 'Modelo de mensagem enviada quando uma fatura é criada pelo WHMCS',
                 'paghiper'    => 'Para anexar o boleto bancário do PagHiper neste template escreva: %paghiper_boleto% em qualquer parte da mensagem',
                 'rules'       => [
                     0 => [
@@ -211,7 +211,7 @@ if (!function_exists('templatesConfigurations')) {
             ],
             'invoicepaymentreminder' => [
                 'name'        => 'Lembrete de Fatura',
-                'information' => 'Modelo de mensagem utilizado no lembrete de fatura em aberto (manualmente ou via hook)',
+                'description' => 'Modelo de mensagem utilizado no lembrete de fatura em aberto (manualmente ou via hook)',
                 'paghiper'    => 'Para anexar o boleto bancário do PagHiper neste template escreva: %paghiper_boleto% em qualquer parte da mensagem',
                 'rules'       => [
                     0 => [
@@ -257,7 +257,7 @@ if (!function_exists('templatesConfigurations')) {
             ],
             'invoicepaid' => [
                 'name'        => 'Fatura Paga',
-                'information' => 'Modelo de mensagem enviada quando o pagamento de uma fatura é confirmado',
+                'description' => 'Modelo de mensagem enviada quando o pagamento de uma fatura é confirmado',
                 'rules'       => [
                     0 => [
                         'id'          => 'controlByClient',
@@ -300,7 +300,7 @@ if (!function_exists('templatesConfigurations')) {
             ],
             'invoicecancelled' => [
                 'name'        => 'Fatura Cancelada',
-                'information' => 'Modelo de mensagem enviada quando uma fatura é cancelada',
+                'description' => 'Modelo de mensagem enviada quando uma fatura é cancelada',
                 'rules'       => [
                     0 => [
                         'id'          => 'controlByClient',
@@ -335,7 +335,7 @@ if (!function_exists('templatesConfigurations')) {
             ],
             'invoicefirstoverduealert' => [
                 'name'        => 'Fatura em Atraso <b>[1]</b>',
-                'information' => 'Modelo de mensagem enviada no primeiro aviso de fatura em atraso',
+                'description' => 'Modelo de mensagem enviada no primeiro aviso de fatura em atraso',
                 'paghiper'    => 'Para anexar o boleto bancário do PagHiper neste template escreva: %paghiper_boleto% em qualquer parte da mensagem',
                 'rules'       => [
                     0 => [
@@ -372,7 +372,7 @@ if (!function_exists('templatesConfigurations')) {
             ],
             'invoicesecondoverduealert' => [
                 'name'        => 'Fatura em Atraso <b>[2]</b>',
-                'information' => 'Modelo de mensagem enviada no segundo aviso de fatura em atraso',
+                'description' => 'Modelo de mensagem enviada no segundo aviso de fatura em atraso',
                 'paghiper'    => 'Para anexar o boleto bancário do PagHiper neste template escreva: %paghiper_boleto% em qualquer parte da mensagem',
                 'rules'       => [
                     0 => [
@@ -409,7 +409,7 @@ if (!function_exists('templatesConfigurations')) {
             ],
             'invoicethirdoverduealert' => [
                 'name'        => 'Fatura em Atraso <b>[3]</b>',
-                'information' => 'Modelo de mensagem enviada no terceiro aviso de fatura em atraso',
+                'description' => 'Modelo de mensagem enviada no terceiro aviso de fatura em atraso',
                 'paghiper'    => 'Para anexar o boleto bancário do PagHiper neste template escreva: %paghiper_boleto% em qualquer parte da mensagem',
                 'rules'       => [
                     0 => [
@@ -446,7 +446,7 @@ if (!function_exists('templatesConfigurations')) {
             ],
             'ticketopen' => [
                 'name'        => 'Ticket Criado',
-                'information' => 'Modelo de mensagem enviada quando um ticket é aberto pelo cliente',
+                'description' => 'Modelo de mensagem enviada quando um ticket é aberto pelo cliente',
                 'rules'       => [
                     0 => [
                         'id'          => 'controlByClient',
@@ -484,7 +484,7 @@ if (!function_exists('templatesConfigurations')) {
             ],
             'ticketadminreply' => [
                 'name'        => 'Ticket Respondido',
-                'information' => 'Modelo de mensagem enviada quando um ticket é respondido pela equipe',
+                'description' => 'Modelo de mensagem enviada quando um ticket é respondido pela equipe',
                 'rules'       => [
                     0 => [
                         'id'          => 'controlByClient',
@@ -530,7 +530,7 @@ if (!function_exists('templatesConfigurations')) {
             ],
             'aftermodulecreate' => [
                 'name'        => 'Serviço Criado',
-                'information' => 'Modelo de mensagem enviada quando um serviço é criado',
+                'description' => 'Modelo de mensagem enviada quando um serviço é criado',
                 'rules'       => [
                     0 => [
                         'id'          => 'controlByClient',
@@ -586,7 +586,7 @@ if (!function_exists('templatesConfigurations')) {
             ],
             'aftermodulesuspend' => [
                 'name'        => 'Serviço Suspenso',
-                'information' => 'Modelo de mensagem enviada quando um serviço é suspenso',
+                'description' => 'Modelo de mensagem enviada quando um serviço é suspenso',
                 'rules'       => [
                     0 => [
                         'id'          => 'controlByClient',
@@ -642,7 +642,7 @@ if (!function_exists('templatesConfigurations')) {
             ],
             'aftermoduleunsuspend' => [
                 'name'        => 'Serviço Reativado',
-                'information' => 'Modelo de mensagem enviada quando um serviço é reativado',
+                'description' => 'Modelo de mensagem enviada quando um serviço é reativado',
                 'rules'       => [
                     0 => [
                         'id'          => 'controlByClient',
@@ -698,7 +698,7 @@ if (!function_exists('templatesConfigurations')) {
             ],
             'aftermoduleterminate' => [
                 'name'        => 'Serviço Cancelado',
-                'information' => 'Modelo de mensagem enviada quando um serviço é cancelado',
+                'description' => 'Modelo de mensagem enviada quando um serviço é cancelado',
                 'rules'       => [
                     0 => [
                         'id'          => 'controlByClient',
@@ -754,7 +754,7 @@ if (!function_exists('templatesConfigurations')) {
             ],
             'aftermoduleready' => [
                 'name'        => 'Serviço Pronto',
-                'information' => 'Modelo de mensagem utilizado no botão de serviço pronto (uso manual)',
+                'description' => 'Modelo de mensagem utilizado no botão de serviço pronto (uso manual)',
                 'variables' => [
                     'product'  => 'Nome do Serviço',
                     'id'       => 'Id do Serviço',
@@ -768,7 +768,7 @@ if (!function_exists('templatesConfigurations')) {
             ],
             'clientadd' => [
                 'name'        => 'Bem-vindo',
-                'information' => 'Modelo de mensagem enviada no cadastrado de um cliente',
+                'description' => 'Modelo de mensagem enviada no cadastrado de um cliente',
                 'rules'       => [
                     0 => [
                         'id'          => 'controlByPartsOfEmail',
@@ -795,7 +795,7 @@ if (!function_exists('templatesConfigurations')) {
             ],
             'clientlogin' => [
                 'name'        => 'Login de Cliente',
-                'information' => 'Modelo de mensagem enviada no login de uma conta de cliente',
+                'description' => 'Modelo de mensagem enviada no login de uma conta de cliente',
                 'rules'       => [
                     0 => [
                         'id'          => 'controlByClient',
@@ -844,7 +844,7 @@ if (!function_exists('templatesConfigurations')) {
             ],
             'clientareapagelogin' => [
                 'name'        => 'Falha de Login',
-                'information' => 'Modelo de mensagem enviada na falha de login de uma conta de cliente',
+                'description' => 'Modelo de mensagem enviada na falha de login de uma conta de cliente',
                 'rules'       => [
                     0 => [
                         'id'          => 'controlByClient',
@@ -893,7 +893,7 @@ if (!function_exists('templatesConfigurations')) {
             ],
             'clientchangepassword' => [
                 'name'        => 'Troca de Senha',
-                'information' => 'Modelo de mensagem enviada na troca de senha da conta de um cliente',
+                'description' => 'Modelo de mensagem enviada na troca de senha da conta de um cliente',
                 'rules'       => [
                     0 => [
                         'id'          => 'controlByClient',

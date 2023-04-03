@@ -285,23 +285,36 @@ function zapme_output($vars)
             </div>
         </div>
         <div class="tab-pane <?= $tab === 'templates' ? 'active' : '' ?>" id="templates">
-            <div class="signin-apps-container" style="max-width: none;">
-                <div class="row">
-                    <?php
+            <table id="tabletempalte" class="table table-striped table-responsive" style="width: 100% !important">
+                <thead>
+                <tr>
+                    <td>#</td>
+                    <td>Nome</td>
+                    <td>Descrição</td>
+                    <td>Status</td>
+                    <td>Personalizável</td>
+                    <td></td>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
                     $modulePagHiper = modulePagHiperExist();
                     foreach ($templates as $template):
-                        $templateConfiguration = templatesConfigurations($template->code); ?>
-                        <div class="col-sm-12 col-md-2">
-                            <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#editmodal-<?= $template->id ?>" style="float: right !important; font-size: 10px">EDITAR</button>
-                            <div class="app" style="background-color: <?= !$template->is_active ? '#fdeeee;"' : '#f1fff0;' ?>">
-                                <div class="logo-container">
-                                    <h1><b>(#<?= $template->id ?>)</b> <?= $templateConfiguration['name'] ?></h1>
-                                </div>
-                                <div class="content-container">
-                                    <div class="description"><?= $templateConfiguration['information'] ?></div>
-                                </div>
-                            </div>
-                        </div>
+                    $templateConfiguration = templatesConfigurations($template->code); ?>
+                    <tr>
+                        <th><?= $template->id ?></th>
+                        <th><?= $templateConfiguration['name'] ?></th>
+                        <th><?= $templateConfiguration['description'] ?></th>
+                        <th>
+                            <?php $class = $template->is_active ? 'success' : 'danger'; ?>
+                            <i class="fa fa-check-circle text-<?= $class; ?>"></i>
+                        </th>
+                        <th>
+                            <?php $class = $template->is_configurable ? 'success' : 'danger'; ?>
+                            <i class="fa fa-check-circle text-<?= $class; ?>"></i>
+                        </th>
+                        <th> <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editmodal-<?= $template->id ?>"><i class="fa fa-eye" aria-hidden="true"></i></button> </th>
+                    </tr>
                         <div class="modal fade" id="editmodal-<?= $template->id ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg" role="document">
                                 <div class="modal-content">
@@ -347,10 +360,9 @@ function zapme_output($vars)
                                 </div>
                             </div>
                         </div>
-                    <?php unset($configuration);
-                    endforeach; ?>
-                </div>
-            </div>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
         <div class="tab-pane <?= $tab === 'editrules' ? 'active' : '' ?>" id="editrules">
             <a class="btn btn-info btn-sm" href="addonmodules.php?module=zapme&tab=templates">VOLTAR</a>
@@ -456,13 +468,20 @@ function zapme_output($vars)
             </div>
         </div>
     </div>
-    <p class="footer" style="margin-top: 10px !important;"><a href="https://zapme.com.br/" target="_blank"><b>ZapMe</b></a> - Versão: <b><?= $vars['version'] ?></b></p>
+    <p class="footer" style="margin-top: 10px !important;"><a href="https://zapme.com.br/" target="_blank"><b>ZapMe</b></a>, Versão: <b><?= $vars['version'] ?></b></p>
     <script>
         $(document).ready(function() {
             $("#tablelog").DataTable({
                 "pageLength": 25,
                 "order": [
                     [0, "desc"]
+                ],
+                responsive: true
+            });
+            $("#tabletempalte").DataTable({
+                "pageLength": 25,
+                "order": [
+                    [0, "asc"]
                 ],
                 responsive: true
             });
