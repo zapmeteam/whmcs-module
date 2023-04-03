@@ -41,17 +41,42 @@ class InternalActions extends Sdk
                 ...$this->carbonToDatabase(),
             ]);
 
-            return $this->success('Tudo certo! <b>Módulo configurado e atualizado com sucesso.</b>');
+            return $this->success("Tudo certo! <b>Módulo configurado e atualizado com sucesso.</b>");
         } catch (Throwable $e) {
             throwlable($e);
         }
 
-        return $this->danger('Ops! <b>Houve algum erro ao validar a sua API.</b> Verifique os logs do sistema.</b>');
+        return $this->danger("Ops! <b>Houve algum erro ao validar a sua API.</b> Verifique os logs do sistema.</b>");
     }
 
-    public function editModuleTemplateConfigurations()
+    public function editModuleTemplateConfigurations(Request $request)
     {
+        $post     = $request->request;
+        $template = $post->get('template');
 
+        try {
+            $capsule  = Capsule::table('mod_zapme_templates');
+
+            if (
+                $capsule->where('id', '=', $template)
+                    ->doesntExist()
+            ) {
+                return $this->danger("<b>Ops!</b> O template solicitado para edição não existe no banco de dados.");
+            }
+
+            $capsule->where('id', '=', $template)
+                ->update([
+                   'message'    => $post->get('message'),
+                   'is_active'  => $post->get('is_active'),
+                   ...$this->carbonToDatabase(false)
+                ]);
+
+            return $this->success("Tudo certo! <b>Template #{$template} atualizado com sucesso.</b>");
+        } catch (Throwable $e) {
+            throwlable($e);
+        }
+
+        return $this->danger("Ops! <b>Houve algum erro ao editar o template.</b> Verifique os logs do sistema.</b>");
     }
 
     public function editModuleTemplateRulesConfigurations()

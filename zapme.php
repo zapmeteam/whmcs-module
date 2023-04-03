@@ -289,11 +289,11 @@ function zapme_output($vars)
                 <div class="row">
                     <?php
                     $modulePagHiper = modulePagHiperExist();
-                    foreach ($templates as $template) :
+                    foreach ($templates as $template):
                         $templateConfiguration = templatesConfigurations($template->code); ?>
                         <div class="col-sm-12 col-md-2">
                             <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#editmodal-<?= $template->id ?>" style="float: right !important; font-size: 10px">EDITAR</button>
-                            <div class="app" style="background-color: #<?= $template->status == false ? 'fdeeee;"' : 'f1fff0;' ?>">
+                            <div class="app" style="background-color: <?= !$template->is_active ? '#fdeeee;"' : '#f1fff0;' ?>">
                                 <div class="logo-container">
                                     <h1><b>(#<?= $template->id ?>)</b> <?= $templateConfiguration['name'] ?></h1>
                                 </div>
@@ -312,7 +312,7 @@ function zapme_output($vars)
                                         </button>
                                     </div>
                                     <form action="addonmodules.php?module=zapme&internalconfig=true&action=templates" method="post">
-                                        <input type="hidden" name="messageid" value="<?= $template->id ?>">
+                                        <input type="hidden" name="template" value="<?= $template->id ?>">
                                         <div class="modal-body">
                                             <div class="form-group">
                                                 <label>Mensagem</label>
@@ -330,12 +330,12 @@ function zapme_output($vars)
                                             <hr>
                                             <div class="form-group">
                                                 <label>Status</label>
-                                                <select class="form-control" name="status">
-                                                    <option value="1" <?= $template->status == true ? 'selected' : '' ?>>Ativado</option>
-                                                    <option value="0" <?= $template->status == false ? 'selected' : '' ?>>Desativado</option>
+                                                <select class="form-control" name="is_active">
+                                                    <option value="1" <?= $template->is_active ? 'selected' : '' ?>>Ativado</option>
+                                                    <option value="0" <?= !$template->is_active ? 'selected' : '' ?>>Desativado</option>
                                                 </select>
                                             </div>
-                                            <?php if ($template->allowconfiguration) : ?>
+                                            <?php if ($template->is_configurable) : ?>
                                                 <a class="btn btn-danger btn-sm" href="addonmodules.php?module=zapme&tab=templates&action=editrules&template=<?= $template->id ?>">REGRAS DE ENVIO</a>
                                             <?php endif; ?>
                                         </div>

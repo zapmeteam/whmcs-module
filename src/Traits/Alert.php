@@ -9,7 +9,7 @@ trait Alert
         return $this->alert($message);
     }
 
-    protected function danger(string $message): string
+    public function danger(string $message): string
     {
         return $this->alert($message, 'danger');
     }
