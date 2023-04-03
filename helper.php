@@ -3,20 +3,29 @@
 use WHMCS\Database\Capsule;
 
 if (!defined('WHMCS')) {
-    die('Denied access');
+    die;
 }
 
-define('ZAPMEMODULE_HOMEPATH', __DIR__);
-define('ZAPMEMODULE_ACTIVITYLOG', true);
+const ZAPME_MODULE_PATH         = __DIR__;
+const ZAPME_MODULE_ACTIVITY_LOG = true;
+const ZAPME_MODULE_API_URL      = 'http://api.zapme.test';
+
+if (!function_exists('throwlable')) {
+    function throwlable(Throwable $exception): void
+    {
+        if (!ZAPME_MODULE_ACTIVITY_LOG) {
+            return;
+        }
+
+        $source = $exception->getFile();
+        $file   = explode('zapme/whmcs', $source);
+        $file   = $file[1] ?? $source;
+
+        logActivity("[ZapMe] Erro: {$exception->getMessage()} | {$file}:{$exception->getLine()}");
+    }
+}
 
 if (!function_exists('modulePagHiperExtractPdf')) {
-    /**
-     * Generate base64 from PagHiper Billet
-     *
-     * @param string $link
-     * 
-     * @return string
-     */
     function modulePagHiperExtractPdf(string $link): string
     {
         $billet = base64_encode(file_get_contents($link));
@@ -37,11 +46,6 @@ if (!function_exists('modulePagHiperExtractPdf')) {
 }
 
 if (!function_exists('modulePagHiperExist')) {
-    /**
-     * Check if PagHiper module exist and it's actived
-     *
-     * @return boolean
-     */
     function modulePagHiperExist(): bool
     {
         $modulePagHiper = Capsule::table('tblpaymentgateways')->where('gateway', 'paghiper')->where('setting', 'visible')->first();
@@ -77,15 +81,6 @@ if (!function_exists('moduleSaveLog')) {
 }
 
 if (!function_exists('clientConsentiment')) {
-    /**
-     * Handle client consentiment to receive messages
-     *
-     * @param string $hook
-     * @param mixed $client
-     * @param integer $clientConsentFieldId
-     * 
-     * @return boolean
-     */
     function clientConsentiment(string $hook, $client, int $clientConsentFieldId): bool
     {
         if (!isset($client->id)) {
@@ -115,7 +110,7 @@ if (!function_exists('clientConsentiment')) {
         $value = strtolower($value);
 
         if ($value === 'n' || $value === 'nao') {
-            if (ZAPMEMODULE_ACTIVITYLOG === true) {
+            if (ZAPME_MODULE_ACTIVITY_LOG === true) {
                 logActivity('[ZapMe][' . $hook . '] Envio de Mensagem Abortado: O cliente ' . $client->firstname . ' (#' . $client->id . ') desativou o recebimento de alertas através do campo customizado');
             }
             return false;
@@ -126,14 +121,6 @@ if (!function_exists('clientConsentiment')) {
 }
 
 if (!function_exists('clientPhoneNumber')) {
-    /**
-     * Handle client phone number
-     * 
-     * @param mixed $client
-     * @param integer $clientPhoneFieldId
-     * 
-     * @return string
-     */
     function clientPhoneNumber($client, int $clientPhoneFieldId): string
     {
         if ($clientPhoneFieldId == 0) {
@@ -159,17 +146,8 @@ if (!function_exists('clientPhoneNumber')) {
 }
 
 if (!function_exists('alert')) {
-    /**
-     * Draw div alerts
-     * 
-     * @param string $message
-     * @param string $type
-     * 
-     * @return string
-     */
     function alert(string $message, string $type = 'success'): string
     {
-        $type = $type === 'error' ? 'danger' : $type;
         return '<div class="alert alert-' . $type . ' text-center">' . ($type === 'success' ? '<i class="fa fa-check-circle" aria-hidden="true"></i>' : '<i class="fa fa-exclamation-circle" aria-hidden="true"></i>') . ' ' . $message . '</div>';
     }
 }

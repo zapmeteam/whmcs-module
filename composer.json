@@ -15,7 +15,7 @@
             "helper.php"
         ],
         "psr-4": {
-            "ZapMeTeam\\Whmcs\\": "src/"
+            "ZapMe\\Whmcs\\": "src/"
         }
     },
     "authors": [

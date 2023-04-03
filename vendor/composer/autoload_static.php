@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5ddc0236dd1ef9877e19762a28340672
+class ComposerStaticInite806c685bde7e4900450cc5b7a0fa1df
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -20,7 +20,7 @@ class ComposerStaticInit5ddc0236dd1ef9877e19762a28340672
     public static $prefixLengthsPsr4 = array (
         'Z' => 
         array (
-            'ZapMeTeam\\Whmcs\\' => 16,
+            'ZapMe\\Whmcs\\' => 12,
             'ZapMeSdk\\' => 9,
         ),
         'S' => 
@@ -43,7 +43,7 @@ class ComposerStaticInit5ddc0236dd1ef9877e19762a28340672
     );
 
     public static $prefixDirsPsr4 = array (
-        'ZapMeTeam\\Whmcs\\' => 
+        'ZapMe\\Whmcs\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
@@ -65,8 +65,8 @@ class ComposerStaticInit5ddc0236dd1ef9877e19762a28340672
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -98,9 +98,9 @@ class ComposerStaticInit5ddc0236dd1ef9877e19762a28340672
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5ddc0236dd1ef9877e19762a28340672::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5ddc0236dd1ef9877e19762a28340672::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit5ddc0236dd1ef9877e19762a28340672::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite806c685bde7e4900450cc5b7a0fa1df::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite806c685bde7e4900450cc5b7a0fa1df::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInite806c685bde7e4900450cc5b7a0fa1df::$classMap;
 
         }, null, ClassLoader::class);
     }

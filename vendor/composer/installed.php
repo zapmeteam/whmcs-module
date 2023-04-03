@@ -3,7 +3,7 @@
         'name' => 'zapmeteam/whmcs-module',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '7f3b3234510a9b529ab4057729b5516a78727934',
+        'reference' => '80ce2d16f9ad20ef6ea6b202d579d5b4e7d5ce7f',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -157,7 +157,7 @@
         'zapmeteam/whmcs-module' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '7f3b3234510a9b529ab4057729b5516a78727934',
+            'reference' => '80ce2d16f9ad20ef6ea6b202d579d5b4e7d5ce7f',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

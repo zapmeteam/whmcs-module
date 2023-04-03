@@ -1,77 +1,58 @@
 <?php
 
-namespace ZapMeTeam\Whmcs;
+namespace ZapMe\Whmcs;
 
-use ZapMeSdk\Base;
 use WHMCS\User\Client;
 use WHMCS\Service\Service;
 use WHMCS\Database\Capsule;
+use ZapMeSdk\Base as ZapMeSdk;
+use ZapMeTeam\Whmcs\Actions\Actions;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 if (!defined('WHMCS')) {
-    die('Denied access');
+    die;
 }
 
 class ZapMeModule
 {
-    /** * @var string */
-    private $now;
+    private string $now;
 
     public function __construct()
     {
         $this->now = date('Y-m-d H:i:s');
     }
 
-    /**
-     * Handle incoming request of module
-     *
-     * @param Request $request
-     * 
-     * @return void
-     */
-    public function handleRequest(Request $request)
+    public function handleRequest(Request $request): mixed
     {
-        $method = $request->getMethod();
+        $action  = $request->get('action') ?? $request->get('externalaction');
+        $actions = new Actions($action, $request);
 
-        if ($method === 'POST') {
-            if ($request->get('internalconfig') === null) {
-                return;
-            }
+        return $actions->execute();
 
-            switch ($request->get('action')) {
-                case 'configuration':
-                    return $this->internalActionEditConfigurations($request->request);
-                case 'templates':
-                    return $this->internalActionEditTemplates($request->request);
-                case 'editrules':
-                    return $this->internalActionEditTemplateRules($request->request);
-                case 'logs':
-                    return $this->internalActionEditLogs($request->request);
-                case 'manualmessage':
-                    return $this->externalActionManualMessage($request->request);
-            }
-        }
+        $methods = [
+            'post' => [
+                'internal' => [
+                    'configuration',
+                    'templates',
+                    'editrules',
+                    'logs',
+                ],
+                'external' => [
+                    'manualmessage',
+                ],
+            ],
+            'get' => [
+                'external' => [
+                    'invoicereminder',
+                    'serviceready',
+                ],
+            ],
+        ];
 
-        if ($request->get('externalaction') === null) {
-            return;
-        }
-
-        switch ($request->get('externalaction')) {
-            case 'invoicereminder':
-                return $this->externalActionInvoiceReminder($request->query);
-            case 'serviceready':
-                return $this->externalActionServiceReady($request->query);
-        }
+        $actions = new Actions();
     }
 
-    /**
-     * Internal action for edit conifgurations
-     *
-     * @param ParameterBag|null $post
-     * 
-     * @return void
-     */
     private function internalActionEditConfigurations(ParameterBag $post = null)
     {
         $api    = $post->get('api');
@@ -83,7 +64,7 @@ class ZapMeModule
             ->accountStatus();
 
         if (isset($result['result']) && $result['result'] !== 'success') {
-            if (ZAPMEMODULE_ACTIVITYLOG === true) {
+            if (ZAPME_MODULE_ACTIVITY_LOG === true) {
                 logActivity('[ZapMe] Erro: ' . $result['result']);
             }
             return alert('Ops! <b>Houve algum erro ao validar a sua API.</b> Verifique os logs do sistema e contate o suporte da ZapMe.</b>', 'danger');
@@ -251,7 +232,7 @@ class ZapMeModule
             return alert('Tudo certo! <b>Procedimento efetuado com sucesso.</b>');
         }
 
-        if (ZAPMEMODULE_ACTIVITYLOG === true) {
+        if (ZAPME_MODULE_ACTIVITY_LOG === true) {
             logActivity('[ZapMe][AfterModuleReady] Envio de Mensagem: Erro: ' . $response['result']);
         }
 
@@ -292,7 +273,7 @@ class ZapMeModule
             return alert('Tudo certo! <b>Procedimento efetuado com sucesso.</b>');
         }
 
-        if (ZAPMEMODULE_ACTIVITYLOG === true) {
+        if (ZAPME_MODULE_ACTIVITY_LOG === true) {
             logActivity('[ZapMe][AfterModuleReady] Envio de Mensagem: Erro: ' . $response['result']);
         }
 

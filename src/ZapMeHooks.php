@@ -1,6 +1,6 @@
 <?php
 
-namespace ZapMeTeam\Whmcs;
+namespace ZapMe\Whmcs;
 
 use DateTime;
 use ZapMeSdk\Base;
@@ -62,14 +62,14 @@ class ZapMeHooks
     public function dispatch($vars)
     {
         if (!isset($this->module->id)) {
-            if (ZAPMEMODULE_ACTIVITYLOG === true) {
+            if (ZAPME_MODULE_ACTIVITY_LOG === true) {
                 logActivity('[ZapMe][' . $this->hook . '] Processo Abortado: Módulo não configurado');
             }
             return;
         }
 
         if ($this->module->status == 0) {
-            if (ZAPMEMODULE_ACTIVITYLOG === true) {
+            if (ZAPME_MODULE_ACTIVITY_LOG === true) {
                 logActivity('[ZapMe][' . $this->hook . '] Processo Abortado: Módulo desativado');
             }
             return;
@@ -797,7 +797,7 @@ class ZapMeHooks
         $date = (int) date('d');
 
         if ($date == 1 && $this->module->logautoremove == 1) {
-            if (ZAPMEMODULE_ACTIVITYLOG === true) {
+            if (ZAPME_MODULE_ACTIVITY_LOG === true) {
                 logActivity('[ZapMe][' . $this->hook . '] Rotina de Limpeza de Registros de Logs');
             }
             Capsule::table('mod_zapme_logs')->truncate();
@@ -818,7 +818,7 @@ class ZapMeHooks
 
         Capsule::table('mod_zapme')->where('id', 1)->update(['service' => $service]);
 
-        if (ZAPMEMODULE_ACTIVITYLOG === true) {
+        if (ZAPME_MODULE_ACTIVITY_LOG === true) {
             logActivity('[ZapMe][' . $this->hook . '] Atualização dos Dados do Serviço da ZapMe');
         }
     }
@@ -838,7 +838,7 @@ class ZapMeHooks
         $response = $this->base->sendMessage($phone, $message, $document);
 
         if (isset($response['result']) && $response['result'] === 'created') {
-            if (ZAPMEMODULE_ACTIVITYLOG === true) {
+            if (ZAPME_MODULE_ACTIVITY_LOG === true) {
                 logActivity('[ZapMe][' . $this->hook . '] Envio de Mensagem: Sucesso.');
             }
 
@@ -849,7 +849,7 @@ class ZapMeHooks
             return;
         }
 
-        if (ZAPMEMODULE_ACTIVITYLOG === true) {
+        if (ZAPME_MODULE_ACTIVITY_LOG === true) {
             logActivity('[ZapMe][' . $this->hook . '] Envio de Mensagem: Erro: ' . $response['result']);
         }
     }

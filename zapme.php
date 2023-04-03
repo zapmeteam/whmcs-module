@@ -5,9 +5,9 @@ require __DIR__ . '/helper.php';
 
 use WHMCS\User\Client;
 use WHMCS\Database\Capsule;
-use ZapMeTeam\Whmcs\ZapMeModule;
+use ZapMe\Whmcs\Actions\Actions;
+use ZapMe\Whmcs\Configuration;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 if (!defined('WHMCS')) {
     die;
@@ -26,8 +26,8 @@ function zapme_config(): array
 
 function zapme_activate(): array
 {
-    if (($phpVersion = phpversion()) < 7.4) {
-        return ['status'  => 'error', 'description' => "PHP {$phpVersion} Incompatível. Versão Desejada: 7.4+"];
+    if (($phpVersion = phpversion()) < 8.0) {
+        return ['status'  => 'error', 'description' => "PHP ({$phpVersion}) Incompatível. Versão Desejada: 8.0+"];
     }
 
     try {
@@ -47,7 +47,7 @@ function zapme_activate(): array
             $table->boolean('log_auto_remove')->default(false);
             $table->unsignedInteger('client_phone_field_id')->nullable();
             $table->unsignedInteger('client_consent_field_id')->nullable();
-            $table->text('account_status')->nullable();
+            $table->text('account')->nullable();
             $table->timestamps();
         });
 
@@ -125,18 +125,13 @@ function zapme_deactivate(): array
 function zapme_output($vars)
 {
     $request = Request::createFromGlobals();
-    $zapme   = new ZapMeModule;
 
     $tab = $request->get('action') ?? $request->get('tab');
     $tab = $tab === 'configuration' || $tab === 'manualmessage' ? null : $tab;
 
-    echo $zapme->handleRequest($request);
+    echo (new Actions($request))->execute();
 
-    $config = Capsule::table('mod_zapme')->first();
-
-    if ($config) {
-        $config->account_status = json_decode($config->account_status);
-    }
+    $module = (new Configuration())->fromDto();
 
     switch ($tab) {
         case 'templates':
@@ -150,17 +145,15 @@ function zapme_output($vars)
             break;
     }
 
-    if (!$tab) {
-        $fields  = Capsule::table('tblcustomfields')->where('type', 'client')->get();
-    }
+    if (!$tab) $fields = Capsule::table('tblcustomfields')->where('type', 'client')->get();
 ?>
-    <?php if (!$config) : ?>
+    <?php if (!$module->configured) : ?>
         <div class="alert alert-info text-center"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> <b>O módulo não encontra-se configurado para uso!</b> Certifique-se de configurar o módulo para que o mesmo funcione corretamente.</div>
     <?php endif; ?>
-    <?php if ($config && !$config->is_active) : ?>
+    <?php if ($module->configured && !$module->isActive) : ?>
         <div class="alert alert-danger text-center"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> <b>ATENÇÃO!</b> O módulo encontra-se configurado, mas <b>o status está "Desativado".</b> Nenhuma mensagem será enviada até que o status esteja <b>"Ativo".</b></div>
     <?php endif; ?>
-    <?php if ($config) : ?>
+    <?php if ($module->configured) : ?>
         <div class="signin-apps-container">
             <p class="text-center">Status do Serviço <i class="fas fa-question-circle text-danger" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-html="true" title="Estas são as informações atreladas ao seu serviço da ZapMe. Para atualizar essas informações pressione o botão Salvar do módulo"></i></p>
             <div class="row">
@@ -170,7 +163,8 @@ function zapme_output($vars)
                             <h5>SERVIÇO</h5>
                         </div>
                         <div class="content-container">
-                            <div class="description"><label class="label label-<?= $config->account_status['status'] === 'active' ? 'success' : 'danger' ?>"><span><?= $config->account_status['status'] === 'active' ? 'ATIVADO' : 'DESATIVADO' ?></span></label></div>
+                            <?php $service = $module->account['service']['status'] === 'active'; ?>
+                            <div class="description"><label class="label label-<?= $service ? 'success' : 'danger' ?>"><span><?= $service ? 'ATIVADO' : 'DESATIVADO' ?></span></label></div>
                         </div>
                     </div>
                 </div>
@@ -180,7 +174,7 @@ function zapme_output($vars)
                             <h5>PLANO</h5>
                         </div>
                         <div class="content-container">
-                            <div class="description"><?= $config->account_status['plan'] ?></div>
+                            <div class="description"><?= $module->account['service']['plan'] ?? 'N/A' ?></div>
                         </div>
                     </div>
                 </div>
@@ -190,7 +184,8 @@ function zapme_output($vars)
                             <h5>VENCIMENTO</h5>
                         </div>
                         <div class="content-container">
-                            <div class="description"><?= date('d/m/Y', strtotime($config->account_status['duedate'])) ?></div>
+                            <?php $duedate = $module->account['service']['duedate'] ?? null; ?>
+                            <div class="description"><?= $duedate ? date('d/m/Y', strtotime($duedate)) : 'N/A' ?></div>
                         </div>
                     </div>
                 </div>
@@ -200,7 +195,8 @@ function zapme_output($vars)
                             <h5>AUTENTICAÇÃO</h5>
                         </div>
                         <div class="content-container">
-                            <div class="description"><label class="label label-<?= $config->service['auth'] === true ? 'success' : 'danger' ?>"><span><?= $config->service['auth'] === true ? 'DETECTADA' : 'NÃO DETECTADA' ?></span></label></div>
+                            <?php $authenticated = $module->account['auth']['status'] === true; ?>
+                            <div class="description"><label class="label label-<?= $authenticated ? 'success' : 'danger' ?>"><span><?= $authenticated ? 'AUTENTICADO' : 'NÃO AUTENTICADO' ?></span></label></div>
                         </div>
                     </div>
                 </div>
@@ -209,8 +205,8 @@ function zapme_output($vars)
     <?php endif; ?>
     <ul class="nav nav-tabs admin-tabs" role="tablist">
         <li <?= !$tab ? 'class="active"' : '' ?>><a class="tab-top" href="addonmodules.php?module=zapme" id="configurations" data-tab-id="1">Configuração</a></li>
-        <li <?= $tab === 'templates' || $tab === 'editrules' ? 'class="active"' : '' ?> <?= !isset($config->id) ? 'style="display: none;' : '' ?>><a class="tab-top" href="addonmodules.php?module=zapme&tab=templates" id="templates" data-tab-id="2">Templates</a></li>
-        <li <?= $tab === 'logs' ? 'class="active"' : '' ?> <?= !isset($config->id) ? 'style="display: none;' : '' ?>><a class="tab-top" href="addonmodules.php?module=zapme&tab=logs" id="logs" data-tab-id="3">Logs</a></li>
+        <li <?= $tab === 'templates' || $tab === 'editrules' ? 'class="active"' : '' ?> <?= !$module->configured ? 'style="display: none;' : '' ?>><a class="tab-top" href="addonmodules.php?module=zapme&tab=templates" id="templates" data-tab-id="2">Templates</a></li>
+        <li <?= $tab === 'logs' ? 'class="active"' : '' ?> <?= !$module->configured ? 'style="display: none;' : '' ?>><a class="tab-top" href="addonmodules.php?module=zapme&tab=logs" id="logs" data-tab-id="3">Logs</a></li>
     </ul>
     <div class="tab-content admin-tabs">
         <div class="tab-pane <?= !$tab ? 'active' : '' ?>" id="configurations">
@@ -221,39 +217,39 @@ function zapme_output($vars)
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="inputConfirmPassword">Status</label>
-                                    <select class="form-control" name="status">
-                                        <option value="1" <?= $config && $config->is_active ? 'selected' : '' ?>>Ativado</option>
-                                        <option value="0" <?= $config && !$config->is_active ? 'selected' : '' ?>>Desativado</option>
+                                    <select class="form-control" name="is_active">
+                                        <option value="1" <?= $module->configured && $module->isActive ? 'selected' : '' ?>>Ativado</option>
+                                        <option value="0" <?= $module->configured && !$module->isActive ? 'selected' : '' ?>>Desativado</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="inputConfirmPassword">API</label>
-                                    <input type="text" name="api" class="form-control" value="<?= $config?->api ?>" placeholder="Insira sua chave de API" required>
+                                    <input type="text" name="api" class="form-control" value="<?= $module->api ?>" placeholder="Insira sua chave de API" required>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="inputConfirmPassword">Chave Secreta</label>
-                                    <input type="number" name="secret" class="form-control" value="<?= $config?->secret ?>" placeholder="Insira sua sua Chave Secreta" required>
+                                    <input type="text" name="secret" class="form-control" value="<?= $module?->secret ?>" placeholder="Insira sua sua Chave Secreta" required>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="inputConfirmPassword">Registros de Logs</label>
                                     <select class="form-control" name="log_system">
-                                        <option value="1" <?= $config && $config->log_system ? 'selected' : '' ?>>Sim</option>
-                                        <option value="0" <?= $config && !$config->log_system ? 'selected' : '' ?>>Não</option>
+                                        <option value="1" <?= $module->configured && $module->logSystem ? 'selected' : '' ?>>Sim</option>
+                                        <option value="0" <?= $module->configured && !$module->logSystem ? 'selected' : '' ?>>Não</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="inputConfirmPassword">Auto. Remoção dos Registros de Logs</label>
-                                    <select class="form-control" name="logautoremove">
-                                        <option value="1" <?= $config && $config->log_auto_remove ? 'selected' : '' ?>>Sim</option>
-                                        <option value="0" <?= $config && !$config->log_auto_remove ? 'selected' : '' ?>>Não</option>
+                                    <select class="form-control" name="log_auto_remove">
+                                        <option value="1" <?= $module->configured && $module->logAutoRemove ? 'selected' : '' ?>>Sim</option>
+                                        <option value="0" <?= $module->configured && !$module->logAutoRemove ? 'selected' : '' ?>>Não</option>
                                     </select>
                                     <i class="fas fa-question-circle text-danger" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-html="true" title="Apaga os registros de logs do módulo todo dia primeiro de cada mês, através das ações de hooks do WHMCS."></i>
                                 </div>
@@ -264,7 +260,7 @@ function zapme_output($vars)
                                     <select class="form-control" name="client_phone_field_id">
                                         <option value="0">- Padrão do WHMCS</option>
                                         <?php foreach ($fields as $field) : ?>
-                                            <option value="<?= $field->id ?>" <?= isset($config->client_phone_field_id) && $config->client_phone_field_id == $field->id ? 'selected' : '' ?>>#<?= $field->id ?> - Nome: <?= $field->fieldname ?></option>
+                                            <option value="<?= $field->id ?>" <?= $module->configured && $module->clientPhoneFieldId == $field->id ? 'selected' : '' ?>>#<?= $field->id ?> - Nome: <?= $field->fieldname ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                     <i class="fas fa-question-circle text-danger" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-html="true" title="Permite usar um campo customizado de Telefone diferente do padrão do WHMCS. <b>Este campo necessita que o formato do telefone seja: DDI + DDD + Telefone.</b> Caso não seja identificado o DDI no campo customizado o sistema irá obter o DDI do campo de Telefone padrão do WHMCS."></i>
@@ -276,14 +272,14 @@ function zapme_output($vars)
                                     <select class="form-control" name="client_consent_field_id">
                                         <option value="0">- Nenhum</option>
                                         <?php foreach ($fields as $field) : ?>
-                                            <option value="<?= $field->id ?>" <?= isset($config->client_consent_field_id) && $config->client_consent_field_id == $field->id ? 'selected' : '' ?>>#<?= $field->id ?> - Nome: <?= $field->fieldname ?></option>
+                                            <option value="<?= $field->id ?>" <?= $module->configured && $module->clientConsentFieldId == $field->id ? 'selected' : '' ?>>#<?= $field->id ?> - Nome: <?= $field->fieldname ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                     <i class="fas fa-question-circle text-danger" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-html="true" title="Campo custommizado de cadastro para viabilizar o conscentimento do cliente para receber ou não as mensagens encaminhadas pelo sistema. Se definido como <b>Nenhum</b> o envio será efetuado normalmente.<br><br>O valor do campo customizado para seleção do cliente deve conter: Sim,Não (com ou sem acento). <b>Caso o cliente selecione Não, então os envios serão abortados.</b>"></i>
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-success btn-block">Salvar</button>
+                        <button type="submit" class="btn btn-success btn-block">SALVAR</button>
                     </form>
                 </div>
             </div>
