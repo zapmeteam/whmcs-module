@@ -28,14 +28,14 @@ class AfterModuleCreate extends AbstractTemplateStructure
     public function variables(): array
     {
         return [
-            'product'  => 'Nome do serviço',
-            'id'       => 'Id do serviço',
-            'duedate'  => 'Data de vencimento (d/m/Y)',
-            'value'    => 'Valor total',
-            'ip'       => 'IP do serviço',
-            'domain'   => 'Domínio do serviço',
-            'user'     => 'Usuário do serviço',
-            'password' => 'Senha do serviço',
+            'product'  => 'Nome do Serviço',
+            'id'       => 'Id do Serviço',
+            'duedate'  => 'Data de Vencimento',
+            'value'    => 'Valor Total',
+            'ip'       => 'IP do Serviço',
+            'domain'   => 'Domínio do Serviço',
+            'user'     => 'Usuário do Serviço',
+            'password' => 'Senha do Serviço',
         ];
     }
 }

@@ -152,6 +152,13 @@ if (!function_exists('alert')) {
     }
 }
 
+if (!function_exists('selected')) {
+    function selected(bool $boolean, string $text = 'selected'): string
+    {
+        return $boolean ? $text : '';
+    }
+}
+
 if (!function_exists('templatesConfigurations')) {
     /**
      * Save all template descriptions
@@ -943,40 +950,6 @@ if (!function_exists('templatesConfigurations')) {
         ];
 
         return $types[$code];
-    }
-}
-
-if (!function_exists('drawTemplatesVariables')) {
-    /**
-     * Draw template variables in an alert div
-     * 
-     * @param string $code
-     * @param bool $modulePagHiper
-     * 
-     * @return string
-     */
-    function drawTemplatesVariables(string $code, bool $modulePagHiper = false): string
-    {
-        $alert  = '<div class="alert alert-info text-center">';
-        $alert .= '%name% - Nome do cliente (completo)<br>';
-        $alert .= '%firstname% - Primeiro nome do cliente<br>';
-        $alert .= '%lastname% - Último nome do cliente<br>';
-        $alert .= '%email% - E-mail do cliente<br>';
-        $alert .= '%company% - Compania do Cliente<br>';
-        $alert .= '<hr>';
-
-        $variables = templatesConfigurations($code)['variables'];
-
-        foreach ($variables as $key => $value) {
-            if ($modulePagHiper === false && mb_strpos($key, 'paghiper') !== false) {
-                continue;
-            }
-            $alert .= '%' . $key . '% - ' . $value . '<br>';
-        }
-
-        $alert .= '</div>';
-
-        return $alert;
     }
 }
 

@@ -30,7 +30,7 @@ class InvoiceCreated extends AbstractTemplateStructure
     {
         return [
             'invoiceid'        => 'Id da fatura',
-            'duedate'          => 'Vencimento da fatura (d/m/Y)',
+            'duedate'          => 'Vencimento da fatura',
             'value'            => 'Valor total',
             'paghiper_barcode' => 'Código de Barras do Boleto Bancário da PagHiper',
         ];

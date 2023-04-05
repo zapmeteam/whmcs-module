@@ -22,9 +22,9 @@ class InvoicePaid extends AbstractTemplateStructure
     public function variables(): array
     {
         return [
-            'invoiceid' => 'Id da fatura',
-            'duedate'   => 'Vencimento da fatura (d/m/Y)',
-            'value'     => 'Valor total',
+            'invoiceid' => 'Id da Fatura',
+            'duedate'   => 'Vencimento da Fatura',
+            'value'     => 'Valor Total',
         ];
     }
 }

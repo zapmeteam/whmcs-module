@@ -7,6 +7,7 @@ use WHMCS\User\Client;
 use WHMCS\Database\Capsule;
 use ZapMe\Whmcs\Actions\Actions;
 use ZapMe\Whmcs\Module\Template;
+use ZapMe\Whmcs\Module\PagHiper;
 use ZapMe\Whmcs\Module\Configuration;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -136,10 +137,10 @@ function zapme_output($vars)
 
     switch ($tab) {
         case 'templates':
-            $templates = Capsule::table('mod_zapme_templates')->get();
+            $templates = (new Template())->fromDto();
             break;
         case 'editrules':
-            $templates = Capsule::table('mod_zapme_templates')->where('id', '=', $request->get('template'))->get();
+            $templates = (new Template($request->get('template')))->fromDto();
             break;
         case 'logs':
             $logs = Capsule::table('mod_zapme_logs')->oldest('id')->get();
@@ -210,7 +211,8 @@ function zapme_output($vars)
         <li <?= $tab === 'logs' ? 'class="active"' : '' ?> <?= !$module->configured ? 'style="display: none;' : '' ?>><a class="tab-top" href="addonmodules.php?module=zapme&tab=logs" id="logs" data-tab-id="3">Logs</a></li>
     </ul>
     <div class="tab-content admin-tabs">
-        <div class="tab-pane <?= !$tab ? 'active' : '' ?>" id="configurations">
+        <!-- Configurations -->
+        <div class="tab-pane <?= selected(!$tab, 'active') ?>" id="configurations">
             <div class="auth-container" style="margin: auto !important; border-top: none;">
                 <div class="row">
                     <form action="addonmodules.php?module=zapme&internalconfig=true&action=configuration" method="post">
@@ -219,8 +221,8 @@ function zapme_output($vars)
                                 <div class="form-group">
                                     <label for="inputConfirmPassword">Status</label>
                                     <select class="form-control" name="is_active">
-                                        <option value="1" <?= $module->configured && $module->isActive ? 'selected' : '' ?>>Ativado</option>
-                                        <option value="0" <?= $module->configured && !$module->isActive ? 'selected' : '' ?>>Desativado</option>
+                                        <option value="1" <?= selected($module->configured && $module->isActive) ?>>Ativado</option>
+                                        <option value="0" <?= selected($module->configured && !$module->isActive) ?>>Desativado</option>
                                     </select>
                                 </div>
                             </div>
@@ -240,8 +242,8 @@ function zapme_output($vars)
                                 <div class="form-group">
                                     <label for="inputConfirmPassword">Registros de Logs</label>
                                     <select class="form-control" name="log_system">
-                                        <option value="1" <?= $module->configured && $module->logSystem ? 'selected' : '' ?>>Sim</option>
-                                        <option value="0" <?= $module->configured && !$module->logSystem ? 'selected' : '' ?>>Não</option>
+                                        <option value="1" <?= selected($module->configured && $module->logSystem) ?>>Sim</option>
+                                        <option value="0" <?= selected($module->configured && !$module->logSystem) ?>>Não</option>
                                     </select>
                                 </div>
                             </div>
@@ -249,8 +251,8 @@ function zapme_output($vars)
                                 <div class="form-group">
                                     <label for="inputConfirmPassword">Auto. Remoção dos Registros de Logs</label>
                                     <select class="form-control" name="log_auto_remove">
-                                        <option value="1" <?= $module->configured && $module->logAutoRemove ? 'selected' : '' ?>>Sim</option>
-                                        <option value="0" <?= $module->configured && !$module->logAutoRemove ? 'selected' : '' ?>>Não</option>
+                                        <option value="1" <?= selected($module->configured && $module->logAutoRemove) ?>>Sim</option>
+                                        <option value="0" <?= selected($module->configured && !$module->logAutoRemove) ?>>Não</option>
                                     </select>
                                     <i class="fas fa-question-circle text-danger" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-html="true" title="Apaga os registros de logs do módulo todo dia primeiro de cada mês, através das ações de hooks do WHMCS."></i>
                                 </div>
@@ -261,7 +263,7 @@ function zapme_output($vars)
                                     <select class="form-control" name="client_phone_field_id">
                                         <option value="0">- Padrão do WHMCS</option>
                                         <?php foreach ($fields as $field) : ?>
-                                            <option value="<?= $field->id ?>" <?= $module->configured && $module->clientPhoneFieldId == $field->id ? 'selected' : '' ?>>#<?= $field->id ?> - Nome: <?= $field->fieldname ?></option>
+                                            <option value="<?= $field->id ?>" <?= selected($module->configured && $module->clientPhoneFieldId == $field->id) ?>>#<?= $field->id ?> - Nome: <?= $field->fieldname ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                     <i class="fas fa-question-circle text-danger" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-html="true" title="Permite usar um campo customizado de Telefone diferente do padrão do WHMCS. <b>Este campo necessita que o formato do telefone seja: DDI + DDD + Telefone.</b> Caso não seja identificado o DDI no campo customizado o sistema irá obter o DDI do campo de Telefone padrão do WHMCS."></i>
@@ -273,7 +275,7 @@ function zapme_output($vars)
                                     <select class="form-control" name="client_consent_field_id">
                                         <option value="0">- Nenhum</option>
                                         <?php foreach ($fields as $field) : ?>
-                                            <option value="<?= $field->id ?>" <?= $module->configured && $module->clientConsentFieldId == $field->id ? 'selected' : '' ?>>#<?= $field->id ?> - Nome: <?= $field->fieldname ?></option>
+                                            <option value="<?= $field->id ?>" <?= selected($module->configured && $module->clientConsentFieldId == $field->id) ?>>#<?= $field->id ?> - Nome: <?= $field->fieldname ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                     <i class="fas fa-question-circle text-danger" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-html="true" title="Campo custommizado de cadastro para viabilizar o conscentimento do cliente para receber ou não as mensagens encaminhadas pelo sistema. Se definido como <b>Nenhum</b> o envio será efetuado normalmente.<br><br>O valor do campo customizado para seleção do cliente deve conter: Sim,Não (com ou sem acento). <b>Caso o cliente selecione Não, então os envios serão abortados.</b>"></i>
@@ -285,7 +287,8 @@ function zapme_output($vars)
                 </div>
             </div>
         </div>
-        <div class="tab-pane <?= $tab === 'templates' ? 'active' : '' ?>" id="templates">
+        <!-- Templates -->
+        <div class="tab-pane <?= selected($tab === 'templates', 'active') ?>" id="templates">
             <table id="tabletempalte" class="table table-striped table-responsive" style="width: 100% !important">
                 <thead>
                 <tr>
@@ -298,20 +301,18 @@ function zapme_output($vars)
                 </tr>
                 </thead>
                 <tbody>
-                <?php
-                    $modulePagHiper = modulePagHiperExist();
-                    foreach ($templates as $template):
-                    $templateConfiguration = templatesConfigurations($template->code); ?>
+                <?php /** @var \ZapMe\Whmcs\DTO\TemplateDTO $template */
+                    foreach ($templates as $template): ?>
                     <tr>
                         <th><?= $template->id ?></th>
-                        <th><?= $templateConfiguration['name'] ?></th>
-                        <th><?= $templateConfiguration['description'] ?></th>
+                        <th><?= $template->name ?></th>
+                        <th><?= $template->structure->description ?></th>
                         <th>
-                            <?php $class = $template->is_active ? 'success' : 'danger'; ?>
+                            <?php $class = $template->isActive ? 'success' : 'danger'; ?>
                             <i class="fa fa-check-circle text-<?= $class; ?>"></i>
                         </th>
                         <th>
-                            <?php $class = $template->is_configurable ? 'success' : 'danger'; ?>
+                            <?php $class = $template->isConfigurable ? 'success' : 'danger'; ?>
                             <i class="fa fa-check-circle text-<?= $class; ?>"></i>
                         </th>
                         <th> <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editmodal-<?= $template->id ?>"><i class="fa fa-eye" aria-hidden="true"></i></button> </th>
@@ -320,7 +321,7 @@ function zapme_output($vars)
                             <div class="modal-dialog modal-lg" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">#<?= $template->id ?> - <?= $templateConfiguration['name'] ?></h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">#<?= $template->id ?> - <?= $template->name ?></h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -334,10 +335,10 @@ function zapme_output($vars)
                                             </div>
                                             <hr>
                                             <p>Variáveis Disponíveis</p>
-                                            <?= drawTemplatesVariables($template->code, $modulePagHiper) ?>
-                                            <?php if (isset($templateConfiguration['paghiper']) && $modulePagHiper === true) : ?>
+                                            <?php echo $template->structure->print; ?>
+                                            <?php if (isset($template->structure->paghiper)) : ?>
                                                 <div class="alert alert-warning text-center">
-                                                    <?= $templateConfiguration['paghiper'] ?>
+                                                    Para anexar o boleto bancário do PagHiper neste template escreva: %paghiper_boleto% em qualquer parte da mensagem
                                                 </div>
                                                 <small class="text-danger"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> O boleto bancário do PagHiper só será enviado se o sistema atender as seguintes condições: <b>I.</b> A fatura for superior à R$ 3,00. <b>II.</b> A fatura estiver com o método de pagamento PagHiper. <b>III.</b> O módulo do PagHiper estiver ativado e marcado como visível. <b>Caso contrário, as variáveis %paghiper_barcode% e %paghiper_boleto% serão removidas do envio</b></small>
                                             <?php endif; ?>
@@ -345,11 +346,11 @@ function zapme_output($vars)
                                             <div class="form-group">
                                                 <label>Status</label>
                                                 <select class="form-control" name="is_active">
-                                                    <option value="1" <?= $template->is_active ? 'selected' : '' ?>>Ativado</option>
-                                                    <option value="0" <?= !$template->is_active ? 'selected' : '' ?>>Desativado</option>
+                                                    <option value="1" <?= selected($template->isActive) ?>>Ativado</option>
+                                                    <option value="0" <?= selected(!$template->isActive) ?>>Desativado</option>
                                                 </select>
                                             </div>
-                                            <?php if ($template->is_configurable) : ?>
+                                            <?php if ($template->isConfigurable && !empty($template->structure->rules)) : ?>
                                                 <a class="btn btn-danger btn-sm" href="addonmodules.php?module=zapme&tab=templates&action=editrules&template=<?= $template->id ?>">REGRAS DE ENVIO</a>
                                             <?php endif; ?>
                                         </div>
@@ -365,7 +366,8 @@ function zapme_output($vars)
                 </tbody>
             </table>
         </div>
-        <div class="tab-pane <?= $tab === 'editrules' ? 'active' : '' ?>" id="editrules">
+        <!-- Template Rules -->
+        <div class="tab-pane <?= selected($tab === 'editrules', 'active') ?>" id="editrules">
             <a class="btn btn-info btn-sm" href="addonmodules.php?module=zapme&tab=templates">VOLTAR</a>
             <div class="signin-apps-container">
                 <?php if ($tab === 'editrules') {
@@ -377,7 +379,7 @@ function zapme_output($vars)
                     <div class="alert alert-danger text-center">O template selecionado <b>(#<?= $template->id ?>)</b> não possui regras disponíveis para edição.</div>
                 <?php else : ?>
                     <div class="alert alert-info text-center">
-                        Você está editando as regras do template: <b>(#<?= $request->get('template') ?>)</b> <?= $templateConfiguration['name'] ?>
+                        Você está editando as regras do template: <b>(#<?= $request->get('template') ?>)</b> <?= $template->name ?>
                     </div>
                     <form action="addonmodules.php?module=zapme&internalconfig=true&tab=templates&action=editrules&template=<?= $template->id ?>" method="post">
                         <input type="hidden" name="template" value="<?= $template->id ?>">
@@ -399,7 +401,8 @@ function zapme_output($vars)
                 <?php endif; ?>
             </div>
         </div>
-        <div class="tab-pane <?= $tab === 'logs' ? 'active' : '' ?>" id="logs">
+        <!-- Logs -->
+        <div class="tab-pane <?= selected($tab === 'templates', 'active') ?>" id="logs">
             <button class="btn btn-danger btn-sm" style="margin: 0px 0px 15px 0px;" data-toggle="modal" data-target="#clearlogs">APAGAR REGISTROS</button>
             <table id="tablelog" class="table table-striped table-responsive" style="width: 100% !important">
                 <thead>

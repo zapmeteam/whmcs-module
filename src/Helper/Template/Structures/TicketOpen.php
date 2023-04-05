@@ -27,12 +27,12 @@ class TicketOpen extends AbstractTemplateStructure
     public function variables(): array
     {
         return [
-            'id'        => 'Id do Ticket',
-            'tid'       => 'Tid do Ticket',
-            'title'     => 'Título do Ticket',
-            'date'      => 'Data da Abertura do Ticket',
-            'hour'      => 'Hora da Abertura do Ticket',
-            'deptname'  => 'Departamento do Ticket',
+            'id'          => 'Id do Ticket',
+            'tid'         => 'Tid do Ticket',
+            'title'       => 'Título do Ticket',
+            'date'        => 'Data da Abertura do Ticket',
+            'hour'        => 'Hora da Abertura do Ticket',
+            'deppartment' => 'Departamento do Ticket',
         ];
     }
 }
