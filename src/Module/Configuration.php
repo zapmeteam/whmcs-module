@@ -1,6 +1,6 @@
 <?php
 
-namespace ZapMe\Whmcs;
+namespace ZapMe\Whmcs\Module;
 
 use WHMCS\Database\Capsule;
 use Illuminate\Support\Carbon;
@@ -32,7 +32,7 @@ class Configuration
         ));
     }
 
-    public function fromDatabase(): object
+    public function fromDatabase(): ?object
     {
         if ($this->configuration) {
             $this->configuration->account    = unserialize($this->configuration->account);

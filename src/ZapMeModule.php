@@ -14,6 +14,7 @@ if (!defined('WHMCS')) {
     die;
 }
 
+/** @deprecated */
 class ZapMeModule
 {
     private string $now;

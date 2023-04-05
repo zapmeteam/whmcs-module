@@ -6,7 +6,8 @@ require __DIR__ . '/helper.php';
 use WHMCS\User\Client;
 use WHMCS\Database\Capsule;
 use ZapMe\Whmcs\Actions\Actions;
-use ZapMe\Whmcs\Configuration;
+use ZapMe\Whmcs\Module\Template;
+use ZapMe\Whmcs\Module\Configuration;
 use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('WHMCS')) {
@@ -70,24 +71,24 @@ function zapme_activate(): array
         });
 
         $templates = [
-            'invoicecreated'            => 'Olá %name%! Informamos que a fatura N° %invoiceid%, com vencimento em %duedate%, tem o valor total de R$ %value%, já encontra-se disponível em sua área do cliente para pagamento. Evite transtornos e efetue o pagamento até a data de vencimento.',
-            'invoicepaymentreminder'    => 'Olá %name%! Informamos que sua fatura N° %invoiceid% está em aberto há alguns dias em sua área do cliente, com o vencimento em %duedate% e o valor total de R$ %value%. Evite transtornos e efetue o pagamento da fatura.',
-            'invoicepaid'               => 'Olá %name%! Informamos que o pagamento de sua fatura N° %invoiceid%, foi confirmado com sucesso, agradecemos a sua confiança.',
-            'invoicecancelled'          => 'Olá %name%! Informamos que a fatura N° %invoiceid%, com vencimento em %duedate% e o valor total de R$ %value% foi cancelada em sua conta. Para mais detalhes entre em contato com o nosso suporte via ticket em sua área do cliente',
-            'invoicefirstoverduealert'  => 'Olá %name%! Informamos que sua fatura N° %invoiceid% está vencida há 1 dia e esta mensagem serve como um lembrete de primeiro aviso de fatura em atraso. O vencimento da fatura era em %duedate%, com o valor total de R$ %value%. O não pagamento desta fatura poderá acarretar em suspensão dos serviços vinculado a ela.',
-            'invoicesecondoverduealert' => 'Olá %name%! Informamos que sua fatura N° %invoiceid% está vencida há 2 dias e esta mensagem serve como um lembrete de segundo aviso de fatura em atraso. O vencimento da fatura era em %duedate%, com o valor total de R$ %value%. O não pagamento desta fatura poderá acarretar em suspensão dos serviços vinculado a ela.',
-            'invoicethirdoverduealert'  => 'Olá %name%! Informamos que sua fatura N° %invoiceid% está vencida há 3 dias e esta mensagem serve como um lembrete de terceiro e último aviso de fatura em atraso. O vencimento da fatura era em %duedate%, com o valor total de R$ %value%. Os serviços vinculados a esta fatura poderão ser suspensos e nenhum novo aviso será emitido.',
-            'ticketopen'                => 'Olá %name%! Recebemos o seu ticket de N° %ticket% em %date% as %hour% em nosso sistema. Aguarde, em breve um de nossos atendentes irá lhe atender.',
-            'ticketadminreply'          => 'Olá %name%! O seu ticket N° %ticket% foi respondido por nossa equipe neste exato momento (%date% - %hour%). Visite sua área de cliente para conferir maiores informações.',
-            'aftermodulecreate'         => 'Olá %name%! O seu produto %product% foi ativado! Para sua segurança os dados de acesso foram encaminhados ao seu e-mail neste momento. Caso não encontre entre em contato conosco.',
-            'aftermodulesuspend'        => 'Olá %name%! Informamos que o produto %product% foi suspenso, para mais informações acesse a área do cliente.',
-            'aftermoduleunsuspend'      => 'Olá %name%! Informamos que o produto %product% foi reativado, para mais informações acesse a área do cliente.',
-            'aftermoduleterminate'      => 'Olá %name%! Informamos que o produto %product% foi cancelado, para mais informações acesse a área do cliente.',
-            'aftermoduleready'          => 'Olá %name%! Informamos o serviço %product% encontra-se pronto para uso a partir de agora. Veja alguns detalhes sobre: Domínio: %domain%, IP: %ip%, Valor: R$ %value%, Vencimento: %duedate%. Outros detalhes como: nome de usuário e senha do serviço foram encaminhados ao seu e-mail por uma questão de segurança. Caso não tenha recebido entre em contato com nosso suporte via ticket em sua área do cliente',
-            'clientadd'                 => 'Olá %name%! Seja bem-vindo a %companyname%! Agradecemos a preferência em nossa plataforma, ficamos contentes com a sua chegada.',
-            'clientlogin'               => 'Olá %name%! Identificamos um acesso à sua conta originado do endereço de IP %ipaddr%. Caso desconheça este IP recomendamos alterar sua senha imediatamente.',
-            'clientareapagelogin'       => 'Olá %name%! Identificamos uma falha de login originada deste IP %ipaddr% em %date% as %hour% sua conta: %email%. Caso você desconheça este IP ou tenha certeza que não foi você recomendamos alterar sua senha imediatamente.',
-            'clientchangepassword'      => 'Olá %name%! Informamos que a senha da sua conta (%email%) foi alterada neste momento e por isso achamos prudente te notificar. IP: %ipaddr%, Data da alteração: %date%, Hora: %hour%. Se você desconhece essa ação recomendamos recuperar sua senha neste momento e em seguida entre em contato com nosso suporte via ticket em sua área do cliente.',
+            'InvoiceCreated'            => 'Olá %name%! Informamos que a fatura N° %invoiceid%, com vencimento em %duedate%, tem o valor total de R$ %value%, já encontra-se disponível em sua área do cliente para pagamento. Evite transtornos e efetue o pagamento até a data de vencimento.',
+            'InvoicePaymentReminder'    => 'Olá %name%! Informamos que sua fatura N° %invoiceid% está em aberto há alguns dias em sua área do cliente, com o vencimento em %duedate% e o valor total de R$ %value%. Evite transtornos e efetue o pagamento da fatura.',
+            'InvoicePaid'               => 'Olá %name%! Informamos que o pagamento de sua fatura N° %invoiceid%, foi confirmado com sucesso, agradecemos a sua confiança.',
+            'InvoiceCancelled'          => 'Olá %name%! Informamos que a fatura N° %invoiceid%, com vencimento em %duedate% e o valor total de R$ %value% foi cancelada em sua conta. Para mais detalhes entre em contato com o nosso suporte via ticket em sua área do cliente',
+            'InvoiceFirstOverdueAlert'  => 'Olá %name%! Informamos que sua fatura N° %invoiceid% está vencida há 1 dia e esta mensagem serve como um lembrete de primeiro aviso de fatura em atraso. O vencimento da fatura era em %duedate%, com o valor total de R$ %value%. O não pagamento desta fatura poderá acarretar em suspensão dos serviços vinculado a ela.',
+            'InvoiceSecondOverdueAlert' => 'Olá %name%! Informamos que sua fatura N° %invoiceid% está vencida há 2 dias e esta mensagem serve como um lembrete de segundo aviso de fatura em atraso. O vencimento da fatura era em %duedate%, com o valor total de R$ %value%. O não pagamento desta fatura poderá acarretar em suspensão dos serviços vinculado a ela.',
+            'InvoiceThirdOverdueAlert'  => 'Olá %name%! Informamos que sua fatura N° %invoiceid% está vencida há 3 dias e esta mensagem serve como um lembrete de terceiro e último aviso de fatura em atraso. O vencimento da fatura era em %duedate%, com o valor total de R$ %value%. Os serviços vinculados a esta fatura poderão ser suspensos e nenhum novo aviso será emitido.',
+            'TicketOpen'                => 'Olá %name%! Recebemos o seu ticket de N° %ticket% em %date% as %hour% em nosso sistema. Aguarde, em breve um de nossos atendentes irá lhe atender.',
+            'TicketAdminReply'          => 'Olá %name%! O seu ticket N° %ticket% foi respondido por nossa equipe neste exato momento (%date% - %hour%). Visite sua área de cliente para conferir maiores informações.',
+            'AfterModuleCreate'         => 'Olá %name%! O seu produto %product% foi ativado! Para sua segurança os dados de acesso foram encaminhados ao seu e-mail neste momento. Caso não encontre entre em contato conosco.',
+            'AfterModuleSuspend'        => 'Olá %name%! Informamos que o produto %product% foi suspenso, para mais informações acesse a área do cliente.',
+            'AfterModuleUnsuspend'      => 'Olá %name%! Informamos que o produto %product% foi reativado, para mais informações acesse a área do cliente.',
+            'AfterModuleTerminate'      => 'Olá %name%! Informamos que o produto %product% foi cancelado, para mais informações acesse a área do cliente.',
+            'AfterModuleReady'          => 'Olá %name%! Informamos o serviço %product% encontra-se pronto para uso a partir de agora. Veja alguns detalhes sobre: Domínio: %domain%, IP: %ip%, Valor: R$ %value%, Vencimento: %duedate%. Outros detalhes como: nome de usuário e senha do serviço foram encaminhados ao seu e-mail por uma questão de segurança. Caso não tenha recebido entre em contato com nosso suporte via ticket em sua área do cliente',
+            'ClientAdd'                 => 'Olá %name%! Seja bem-vindo a %companyname%! Agradecemos a preferência em nossa plataforma, ficamos contentes com a sua chegada.',
+            'ClientLogin'               => 'Olá %name%! Identificamos um acesso à sua conta originado do endereço de IP %ipaddr%. Caso desconheça este IP recomendamos alterar sua senha imediatamente.',
+            'ClientAreaPageLogin'       => 'Olá %name%! Identificamos uma falha de login originada deste IP %ipaddr% em %date% as %hour% sua conta: %email%. Caso você desconheça este IP ou tenha certeza que não foi você recomendamos alterar sua senha imediatamente.',
+            'ClientChangePassword'      => 'Olá %name%! Informamos que a senha da sua conta (%email%) foi alterada neste momento e por isso achamos prudente te notificar. IP: %ipaddr%, Data da alteração: %date%, Hora: %hour%. Se você desconhece essa ação recomendamos recuperar sua senha neste momento e em seguida entre em contato com nosso suporte via ticket em sua área do cliente.',
         ];
 
         $connection = Capsule::connection();

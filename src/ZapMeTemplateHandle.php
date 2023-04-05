@@ -9,6 +9,7 @@ if (!defined('WHMCS')) {
     die('Denied access');
 }
 
+/** @deprecated */
 class ZapMeTemplateHandle
 {
     /** * @var object */
