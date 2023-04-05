@@ -9,14 +9,12 @@ use Illuminate\Support\Collection;
 use Illuminate\Database\Query\Builder;
 use WHMCS\Database\Capsule;
 
-class Template extends Base
+class Template
 {
     protected Collection|null $template = null;
 
     public function __construct(?string $code = null)
     {
-        parent::__construct();
-
         $this->template = Capsule::table('mod_zapme_templates')
             ->when($code, fn (Builder $query) => $query->where('code', '=', $code))
             ->get();
