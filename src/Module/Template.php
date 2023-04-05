@@ -42,7 +42,7 @@ class Template
                 createdAt: Carbon::parse($item->created_at),
                 updatedAt: Carbon::parse($item->updated_at),
             ));
-        })->count() == 1 ? $this->template->first() : $this->template;
+        });
     }
 
     public function fromDatabase(): ?object
@@ -55,7 +55,7 @@ class Template
             $item->updated_at     = Carbon::parse($item->updated_at);
 
             return $item;
-        })->count() == 1 ? $this->template->first() : $this->template;
+        });
     }
 
     private function structure(object $template): object

@@ -6,13 +6,14 @@ abstract class AbstractTemplateStructure
 {
     public static function execute(bool $paghiper): object
     {
-        $variables = (new static())->variables();
+        $class     = new static();
+        $variables = $class->variables();
 
         return (object) array_merge(
-            (new static())->base(),
-            ['rules'     => (new static())->rules()],
+            $class->base(),
+            ['rules'     => $class->rules()],
+            ['print'     => $class->print($paghiper, $variables)],
             ['variables' => $variables],
-            ['print'     => (new static())->print($paghiper, $variables)],
         );
     }
 

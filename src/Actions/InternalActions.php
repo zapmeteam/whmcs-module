@@ -6,6 +6,8 @@ use Throwable;
 use Punic\Exception;
 use WHMCS\Database\Capsule;
 use ZapMe\Whmcs\Module\Base;
+use ZapMe\Whmcs\Module\Template;
+use ZapMe\Whmcs\DTO\TemplateDTO;
 use Symfony\Component\HttpFoundation\Request;
 
 class InternalActions extends Base
@@ -79,29 +81,30 @@ class InternalActions extends Base
         return $this->danger("Ops! <b>Houve algum erro ao editar o template.</b> Verifique os logs do sistema.</b>");
     }
 
-    public function editModuleTemplateRulesConfigurations(Request $request): string
+    public function editModuleTemplateRulesConfigurations(Request $request): ?string
     {
         $post = $request->request;
 
         try {
-            $template = Capsule::table('mod_zapme_templates')
-                ->where('id', '=', $post->get('template'))
+            /** @var TemplateDTO $template */
+            $template = (new Template($post->get('template')))
+                ->fromDto()
                 ->first();
 
-            $templateDescriptions = templatesConfigurations($template->code);
-
-            if (!isset($templateDescriptions['rules'])) {
-                return $this->danger("Ops! <b>O template selecionado <b>(#{$template->id})</b> não possui regras de envio.</b>");
+            if (!$template->isConfigurable || empty($template->structure->rules)) {
+                return $this->danger("Ops! <b>O template selecionado <b>(#{$template->name})</b> não é personalizável.</b>");
             }
 
             $post->remove('token');
             $post->remove('template');
             $all = $post->all();
 
-            foreach ($templateDescriptions['rules'] as $rule => $informations) {
-                if ($informations['field']['type'] === 'text') {
-                    $all[$informations['id']] = trim($all[$informations['id']], ',');
+            foreach ($template->structure->rules as $rule) {
+                if ($rule['field']['type'] !== 'text') {
+                    continue;
                 }
+
+                $all[$rule['id']] = trim($all[$rule['id']], ',');
             }
 
             Capsule::table('mod_zapme_templates')

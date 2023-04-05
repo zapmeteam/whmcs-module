@@ -2,11 +2,53 @@
 
 namespace ZapMe\Whmcs\Helper\Template;
 
+use ZapMe\Whmcs\DTO\TemplateDTO;
+
 class TemplateRule
 {
     public static function build(string $rule): array
     {
         return (new self())->{$rule}();
+    }
+
+    public static function print(TemplateDTO $templateDTO, array $rule): string
+    {
+        $configuration = $templateDTO->configurations;
+
+        $type        = $rule['field']['type'];
+        $name        = $rule['id'];
+        $id          = $rule['id'];
+        $placeholder = $rule['field']['placeholder'] ?? null;
+        $required    = $rule['field']['required'] ?? null;
+        $maxlength   = $rule['field']['maxlength'] ?? null;
+        $minlength   = $rule['field']['minlength'] ?? null;
+        $min         = $rule['field']['min'] ?? null;
+        $max         = $rule['field']['max'] ?? null;
+        $options     = $rule['field']['options'] ?? null;
+        $current     = $configuration[$rule['id']] ?? null;
+
+        $input = $type === 'select' ? "<select" : "<input type=\"text\"";
+        $input .= " class=\"form-control\" name=\"{$name}\" id=\"{$id}\" ";
+        $input .= $placeholder ? " placeholder=\"{$placeholder}\" " : "";
+        $input .= $required ? " required " : "";
+        $input .= $maxlength ? " maxlength=\"{$maxlength}\" " : "";
+        $input .= $minlength ? " minlength=\"{$minlength}\" " : "";
+        $input .= $max ? " max=\"{$max}\" " : "";
+        $input .= $min ? " min=\"{$min}\" " : "";
+
+        if ($type === 'select') {
+            $input .= ">";
+
+            foreach ($options as $key => $value) {
+                $input .= "<option value=\"{$key}\"";
+                $input .= $value === $current ? " selected " : "";
+                $input .= ">{$value}</option>";
+            }
+        }
+
+        $input .= $type === 'select' ? "</select>" : " value=\"{$current}\" />";
+
+        return $input;
     }
 
     private function client(): array

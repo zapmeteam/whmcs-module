@@ -7,9 +7,9 @@ use WHMCS\User\Client;
 use WHMCS\Database\Capsule;
 use ZapMe\Whmcs\Actions\Actions;
 use ZapMe\Whmcs\Module\Template;
-use ZapMe\Whmcs\Module\PagHiper;
 use ZapMe\Whmcs\Module\Configuration;
 use Symfony\Component\HttpFoundation\Request;
+use ZapMe\Whmcs\Helper\Template\TemplateRule;
 
 if (!defined('WHMCS')) {
     die;
@@ -370,30 +370,19 @@ function zapme_output($vars)
         <div class="tab-pane <?= selected($tab === 'editrules', 'active') ?>" id="editrules">
             <a class="btn btn-info btn-sm" href="addonmodules.php?module=zapme&tab=templates">VOLTAR</a>
             <div class="signin-apps-container">
-                <?php if ($tab === 'editrules') {
-                    $description = templatesConfigurations($template->code);
-                    $configuration = unserialize($template->configurations);
-                }
-                ?>
-                <?php if (!isset($description['rules']) || $description['rules'] === null) : ?>
+                <?php if (!$template->isConfigurable || empty($template->structure->rules)) : ?>
                     <div class="alert alert-danger text-center">O template selecionado <b>(#<?= $template->id ?>)</b> não possui regras disponíveis para edição.</div>
                 <?php else : ?>
                     <div class="alert alert-info text-center">
-                        Você está editando as regras do template: <b>(#<?= $request->get('template') ?>)</b> <?= $template->name ?>
+                        Você está editando as Regras de Envio do Template: <b><?= $template->name ?></b>
                     </div>
-                    <form action="addonmodules.php?module=zapme&internalconfig=true&tab=templates&action=editrules&template=<?= $template->id ?>" method="post">
+                    <form action="addonmodules.php?module=zapme&tab=templates&action=editrules&template=<?= $template->id ?>" method="post">
                         <input type="hidden" name="template" value="<?= $template->id ?>">
-                        <?php foreach ($description['rules'] as $rule) : ?>
+                        <?php foreach ($template->structure->rules as $rule) : ?>
                             <div class="form-group">
                                 <label><?= $rule['label'] ?></label>
-                                <<?= drawInputFromTemplatesRules($configuration, $rule); ?>>
-                                    <?php if ($rule['field']['type'] === 'select' && isset($rule['field']['options'])) : ?>
-                                        <?php foreach ($rule['field']['options'] as $option) : ?>
-                                            <option value="<?= $option ?>" <?= isset($configuration[$rule['id']]) && ($option == $configuration[$rule['id']]) ? 'selected' : '' ?>><?= $option ?></option>
-                                        <?php endforeach; ?>
-                                    <?php endif; ?>
-                                    <?php if ($rule['field']['type'] === 'select') : ?></select><?php endif; ?>
-                                    <small><?= $rule['description'] ?></small>
+                                <?= TemplateRule::print($template, $rule) ?>
+                                <small><?= $rule['description'] ?></small>
                             </div>
                         <?php endforeach; ?>
                         <button type="submit" class="btn btn-primary">Salvar</button>
@@ -402,7 +391,7 @@ function zapme_output($vars)
             </div>
         </div>
         <!-- Logs -->
-        <div class="tab-pane <?= selected($tab === 'templates', 'active') ?>" id="logs">
+        <div class="tab-pane <?= selected($tab === 'logs', 'active') ?>" id="logs">
             <button class="btn btn-danger btn-sm" style="margin: 0px 0px 15px 0px;" data-toggle="modal" data-target="#clearlogs">APAGAR REGISTROS</button>
             <table id="tablelog" class="table table-striped table-responsive" style="width: 100% !important">
                 <thead>
