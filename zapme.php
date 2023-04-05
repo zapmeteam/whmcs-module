@@ -138,14 +138,14 @@ function zapme_output($vars)
             $templates = Capsule::table('mod_zapme_templates')->get();
             break;
         case 'editrules':
-            $templates = Capsule::table('mod_zapme_templates')->where('id', '=', (int) $request->get('template'))->get();
+            $templates = Capsule::table('mod_zapme_templates')->where('id', '=', $request->get('template'))->get();
             break;
         case 'logs':
-            $logs = Capsule::table('mod_zapme_logs')->orderBy('id', '=', 'desc')->get();
+            $logs = Capsule::table('mod_zapme_logs')->oldest('id')->get();
             break;
     }
 
-    if (!$tab) $fields = Capsule::table('tblcustomfields')->where('type', 'client')->get();
+    if (!$tab) $fields = Capsule::table('tblcustomfields')->where('type', '=', 'client')->get();
 ?>
     <?php if (!$module->configured) : ?>
         <div class="alert alert-info text-center"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> <b>O módulo não encontra-se configurado para uso!</b> Certifique-se de configurar o módulo para que o mesmo funcione corretamente.</div>

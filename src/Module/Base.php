@@ -1,12 +1,12 @@
 <?php
 
-namespace ZapMe\Whmcs;
+namespace ZapMe\Whmcs\Module;
 
-use ZapMeSdk\Base as ZapMeSdk;
 use ZapMe\Whmcs\Traits\Alert;
+use ZapMeSdk\Base as ZapMeSdk;
 use Illuminate\Support\Carbon;
 
-class Sdk
+class Base
 {
     use Alert;
 
@@ -22,10 +22,9 @@ class Sdk
         $this->carbon->timezone('America/Sao_Paulo');
     }
 
-    public function carbonToDatabase(bool $createdAt = true): array
+    public function carbon(bool $createdAt = true): array
     {
-        $date = $this->carbon->format('Y-m-d H:i:s');
-
+        $date    = $this->carbon->format('Y-m-d H:i:s');
         $updated = ['updated_at' => $date];
 
         if (!$createdAt) {

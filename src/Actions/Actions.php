@@ -40,6 +40,7 @@ class Actions
 
         $method = self::ACTIONS[$this->action];
 
+        //TODO: change this to a better way
         if (in_array($this->action, $externals)) {
             return (new ExternalActions())->{$method}($this->request);
         }
