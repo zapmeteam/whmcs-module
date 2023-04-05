@@ -11,10 +11,8 @@ class TemplateRule
         return (new self())->{$rule}();
     }
 
-    public static function print(TemplateDTO $templateDTO, array $rule): string
+    public static function print(array $rule, ?array $configuration = []): ?string
     {
-        $configuration = $templateDTO->configurations;
-
         $type        = $rule['field']['type'];
         $name        = $rule['id'];
         $id          = $rule['id'];
@@ -25,7 +23,7 @@ class TemplateRule
         $min         = $rule['field']['min'] ?? null;
         $max         = $rule['field']['max'] ?? null;
         $options     = $rule['field']['options'] ?? null;
-        $current     = $configuration[$rule['id']] ?? null;
+        $current     = $configuration[$name] ?? null;
 
         $input = $type === 'select' ? "<select" : "<input type=\"text\"";
         $input .= " class=\"form-control\" name=\"{$name}\" id=\"{$id}\" ";
@@ -41,7 +39,7 @@ class TemplateRule
 
             foreach ($options as $key => $value) {
                 $input .= "<option value=\"{$key}\"";
-                $input .= $value === $current ? " selected " : "";
+                $input .= $key == $current ? " selected " : "";
                 $input .= ">{$value}</option>";
             }
         }

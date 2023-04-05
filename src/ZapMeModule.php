@@ -5,9 +5,7 @@ namespace ZapMe\Whmcs;
 use WHMCS\User\Client;
 use WHMCS\Service\Service;
 use WHMCS\Database\Capsule;
-use ZapMeSdk\Base as ZapMeSdk;
 use ZapMeTeam\Whmcs\Actions\Actions;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 if (!defined('WHMCS')) {
@@ -22,26 +20,6 @@ class ZapMeModule
     public function __construct()
     {
         $this->now = date('Y-m-d H:i:s');
-    }
-
-    /**
-     * Internal action for edit logs
-     *
-     * @param ParameterBag|null $post
-     * 
-     * @return string
-     */
-    private function internalActionEditLogs(ParameterBag $post = null): string
-    {
-        $clearlogs = $post->get('clearlogs');
-
-        if ($clearlogs === null) {
-            return alert('Ops! <b>Você não confirmou o procedimento.</b>', 'danger');
-        }
-
-        Capsule::table('mod_zapme_logs')->truncate();
-
-        return alert('Tudo certo! <b>Procedimento efetuado com sucesso.</b>');
     }
 
     /**

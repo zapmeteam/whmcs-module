@@ -59,7 +59,7 @@ function zapme_activate(): array
             $table->binary('message');
             $table->boolean('is_active')->default(true);
             $table->boolean('is_configurable')->default(true);
-            $table->text('configurations')->nullable();
+            $table->json('configurations')->nullable();
             $table->timestamps();
         });
 
@@ -157,7 +157,7 @@ function zapme_output($vars)
     <?php endif; ?>
     <?php if ($module->configured) : ?>
         <div class="signin-apps-container">
-            <p class="text-center">Status do Serviço <i class="fas fa-question-circle text-danger" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-html="true" title="Estas são as informações atreladas ao seu serviço da ZapMe. Para atualizar essas informações pressione o botão Salvar do módulo"></i></p>
+            <p class="text-center font-weight-bold">Status do Serviço</p>
             <div class="row">
                 <div class="col-sm-12 col-md-3">
                     <div class="app">
@@ -166,7 +166,7 @@ function zapme_output($vars)
                         </div>
                         <div class="content-container">
                             <?php $service = $module->account['service']['status'] === 'active'; ?>
-                            <div class="description"><label class="label label-<?= $service ? 'success' : 'danger' ?>"><span><?= $service ? 'ATIVADO' : 'DESATIVADO' ?></span></label></div>
+                            <div class="description"><label class="label label-<?= $service ? 'success' : 'danger' ?>"><span><?= $service ? 'ATIVO' : 'INATIVO' ?></span></label></div>
                         </div>
                     </div>
                 </div>
@@ -194,7 +194,7 @@ function zapme_output($vars)
                 <div class="col-sm-12 col-md-3">
                     <div class="app">
                         <div class="logo-container">
-                            <h5>AUTENTICAÇÃO</h5>
+                            <h5>WHATSAPP</h5>
                         </div>
                         <div class="content-container">
                             <?php $authenticated = $module->account['auth']['status'] === true; ?>
@@ -220,7 +220,7 @@ function zapme_output($vars)
         </li>
         <li <?= $tab === 'logs' ? 'class="active"' : '' ?> <?= !$module->configured ? 'style="display: none;' : '' ?>>
             <a class="tab-top" href="addonmodules.php?module=zapme&tab=logs" id="logs" data-tab-id="3">
-                <i class="fa fa-tags"></i>
+                <i class="fa fa-list"></i>
                 Logs
             </a>
         </li>
@@ -386,17 +386,17 @@ function zapme_output($vars)
             <a class="btn btn-info btn-sm" href="addonmodules.php?module=zapme&tab=templates">VOLTAR</a>
             <div class="signin-apps-container">
                 <?php if (!$template->isConfigurable || empty($template->structure->rules)) : ?>
-                    <div class="alert alert-danger text-center">O template selecionado <b>(#<?= $template->id ?>)</b> não possui regras disponíveis para edição.</div>
+                    <div class="alert alert-danger text-center">O template selecionado <b>(#<?= $template->id ?>)</b> não possui regras de envio disponíveis para edição.</div>
                 <?php else : ?>
                     <div class="alert alert-info text-center">
-                        Você está editando as Regras de Envio do Template: <b><?= $template->name ?></b>
+                        Você está editando as Regras de Envio do template: <b><?= $template->name ?></b>
                     </div>
                     <form action="addonmodules.php?module=zapme&tab=templates&action=editrules&template=<?= $template->id ?>" method="post">
                         <input type="hidden" name="template" value="<?= $template->id ?>">
                         <?php foreach ($template->structure->rules as $rule) : ?>
                             <div class="form-group">
                                 <label><?= $rule['label'] ?></label>
-                                <?= TemplateRule::print($template, $rule) ?>
+                                <?= TemplateRule::print($rule, $template->configurations) ?>
                                 <small><?= $rule['description'] ?></small>
                             </div>
                         <?php endforeach; ?>
@@ -419,7 +419,7 @@ function zapme_output($vars)
                 </thead>
                 <tbody>
                     <?php foreach ($logs as $log) :
-                        $client = Client::find($log->clientid); ?>
+                        $client = Client::find($log->client_id); ?>
                         <tr>
                             <th><?= $log->id ?></th>
                             <th><a href="clientssummary.php?userid=<?= $client->id ?>" target=_blank><?= $client->firstname . ' ' . $client->lastname . ' (#' . $log->clientid . ')' ?></a></th>
@@ -462,7 +462,7 @@ function zapme_output($vars)
                                 <div class="form-group">
                                     <div class="form-check">
                                         <input id="my-input" class="form-check-input" type="checkbox" name="clearlogs">
-                                        <label class="form-check-label text-danger">Desejo limpar os logs do sistema</label>
+                                        <label class="form-check-label text-danger">Estou ciente e desejo prosseguir com a limpeza dos logs do sistema</label>
                                     </div>
                                 </div>
                                 <div class="modal-footer">

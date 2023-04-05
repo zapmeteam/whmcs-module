@@ -37,7 +37,7 @@ class Template
                 message: $item->message,
                 isActive: $item->is_active == 1,
                 isConfigurable: $item->is_configurable == 1,
-                configurations: $item->configurations ? unserialize($item->configurations) : null,
+                configurations: json_decode($item->configurations, true),
                 structure: $item->structure,
                 createdAt: Carbon::parse($item->created_at),
                 updatedAt: Carbon::parse($item->updated_at),
@@ -50,7 +50,7 @@ class Template
         return $this->template->transform(function (object $item) {
             $item = $this->structure($item);
 
-            $item->configurations = unserialize($item->configurations);
+            $item->configurations = json_decode($item->configurations, true);
             $item->created_at     = Carbon::parse($item->created_at);
             $item->updated_at     = Carbon::parse($item->updated_at);
 

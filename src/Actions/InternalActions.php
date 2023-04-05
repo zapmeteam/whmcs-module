@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class InternalActions extends Base
 {
-    public function editModuleConfigurations(Request $request): string //OK
+    public function editModuleConfigurations(Request $request): string
     {
         $post   = $request->request;
         $api    = $post->get('api');
@@ -73,7 +73,7 @@ class InternalActions extends Base
                    ...$this->carbon(false)
                 ]);
 
-            return $this->success("Tudo certo! <b>Template #{$template} atualizado com sucesso.</b>");
+            return $this->success("Tudo certo! <b>Template atualizado com sucesso.</b>");
         } catch (Throwable $e) {
             throwlable($e);
         }
@@ -107,14 +107,16 @@ class InternalActions extends Base
                 $all[$rule['id']] = trim($all[$rule['id']], ',');
             }
 
+            $all = array_filter($all, fn ($value) => !empty($value));
+
             Capsule::table('mod_zapme_templates')
                 ->where('id', '=', $template->id)
                 ->update([
-                    'configurations' => serialize($all),
+                    'configurations' => empty($all) ? null : json_encode($all),
                     ...$this->carbon(false)
                 ]);
 
-            return $this->success("Tudo certo! <b>Regras do template <b>(#{$template->id})</b> atualizadas com sucesso.</b>");
+            return $this->success("Tudo certo! <b>Template atualizado com sucesso.</b>");
         } catch (Throwable $e) {
             throwlable($e);
         }
@@ -122,8 +124,23 @@ class InternalActions extends Base
         return $this->danger("Ops! <b>Houve algum erro ao editar o template.</b> Verifique os logs do sistema.</b>");
     }
 
-    public function editModuleLogsConfigurations()
+    public function editModuleLogsConfigurations(Request $request): string
     {
+        $post         = $request->request;
+        $confirmation = $post->get('clearlogs');
 
+        try {
+            if (!$confirmation) {
+                return $this->danger("Ops! <b>Você não confirmou o procedimento.</b>");
+            }
+
+            Capsule::table('mod_zapme_logs')->truncate();
+
+            return $this->success("Tudo certo! <b>Procedimento realizado com sucesso.</b>");
+        } catch (Throwable $e) {
+            throwlable($e);
+        }
+
+        return $this->danger("Ops! <b>Houve algum erro ao editar o template.</b> Verifique os logs do sistema.</b>");
     }
 }

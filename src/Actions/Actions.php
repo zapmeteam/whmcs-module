@@ -40,9 +40,12 @@ class Actions
 
         $method = self::ACTIONS[$this->action];
 
-        //TODO: change this to a better way
-        if (in_array($this->action, $externals)) {
+        if (($request = $this->request->getMethod()) === 'GET' && in_array($this->action, $externals)) {
             return (new ExternalActions())->{$method}($this->request);
+        }
+
+        if ($request !== 'POST') {
+            return null;
         }
 
         return (new InternalActions())->{$method}($this->request);
