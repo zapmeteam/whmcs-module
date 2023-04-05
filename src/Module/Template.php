@@ -55,7 +55,7 @@ class Template
 
     private function structure(object $template): object
     {
-        collect(glob(ZAPME_MODULE_PATH . "/src/Helper/Template/*.php"))
+        collect(glob(ZAPME_MODULE_PATH . "/src/Helper/Template/Structures/*.php"))
             ->filter(fn (string $file) => Str::of($file)->contains($template->code))
             ->each(function (string $file) use (&$template) {
                 $class = Str::of($file)
@@ -63,7 +63,7 @@ class Template
                     ->beforeLast('.php')
                     ->__toString();
 
-                $class               = "ZapMe\\Whmcs\\Helper\\Template\\" . $class;
+                $class               = "ZapMe\\Whmcs\\Helper\\Template\\Structures\\" . $class;
                 $template->structure = (new $class)::execute();
             });
 

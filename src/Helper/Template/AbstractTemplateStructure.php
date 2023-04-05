@@ -8,8 +8,8 @@ abstract class AbstractTemplateStructure
     {
         return (object) array_merge(
             (new static())->base(),
-            (new static())->rules(),
-            (new static())->variables(),
+            ['rules'     => (new static())->rules()],
+            ['variables' => (new static())->variables()],
         );
     }
 }

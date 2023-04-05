@@ -95,12 +95,12 @@ function zapme_activate(): array
 
         foreach ($templates as $key => $value) {
             $connection->transaction(fn ($handler) =>$handler->table('mod_zapme_templates')->insert([
-                'code'               => $key,
-                'message'            => $value,
-                'is_configurable'    => $key !== 'aftermoduleready',
-                'is_active'          => true,
-                'created_at'         => $now,
-                'updated_at'         => $now
+                'code'            => $key,
+                'message'         => $value,
+                'is_configurable' => $key !== 'AfterModuleReady',
+                'is_active'       => true,
+                'created_at'      => $now,
+                'updated_at'      => $now
             ]));
         }
 
