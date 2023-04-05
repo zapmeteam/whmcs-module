@@ -206,9 +206,24 @@ function zapme_output($vars)
         </div>
     <?php endif; ?>
     <ul class="nav nav-tabs admin-tabs" role="tablist">
-        <li <?= !$tab ? 'class="active"' : '' ?>><a class="tab-top" href="addonmodules.php?module=zapme" id="configurations" data-tab-id="1">Configuração</a></li>
-        <li <?= $tab === 'templates' || $tab === 'editrules' ? 'class="active"' : '' ?> <?= !$module->configured ? 'style="display: none;' : '' ?>><a class="tab-top" href="addonmodules.php?module=zapme&tab=templates" id="templates" data-tab-id="2">Templates</a></li>
-        <li <?= $tab === 'logs' ? 'class="active"' : '' ?> <?= !$module->configured ? 'style="display: none;' : '' ?>><a class="tab-top" href="addonmodules.php?module=zapme&tab=logs" id="logs" data-tab-id="3">Logs</a></li>
+        <li <?= !$tab ? 'class="active"' : '' ?>>
+            <a class="tab-top" href="addonmodules.php?module=zapme" id="configurations" data-tab-id="1">
+                <i class="fa fa-cog"></i>
+                Configuração
+            </a>
+        </li>
+        <li <?= $tab === 'templates' || $tab === 'editrules' ? 'class="active"' : '' ?> <?= !$module->configured ? 'style="display: none;' : '' ?>>
+            <a class="tab-top" href="addonmodules.php?module=zapme&tab=templates" id="templates" data-tab-id="2">
+                <i class="fa fa-comments"></i>
+                Templates
+            </a>
+        </li>
+        <li <?= $tab === 'logs' ? 'class="active"' : '' ?> <?= !$module->configured ? 'style="display: none;' : '' ?>>
+            <a class="tab-top" href="addonmodules.php?module=zapme&tab=logs" id="logs" data-tab-id="3">
+                <i class="fa fa-tags"></i>
+                Logs
+            </a>
+        </li>
     </ul>
     <div class="tab-content admin-tabs">
         <!-- Configurations -->
