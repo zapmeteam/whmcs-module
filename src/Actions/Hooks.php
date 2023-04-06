@@ -22,6 +22,6 @@ class Hooks
 
     public function dispatch(mixed $vars): void
     {
-        $this->hooks::execute($vars);
+        $this->hooks->execute($vars);
     }
 }

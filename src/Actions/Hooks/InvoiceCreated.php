@@ -2,9 +2,13 @@
 
 namespace ZapMe\Whmcs\Actions\Hooks;
 
-class InvoiceCreated extends AbstractHookStructure
+use ZapMe\Whmcs\Helper\Hooks\AbstractHookStructure;
+use ZapMe\Whmcs\Helper\Hooks\HookStructureInterface;
+
+class InvoiceCreated extends AbstractHookStructure implements HookStructureInterface
 {
-    public static function execute(mixed $vars): void
+
+    public function execute(mixed $vars): void
     {
 
     }

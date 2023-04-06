@@ -61,6 +61,8 @@ add_hook('ClientLogin', 1, function ($vars) {
 });
 
 add_hook('ClientAreaHomepage', 1, function ($vars) {
+    // (new Hooks('ClientAreaPageLogin'))->dispatch($vars);
+
 	if (isset($_SESSION['adminid'])) {
 		return;
 	}

@@ -1,9 +1,13 @@
 <?php
 
-namespace ZapMe\Whmcs\Traits;
+namespace ZapMe\Whmcs\Helper\Hooks;
 
-trait SendHookMessage
+use ZapMe\Whmcs\Traits\Hooks\ShareableHookConstructor;
+
+abstract class AbstractHookStructure
 {
+    use ShareableHookConstructor;
+
     protected function send(
         string $message,
         string $phone,

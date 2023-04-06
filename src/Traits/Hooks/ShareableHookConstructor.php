@@ -1,9 +1,10 @@
 <?php
 
-namespace ZapMe\Whmcs\Traits;
+namespace ZapMe\Whmcs\Traits\Hooks;
 
 use ZapMeSdk\Base as ZapMeSdk;
 use ZapMe\Whmcs\DTO\TemplateDTO;
+use Illuminate\Support\Collection;
 use ZapMe\Whmcs\DTO\ConfigurationDTO;
 
 trait ShareableHookConstructor
@@ -14,10 +15,10 @@ trait ShareableHookConstructor
 
     protected ConfigurationDTO $module;
 
-    public function __construct(ZapMeSdk $zapme, ConfigurationDTO $module, TemplateDTO $template)
+    public function __construct(ZapMeSdk $zapme, ConfigurationDTO $module, Collection $template)
     {
         $this->zapme    = $zapme;
         $this->module   = $module;
-        $this->template = $template;
+        $this->template = $template->first();
     }
 }
