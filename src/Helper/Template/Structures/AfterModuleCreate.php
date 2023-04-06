@@ -18,10 +18,10 @@ class AfterModuleCreate extends AbstractTemplateStructure
     public function rules(): array
     {
         return [
-            TemplateRule::build('client'),
-            TemplateRule::build('weekdays'),
-            TemplateRule::build('server'),
-            TemplateRule::build('product'),
+            TemplateRule::get('client'),
+            TemplateRule::get('weekdays'),
+            TemplateRule::get('server'),
+            TemplateRule::get('product'),
         ];
     }
 

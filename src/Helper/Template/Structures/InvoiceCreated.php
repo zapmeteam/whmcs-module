@@ -19,10 +19,10 @@ class InvoiceCreated extends AbstractTemplateStructure
     public function rules(): array
     {
         return [
-            TemplateRule::build('client'),
-            TemplateRule::build('value'),
-            TemplateRule::build('weekdays'),
-            TemplateRule::build('gateways'),
+            TemplateRule::get('client'),
+            TemplateRule::get('value'),
+            TemplateRule::get('weekdays'),
+            TemplateRule::get('gateways'),
         ];
     }
 

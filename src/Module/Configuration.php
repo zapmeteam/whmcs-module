@@ -31,15 +31,4 @@ class Configuration
             updatedAt: Carbon::parse($this->configuration?->updated_at),
         ));
     }
-
-    public function fromDatabase(): ?object
-    {
-        if ($this->configuration) {
-            $this->configuration->account    = unserialize($this->configuration->account);
-            $this->configuration->created_at = Carbon::parse($this->configuration->created_at);
-            $this->configuration->updated_at = Carbon::parse($this->configuration->updated_at);
-        }
-
-        return $this->configuration;
-    }
 }

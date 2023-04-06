@@ -10,13 +10,13 @@ class Hooks
 {
     protected mixed $hooks;
 
-    public function __construct(string $name)
+    public function __construct(string $hook)
     {
         $zapme    = (new ZapMeSdk())->toUrl(ZAPME_MODULE_API_URL);
         $module   = (new Configuration())->fromDto();
-        $template = (new Template($name))->fromDto()->first();
+        $template = (new Template($hook))->fromDto();
 
-        $class       = "ZapMe\\Whmcs\\Actions\\Hooks\\" . $name;
+        $class       = "ZapMe\\Whmcs\\Actions\\Hooks\\".$hook;
         $this->hooks = new $class($zapme, $module, $template);
     }
 

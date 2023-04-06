@@ -10,10 +10,7 @@ if (!defined('WHMCS')) {
 	die;
 }
 
-add_hook('InvoiceCreated', 1, function ($vars) {
-    (new Hooks('InvoiceCreated'))->dispatch($vars);
-	//$zapMeHooks->prepare('InvoiceCreated')->dispatch($vars);
-});
+add_hook('InvoiceCreated', 1, fn ($vars) => (new Hooks('InvoiceCreated'))->dispatch($vars));
 
 add_hook('InvoiceCancelled', 1, function ($vars) {
 	//$zapMeHooks->prepare('invoicecancelled')->dispatch($vars);

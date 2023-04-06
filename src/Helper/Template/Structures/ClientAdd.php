@@ -18,7 +18,7 @@ class ClientAdd extends AbstractTemplateStructure
     public function rules(): array
     {
         return [
-            TemplateRule::build('weekdays')
+            TemplateRule::get('weekdays')
         ];
     }
 

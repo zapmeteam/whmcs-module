@@ -136,16 +136,16 @@ function zapme_output($vars)
     $module = (new Configuration())->fromDto();
 
     switch ($tab) {
-        case 'templates':
-            $templates = (new Template())->fromDto();
-            break;
-        case 'editrules':
-            $templates = (new Template($request->get('template')))->fromDto();
+        case 'templates': case 'editrules':
+            $template  = $request->get('template') ?? null;
+            $templates = (new Template($template))->fromDto();
             break;
         case 'logs':
             $logs = Capsule::table('mod_zapme_logs')->oldest('id')->get();
             break;
     }
+
+    #dd($templates);
 
     if (!$tab) $fields = Capsule::table('tblcustomfields')->where('type', '=', 'client')->get();
 ?>

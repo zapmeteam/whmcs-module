@@ -19,7 +19,7 @@ class TicketAdminReply extends AbstractTemplateStructure
     {
         return array_merge(
             (new TicketOpen())->rules(),
-            [TemplateRule::build('admin')]
+            [TemplateRule::get('admin')]
         );
     }
 

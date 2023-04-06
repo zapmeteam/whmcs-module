@@ -2,12 +2,12 @@
 
 namespace ZapMe\Whmcs\Module;
 
+use WHMCS\Database\Capsule;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use ZapMe\Whmcs\DTO\TemplateDTO;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Query\Builder;
-use WHMCS\Database\Capsule;
 
 class Template
 {
@@ -25,7 +25,7 @@ class Template
         $this->paghiper = new PagHiper();
     }
 
-    public function fromDto(): TemplateDTO|Collection
+    public function fromDto(): Collection
     {
         return $this->template->transform(function (object $item) {
             $item = $this->structure($item);
@@ -42,19 +42,6 @@ class Template
                 createdAt: Carbon::parse($item->created_at),
                 updatedAt: Carbon::parse($item->updated_at),
             ));
-        });
-    }
-
-    public function fromDatabase(): ?object
-    {
-        return $this->template->transform(function (object $item) {
-            $item = $this->structure($item);
-
-            $item->configurations = json_decode($item->configurations, true);
-            $item->created_at     = Carbon::parse($item->created_at);
-            $item->updated_at     = Carbon::parse($item->updated_at);
-
-            return $item;
         });
     }
 

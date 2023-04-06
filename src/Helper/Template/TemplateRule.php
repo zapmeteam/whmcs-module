@@ -2,11 +2,9 @@
 
 namespace ZapMe\Whmcs\Helper\Template;
 
-use ZapMe\Whmcs\DTO\TemplateDTO;
-
 class TemplateRule
 {
-    public static function build(string $rule): array
+    public static function get(string $rule): array
     {
         return (new self())->{$rule}();
     }
@@ -15,7 +13,7 @@ class TemplateRule
     {
         $type        = $rule['field']['type'];
         $name        = $rule['id'];
-        $id          = $rule['id'];
+        $id          = $name;
         $placeholder = $rule['field']['placeholder'] ?? null;
         $required    = $rule['field']['required'] ?? null;
         $maxlength   = $rule['field']['maxlength'] ?? null;

@@ -18,9 +18,9 @@ class ClientLogin extends AbstractTemplateStructure
     public function rules(): array
     {
         return [
-            TemplateRule::build('client'),
-            TemplateRule::build('weekdays'),
-            TemplateRule::build('status')
+            TemplateRule::get('client'),
+            TemplateRule::get('weekdays'),
+            TemplateRule::get('status')
         ];
     }
 
