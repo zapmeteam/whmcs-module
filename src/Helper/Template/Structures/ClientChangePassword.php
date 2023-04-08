@@ -14,11 +14,6 @@ class ClientChangePassword extends AbstractTemplateStructure
         ];
     }
 
-    public function rules(): array
-    {
-        return (new ClientLogin())->rules();
-    }
-
     public function variables(): array
     {
         return (new ClientLogin())->variables();

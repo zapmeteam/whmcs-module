@@ -1,5 +1,6 @@
 <?php
 
+use WHMCS\User\Client;
 use WHMCS\Database\Capsule;
 
 if (!defined('WHMCS')) {

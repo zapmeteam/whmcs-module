@@ -14,11 +14,6 @@ class AfterModuleSuspend extends AbstractTemplateStructure
         ];
     }
 
-    public function rules(): array
-    {
-        return (new AfterModuleCreate())->rules();
-    }
-
     public function variables(): array
     {
         return (new AfterModuleCreate())->variables();

@@ -2,7 +2,6 @@
 
 namespace ZapMe\Whmcs\Helper\Template\Structures;
 
-use ZapMe\Whmcs\Helper\Template\TemplateRule;
 use ZapMe\Whmcs\Helper\Template\AbstractTemplateStructure;
 
 class InvoiceCreated extends AbstractTemplateStructure
@@ -13,16 +12,6 @@ class InvoiceCreated extends AbstractTemplateStructure
             'name'        => 'Fatura Criada',
             'description' => 'Modelo de mensagem enviada quando uma fatura é criada pelo WHMCS',
             'paghiper'    => true,
-        ];
-    }
-
-    public function rules(): array
-    {
-        return [
-            TemplateRule::get('client'),
-            TemplateRule::get('value'),
-            TemplateRule::get('weekdays'),
-            TemplateRule::get('gateways'),
         ];
     }
 

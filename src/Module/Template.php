@@ -36,8 +36,6 @@ class Template
                 code: $item->code,
                 message: $item->message,
                 isActive: $item->is_active == 1,
-                isConfigurable: $item->is_configurable == 1,
-                configurations: json_decode($item->configurations, true),
                 structure: $item->structure,
                 createdAt: Carbon::parse($item->created_at),
                 updatedAt: Carbon::parse($item->updated_at),

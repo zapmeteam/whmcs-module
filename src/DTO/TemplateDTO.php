@@ -12,8 +12,6 @@ class TemplateDTO
         public ?string $code = null,
         public ?string $message = null,
         public ?bool $isActive = null,
-        public ?bool $isConfigurable = null,
-        public ?array $configurations = null,
         public ?object $structure = null,
         public ?Carbon $createdAt = null,
         public ?Carbon $updatedAt = null,

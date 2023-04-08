@@ -14,11 +14,6 @@ class InvoicePaid extends AbstractTemplateStructure
         ];
     }
 
-    public function rules(): array
-    {
-        return (new InvoiceCreated())->rules();
-    }
-
     public function variables(): array
     {
         return [

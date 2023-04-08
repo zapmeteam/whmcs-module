@@ -2,7 +2,6 @@
 
 namespace ZapMe\Whmcs\Helper\Template\Structures;
 
-use ZapMe\Whmcs\Helper\Template\TemplateRule;
 use ZapMe\Whmcs\Helper\Template\AbstractTemplateStructure;
 
 class ClientLogin extends AbstractTemplateStructure
@@ -12,15 +11,6 @@ class ClientLogin extends AbstractTemplateStructure
         return [
             'name'        => 'Login de Cliente',
             'description' => 'Modelo de mensagem enviada no login de uma conta de cliente',
-        ];
-    }
-
-    public function rules(): array
-    {
-        return [
-            TemplateRule::get('client'),
-            TemplateRule::get('weekdays'),
-            TemplateRule::get('status')
         ];
     }
 

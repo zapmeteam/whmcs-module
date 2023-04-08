@@ -2,7 +2,6 @@
 
 namespace ZapMe\Whmcs\Helper\Template\Structures;
 
-use ZapMe\Whmcs\Helper\Template\TemplateRule;
 use ZapMe\Whmcs\Helper\Template\AbstractTemplateStructure;
 
 class TicketAdminReply extends AbstractTemplateStructure
@@ -13,14 +12,6 @@ class TicketAdminReply extends AbstractTemplateStructure
             'name'        => 'Ticket Respondido',
             'description' => 'Modelo de mensagem enviada quando um ticket é respondido pela equipe',
         ];
-    }
-
-    public function rules(): array
-    {
-        return array_merge(
-            (new TicketOpen())->rules(),
-            [TemplateRule::get('admin')]
-        );
     }
 
     public function variables(): array

@@ -2,7 +2,6 @@
 
 namespace ZapMe\Whmcs\Helper\Template\Structures;
 
-use ZapMe\Whmcs\Helper\Template\TemplateRule;
 use ZapMe\Whmcs\Helper\Template\AbstractTemplateStructure;
 
 class AfterModuleCreate extends AbstractTemplateStructure
@@ -12,16 +11,6 @@ class AfterModuleCreate extends AbstractTemplateStructure
         return [
             'name'        => 'Serviço Criado',
             'description' => 'Modelo de mensagem enviada quando um serviço é criado',
-        ];
-    }
-
-    public function rules(): array
-    {
-        return [
-            TemplateRule::get('client'),
-            TemplateRule::get('weekdays'),
-            TemplateRule::get('server'),
-            TemplateRule::get('product'),
         ];
     }
 

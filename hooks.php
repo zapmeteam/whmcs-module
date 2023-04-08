@@ -60,15 +60,7 @@ add_hook('ClientLogin', 1, function ($vars) {
 	//$zapMeHooks->prepare('ClientLogin')->dispatch($vars);
 });
 
-add_hook('ClientAreaHomepage', 1, function ($vars) {
-    // (new Hooks('ClientAreaPageLogin'))->dispatch($vars);
-
-	if (isset($_SESSION['adminid'])) {
-		return;
-	}
-
-	//$zapMeHooks->prepare('ClientAreaPageLogin')->dispatch($vars);
-});
+add_hook('ClientAreaHomepage', 1, fn ($vars) => (new Hooks('ClientAreaPageLogin'))->dispatch($vars));
 
 add_hook('ClientChangePassword', 1, function ($vars) {
 	//$zapMeHooks->prepare('ClientChangePassword')->dispatch($vars);

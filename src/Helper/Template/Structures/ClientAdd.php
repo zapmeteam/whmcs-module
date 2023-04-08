@@ -2,7 +2,6 @@
 
 namespace ZapMe\Whmcs\Helper\Template\Structures;
 
-use ZapMe\Whmcs\Helper\Template\TemplateRule;
 use ZapMe\Whmcs\Helper\Template\AbstractTemplateStructure;
 
 class ClientAdd extends AbstractTemplateStructure
@@ -12,13 +11,6 @@ class ClientAdd extends AbstractTemplateStructure
         return [
             'name'        => 'Boas-vindas',
             'description' => 'Modelo de mensagem enviada no cadastrado de um cliente',
-        ];
-    }
-
-    public function rules(): array
-    {
-        return [
-            TemplateRule::get('weekdays')
         ];
     }
 

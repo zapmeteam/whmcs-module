@@ -14,11 +14,6 @@ class AfterModuleReady extends AbstractTemplateStructure
         ];
     }
 
-    public function rules(): array
-    {
-        return [];
-    }
-
     public function variables(): array
     {
         return (new AfterModuleCreate())->variables();

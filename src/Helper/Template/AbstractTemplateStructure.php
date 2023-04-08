@@ -11,7 +11,6 @@ abstract class AbstractTemplateStructure
 
         return (object) array_merge(
             $class->base(),
-            ['rules'     => $class->rules()],
             ['print'     => $class->print($paghiper, $variables)],
             ['variables' => $variables],
         );

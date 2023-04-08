@@ -9,14 +9,17 @@ use ZapMe\Whmcs\DTO\ConfigurationDTO;
 
 trait ShareableHookConstructor
 {
+    protected string $hook;
+
     protected ZapMeSdk $zapme;
 
     protected TemplateDTO $template;
 
     protected ConfigurationDTO $module;
 
-    public function __construct(ZapMeSdk $zapme, ConfigurationDTO $module, Collection $template)
+    public function __construct(string $hook, ZapMeSdk $zapme, ConfigurationDTO $module, Collection $template)
     {
+        $this->hook     = $hook;
         $this->zapme    = $zapme;
         $this->module   = $module;
         $this->template = $template->first();

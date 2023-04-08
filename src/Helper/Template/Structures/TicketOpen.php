@@ -2,7 +2,6 @@
 
 namespace ZapMe\Whmcs\Helper\Template\Structures;
 
-use ZapMe\Whmcs\Helper\Template\TemplateRule;
 use ZapMe\Whmcs\Helper\Template\AbstractTemplateStructure;
 
 class TicketOpen extends AbstractTemplateStructure
@@ -12,15 +11,6 @@ class TicketOpen extends AbstractTemplateStructure
         return [
             'name'        => 'Ticket Criado',
             'description' => 'Modelo de mensagem enviada quando um ticket é aberto pelo cliente',
-        ];
-    }
-
-    public function rules(): array
-    {
-        return [
-            TemplateRule::get('client'),
-            TemplateRule::get('weekdays'),
-            TemplateRule::get('departments'),
         ];
     }
 

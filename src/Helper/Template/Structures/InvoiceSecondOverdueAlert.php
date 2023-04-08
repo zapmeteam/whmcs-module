@@ -15,11 +15,6 @@ class InvoiceSecondOverdueAlert extends AbstractTemplateStructure
         ];
     }
 
-    public function rules(): array
-    {
-        return (new InvoiceFirstOverdueAlert())->rules();
-    }
-
     public function variables(): array
     {
         return (new InvoiceFirstOverdueAlert())->variables();

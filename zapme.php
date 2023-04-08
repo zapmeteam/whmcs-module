@@ -9,7 +9,6 @@ use ZapMe\Whmcs\Actions\Actions;
 use ZapMe\Whmcs\Module\Template;
 use ZapMe\Whmcs\Module\Configuration;
 use Symfony\Component\HttpFoundation\Request;
-use ZapMe\Whmcs\Helper\Template\TemplateRule;
 
 if (!defined('WHMCS')) {
     die;
@@ -58,8 +57,6 @@ function zapme_activate(): array
             $table->string('code');
             $table->binary('message');
             $table->boolean('is_active')->default(true);
-            $table->boolean('is_configurable')->default(true);
-            $table->json('configurations')->nullable();
             $table->timestamps();
         });
 
@@ -98,7 +95,6 @@ function zapme_activate(): array
             $connection->transaction(fn ($handler) =>$handler->table('mod_zapme_templates')->insert([
                 'code'            => $key,
                 'message'         => $value,
-                'is_configurable' => $key !== 'AfterModuleReady',
                 'is_active'       => true,
                 'created_at'      => $now,
                 'updated_at'      => $now
@@ -136,9 +132,8 @@ function zapme_output($vars)
     $module = (new Configuration())->fromDto();
 
     switch ($tab) {
-        case 'templates': case 'editrules':
-            $template  = $request->get('template') ?? null;
-            $templates = (new Template($template))->fromDto();
+        case 'templates':
+            $templates = (new Template())->fromDto();
             break;
         case 'logs':
             $logs = Capsule::table('mod_zapme_logs')->oldest('id')->get();
@@ -212,7 +207,7 @@ function zapme_output($vars)
                 Configuração
             </a>
         </li>
-        <li <?= $tab === 'templates' || $tab === 'editrules' ? 'class="active"' : '' ?> <?= !$module->configured ? 'style="display: none;' : '' ?>>
+        <li <?= $tab === 'templates' ? 'class="active"' : '' ?> <?= !$module->configured ? 'style="display: none;' : '' ?>>
             <a class="tab-top" href="addonmodules.php?module=zapme&tab=templates" id="templates" data-tab-id="2">
                 <i class="fa fa-comments"></i>
                 Templates
@@ -311,7 +306,6 @@ function zapme_output($vars)
                     <td>Nome</td>
                     <td>Descrição</td>
                     <td>Status</td>
-                    <td>Personalizável</td>
                     <td></td>
                 </tr>
                 </thead>
@@ -326,11 +320,7 @@ function zapme_output($vars)
                             <?php $class = $template->isActive ? 'success' : 'danger'; ?>
                             <i class="fa fa-check-circle text-<?= $class; ?>"></i>
                         </th>
-                        <th>
-                            <?php $class = $template->isConfigurable ? 'success' : 'danger'; ?>
-                            <i class="fa fa-check-circle text-<?= $class; ?>"></i>
-                        </th>
-                        <th> <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editmodal-<?= $template->id ?>"><i class="fa fa-eye" aria-hidden="true"></i></button> </th>
+                        <th> <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editmodal-<?= $template->id ?>"><i class="fa fa-eye" aria-hidden="te"></i></button> </th>
                     </tr>
                         <div class="modal fade" id="editmodal-<?= $template->id ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg" role="document">
@@ -365,9 +355,6 @@ function zapme_output($vars)
                                                     <option value="0" <?= selected(!$template->isActive) ?>>Desativado</option>
                                                 </select>
                                             </div>
-                                            <?php if ($template->isConfigurable && !empty($template->structure->rules)) : ?>
-                                                <a class="btn btn-danger btn-sm" href="addonmodules.php?module=zapme&tab=templates&action=editrules&template=<?= $template->id ?>">REGRAS DE ENVIO</a>
-                                            <?php endif; ?>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="submit" class="btn btn-primary">Salvar</button>
@@ -380,30 +367,6 @@ function zapme_output($vars)
                 <?php endforeach; ?>
                 </tbody>
             </table>
-        </div>
-        <!-- Template Rules -->
-        <div class="tab-pane <?= selected($tab === 'editrules', 'active') ?>" id="editrules">
-            <a class="btn btn-info btn-sm" href="addonmodules.php?module=zapme&tab=templates">VOLTAR</a>
-            <div class="signin-apps-container">
-                <?php if (!$template->isConfigurable || empty($template->structure->rules)) : ?>
-                    <div class="alert alert-danger text-center">O template selecionado <b>(#<?= $template->id ?>)</b> não possui regras de envio disponíveis para edição.</div>
-                <?php else : ?>
-                    <div class="alert alert-info text-center">
-                        Você está editando as Regras de Envio do template: <b><?= $template->name ?></b>
-                    </div>
-                    <form action="addonmodules.php?module=zapme&tab=templates&action=editrules&template=<?= $template->id ?>" method="post">
-                        <input type="hidden" name="template" value="<?= $template->id ?>">
-                        <?php foreach ($template->structure->rules as $rule) : ?>
-                            <div class="form-group">
-                                <label><?= $rule['label'] ?></label>
-                                <?= TemplateRule::print($rule, $template->configurations) ?>
-                                <small><?= $rule['description'] ?></small>
-                            </div>
-                        <?php endforeach; ?>
-                        <button type="submit" class="btn btn-primary">Salvar</button>
-                    </form>
-                <?php endif; ?>
-            </div>
         </div>
         <!-- Logs -->
         <div class="tab-pane <?= selected($tab === 'logs', 'active') ?>" id="logs">
