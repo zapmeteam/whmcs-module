@@ -44,6 +44,6 @@ abstract class AbstractHookStructure
             $message
         );
 
-        logActivity("[ZapMe][$this->hook] $message", $this->client);
+        logActivity("[ZapMe][Hook: $this->hook] $message", $this->client);
     }
 }

@@ -133,7 +133,7 @@ function zapme_output($vars)
 
     switch ($tab) {
         case 'templates':
-            $templates = (new Template())->fromDto();
+            $templates = (new Template())->dto();
             break;
         case 'logs':
             $logs = Capsule::table('mod_zapme_logs')->oldest('id')->get();

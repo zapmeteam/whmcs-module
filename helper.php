@@ -146,6 +146,13 @@ if (!function_exists('clientPhoneNumber')) {
     }
 }
 
+if (!function_exists('sanitize')) {
+    function sanitize(string $phone): string
+    {
+        return trim(str_replace(['(', ')', ' ', '-', '.', '+'], '', $phone));
+    }
+}
+
 if (!function_exists('selected')) {
     function selected(bool $boolean, string $text = 'selected'): string
     {

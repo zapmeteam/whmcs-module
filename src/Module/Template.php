@@ -8,6 +8,7 @@ use Illuminate\Support\Carbon;
 use ZapMe\Whmcs\DTO\TemplateDTO;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Query\Builder;
+use ZapMe\Whmcs\Helper\Template\TemplateParseVariable;
 
 class Template
 {
@@ -25,7 +26,7 @@ class Template
         $this->paghiper = new PagHiper();
     }
 
-    public function fromDto(): Collection
+    public function dto(): Collection
     {
         return $this->template->transform(function (object $item) {
             $item = $this->structure($item);
@@ -58,5 +59,10 @@ class Template
             });
 
         return $template;
+    }
+
+    public function variables(TemplateDTO $template): TemplateParseVariable
+    {
+        return new TemplateParseVariable($template);
     }
 }

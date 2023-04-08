@@ -14,7 +14,7 @@ class Hooks
     {
         $zapme    = (new ZapMeSdk())->toUrl(ZAPME_MODULE_API_URL);
         $module   = (new Configuration())->fromDto();
-        $template = (new Template($hook))->fromDto();
+        $template = (new Template($hook))->dto()->first();
 
         $class       = "ZapMe\\Whmcs\\Actions\\Hooks\\".$hook;
         $this->hooks = new $class($zapme, $module, $template);

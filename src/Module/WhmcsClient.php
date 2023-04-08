@@ -69,27 +69,31 @@ class WhmcsClient
 
     private function phone(): string
     {
-        $symbols = ['(', ')', ' ', '-', '.', '+'];
+        $original = sanitize($this->client->phonenumber);
 
         if (
             !$this->module->clientPhoneFieldId ||
             $this->module->clientPhoneFieldId == 0
         ) {
-            return trim(str_replace($symbols, '', $this->client->phonenumber));
+            return $original;
         }
 
         $value = collect($this->client->customFieldValues)
-            ->map(function (object $field) use ($symbols) {
+            ->map(function (object $field) {
                 return [
                     'id'    => (int) $field->fieldId,
-                    'value' => trim(str_replace($symbols, '', $field->value))
+                    'value' => sanitize($field->value)
                 ];
             })
             ->firstWhere('id', '=', $this->module->clientPhoneFieldId)
-            ->value;
+            ->value ?? null;
+
+        if (!$value) {
+            return $original;
+        }
 
         $phone = explode('.', $this->client->phonenumber);
-        $ddi   = str_replace(['+', ' '], '', $phone[0]);
+        $ddi   = sanitize($phone[0]);
 
         return $ddi . $value;
     }

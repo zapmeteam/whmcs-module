@@ -88,7 +88,7 @@ class InternalActions extends Base
         try {
             /** @var TemplateDTO $template */
             $template = (new Template($post->get('template')))
-                ->fromDto()
+                ->dto()
                 ->first();
 
             if (!$template->isConfigurable || empty($template->structure->rules)) {

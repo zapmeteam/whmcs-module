@@ -6,6 +6,7 @@ use WHMCS\User\Client;
 use WHMCS\Database\Capsule;
 use Illuminate\Support\Str;
 use ZapMe\Whmcs\Helper\Hooks\AbstractHookStructure;
+use ZapMe\Whmcs\Helper\Template\TemplateParseVariable;
 
 class ClientAreaPageLogin extends AbstractHookStructure
 {
@@ -37,6 +38,9 @@ class ClientAreaPageLogin extends AbstractHookStructure
         if (!$this->template->isActive) {
             return;
         }
+
+        $template = (new TemplateParseVariable($this->template))
+            ->fromClient($this->client);
 
 //        if (clientConsentiment($this->hook, $client, $this->module->clientconsentfieldid) === false) {
 //            return;
