@@ -6,8 +6,6 @@ use Throwable;
 use Punic\Exception;
 use WHMCS\Database\Capsule;
 use ZapMe\Whmcs\Module\Base;
-use ZapMe\Whmcs\Module\Template;
-use ZapMe\Whmcs\DTO\TemplateDTO;
 use Symfony\Component\HttpFoundation\Request;
 
 class InternalActions extends Base
@@ -40,7 +38,10 @@ class InternalActions extends Base
                 'client_phone_field_id'   => $post->get('client_phone_field_id'),
                 'client_consent_field_id' => $post->get('client_consent_field_id'),
                 'account'                 => serialize($response['data']),
-                ...$this->carbon(),
+                ...[
+                    ...$this->createdAt(),
+                    ...$this->updatedAt()
+                ],
             ]);
 
             return $this->success("Tudo certo! <b>Módulo configurado e atualizado com sucesso.</b>");
@@ -70,50 +71,9 @@ class InternalActions extends Base
                 ->update([
                    'message'    => $post->get('message'),
                    'is_active'  => $post->get('is_active'),
-                   ...$this->carbon(false)
-                ]);
-
-            return $this->success("Tudo certo! <b>Template atualizado com sucesso.</b>");
-        } catch (Throwable $e) {
-            throwlable($e);
-        }
-
-        return $this->danger("Ops! <b>Houve algum erro ao editar o template.</b> Verifique os logs do sistema.</b>");
-    }
-
-    public function editModuleTemplateRulesConfigurations(Request $request): ?string
-    {
-        $post = $request->request;
-
-        try {
-            /** @var TemplateDTO $template */
-            $template = (new Template($post->get('template')))
-                ->dto()
-                ->first();
-
-            if (!$template->isConfigurable || empty($template->structure->rules)) {
-                return $this->danger("Ops! <b>O template selecionado <b>(#{$template->name})</b> não é personalizável.</b>");
-            }
-
-            $post->remove('token');
-            $post->remove('template');
-            $all = $post->all();
-
-            foreach ($template->structure->rules as $rule) {
-                if ($rule['field']['type'] !== 'text') {
-                    continue;
-                }
-
-                $all[$rule['id']] = trim($all[$rule['id']], ',');
-            }
-
-            $all = array_filter($all, fn ($value) => !empty($value));
-
-            Capsule::table('mod_zapme_templates')
-                ->where('id', '=', $template->id)
-                ->update([
-                    'configurations' => empty($all) ? null : json_encode($all),
-                    ...$this->carbon(false)
+                    ...[
+                        ...$this->updatedAt()
+                    ],
                 ]);
 
             return $this->success("Tudo certo! <b>Template atualizado com sucesso.</b>");

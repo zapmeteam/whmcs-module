@@ -2,7 +2,7 @@
 
 namespace ZapMe\Whmcs\Traits;
 
-trait Alert
+trait Alertable
 {
     public function success(string $message): string
     {

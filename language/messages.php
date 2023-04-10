@@ -30,7 +30,7 @@
  * clientchangepassword
  */
 
-$language = [
+return [
     /**
      * Invoice Created
      */

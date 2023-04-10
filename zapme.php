@@ -140,8 +140,6 @@ function zapme_output($vars)
             break;
     }
 
-    #dd($templates);
-
     if (!$tab) $fields = Capsule::table('tblcustomfields')->where('type', '=', 'client')->get();
 ?>
     <?php if (!$module->configured) : ?>

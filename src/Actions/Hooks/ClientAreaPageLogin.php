@@ -39,8 +39,9 @@ class ClientAreaPageLogin extends AbstractHookStructure
             return;
         }
 
-        $template = (new TemplateParseVariable($this->template))
-            ->fromClient($this->client);
+        $this->template = (new TemplateParseVariable($this->template))
+            ->client($this->client)
+            ->get();
 
 //        if (clientConsentiment($this->hook, $client, $this->module->clientconsentfieldid) === false) {
 //            return;

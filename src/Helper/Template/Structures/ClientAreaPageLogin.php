@@ -13,6 +13,7 @@ class ClientAreaPageLogin extends AbstractTemplateStructure
             'description' => 'Modelo de mensagem enviada na falha de login de uma conta de cliente',
         ];
     }
+
     public function variables(): array
     {
         return (new ClientLogin())->variables();

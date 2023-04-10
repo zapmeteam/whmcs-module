@@ -2,13 +2,15 @@
 
 namespace ZapMe\Whmcs\Module;
 
-use ZapMe\Whmcs\Traits\Alert;
+use ZapMe\Whmcs\Traits\Alertable;
 use ZapMeSdk\Base as ZapMeSdk;
 use Illuminate\Support\Carbon;
+use ZapMe\Whmcs\Traits\InteractWithCarbon;
 
 class Base
 {
-    use Alert;
+    use Alertable;
+    use InteractWithCarbon;
 
     protected ZapMeSdk $zapme;
 
@@ -16,21 +18,8 @@ class Base
 
     public function __construct()
     {
-        $this->zapme  = (new ZapMeSdk())->toUrl(ZAPME_MODULE_API_URL);
+        $this->zapme = (new ZapMeSdk())->toUrl(ZAPME_MODULE_API_URL);
 
-        $this->carbon = Carbon::now();
-        $this->carbon->timezone('America/Sao_Paulo');
-    }
-
-    public function carbon(bool $createdAt = true): array
-    {
-        $date    = $this->carbon->format('Y-m-d H:i:s');
-        $updated = ['updated_at' => $date];
-
-        if (!$createdAt) {
-            return $updated;
-        }
-
-        return array_merge($updated, ['created_at' => $date]);
+        $this->newCarbonInstance();
     }
 }
