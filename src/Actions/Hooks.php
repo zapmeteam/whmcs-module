@@ -11,17 +11,16 @@ class Hooks
 {
     public function __construct(
         protected string $hook,
-        protected int $version,
+        protected ?int $whmcs = null,
         protected ?TemplateDTO $template = null,
         protected mixed $hooks = null
     ) {
-        $zapme    = (new ZapMeSdk())->toUrl(ZAPME_MODULE_API_URL);
-        $module   = (new Configuration())->fromDto();
-        $template = (new Template($hook))->dto()->first();
+        $zapme         = (new ZapMeSdk())->toUrl(ZAPME_MODULE_API_URL);
+        $configuration = (new Configuration())->fromDto();
+        $template      = (new Template($hook))->dto()->first();
+        $class         = "ZapMe\\Whmcs\\Actions\\Hooks\\" . $hook;
 
-        $class       = "ZapMe\\Whmcs\\Actions\\Hooks\\" . $hook;
-        $this->hooks = new $class($hook, $zapme, $module, $template, $version);
-
+        $this->hooks    = new $class($hook, $zapme, $configuration, $template, $whmcs);
         $this->template = $template;
     }
 

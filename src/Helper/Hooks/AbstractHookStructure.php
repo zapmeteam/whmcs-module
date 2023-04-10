@@ -25,8 +25,8 @@ abstract class AbstractHookStructure
     ): void {
         try {
             $this->zapme
-                ->withApi($this->module->api)
-                ->withSecret($this->module->secret)
+                ->withApi($this->configuration->api)
+                ->withSecret($this->configuration->secret)
                 ->sendMessage($this->client->get('phone'), $this->template->message, $attachment);
         } catch (Throwable $e) {
             throwlable($e);
@@ -36,7 +36,7 @@ abstract class AbstractHookStructure
     protected function client(int $id, ?string $index = null): bool|string|Collection|null
     {
         return (new WhmcsClient($id))
-            ->module($this->module)
+            ->configuration($this->configuration)
             ->get($index);
     }
 

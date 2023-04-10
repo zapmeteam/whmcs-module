@@ -11,22 +11,22 @@ class WhmcsClient
 {
     public function __construct(
         int $id,
-        private ?ConfigurationDTO $module = null,
+        private ?ConfigurationDTO $configuration = null,
         protected ?object $client = null
     ) {
         $this->client = Client::find($id);
     }
 
-    public function module(ConfigurationDTO $module): self
+    public function configuration(ConfigurationDTO $module): self
     {
-        $this->module = $module;
+        $this->configuration = $module;
 
         return $this;
     }
 
     public function get(?string $index = null): bool|string|Collection|null
     {
-        $this->module ??= (new Configuration())->fromDto();
+        $this->configuration ??= (new Configuration())->fromDto();
 
         if (!$this->client) {
             return null;
@@ -44,24 +44,25 @@ class WhmcsClient
     private function consent(): bool
     {
         if (
-            !$this->module->clientConsentFieldId || $this->module->clientConsentFieldId == 0 || empty($fields = $this->client->customFieldValues)
+            !$this->configuration->clientConsentFieldId || $this->configuration->clientConsentFieldId == 0 || empty($fields = $this->client->customFieldValues)
         ) {
             return true;
         }
 
-        $value = Str::of($fields->firstWhere('id', '=', $this->module->clientConsentFieldId)?->value ?? '')
+        $value = Str::of($fields->firstWhere('id', '=', $this->configuration->clientConsentFieldId)?->value ?? '')
             ->lower()
             ->replace('ã', 'a');
 
         return in_array($value, ['s', 'sim']);
     }
 
+    //TODO: refactor like above method
     private function phone(): string
     {
         $original = sanitize($this->client->phonenumber);
 
         if (
-            !$this->module->clientPhoneFieldId || $this->module->clientPhoneFieldId == 0
+            !$this->configuration->clientPhoneFieldId || $this->configuration->clientPhoneFieldId == 0
         ) {
             return $original;
         }
@@ -73,7 +74,7 @@ class WhmcsClient
                     'value' => sanitize($field->value)
                 ];
             })
-            ->firstWhere('id', '=', $this->module->clientPhoneFieldId)
+            ->firstWhere('id', '=', $this->configuration->clientPhoneFieldId)
             ->value ?? null;
 
         if (!$value) {

@@ -11,9 +11,9 @@ trait ShareableHookConstructor
     public function __construct(
         protected string $hook,
         protected ZapMeSdk $zapme,
+        protected ConfigurationDTO $configuration,
         protected TemplateDTO $template,
-        protected ConfigurationDTO $module,
-        protected int $whmcs
+        protected ?int $whmcs = null
     ) {
     }
 }
