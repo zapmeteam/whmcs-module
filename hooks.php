@@ -62,7 +62,7 @@ add_hook('ClientAdd', 1, function ($vars) {
 	$zapMeHooks->prepare('ClientLogin')->dispatch($vars);
 });*/
 
-add_hook($whmcs >= 8 ? 'UserLogin' : 'ClientLogin', 1, fn ($vars) => (new Hooks('ClientLogin'))->dispatch($vars));
+add_hook($whmcs >= 8 ? 'UserLogin' : 'ClientLogin', 1, fn ($vars) => (new Hooks('ClientLogin', $whmcs))->dispatch($vars));
 
 add_hook($whmcs >= 8 ? 'ClientLoginShare' : 'ClientAreaPageLogin', 1, fn ($vars) => (new Hooks('ClientAreaPageLogin', $whmcs))->dispatch($vars));
 

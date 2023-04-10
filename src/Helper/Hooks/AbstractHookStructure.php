@@ -23,6 +23,12 @@ abstract class AbstractHookStructure
     protected function send(
         array $attachment = []
     ): void {
+        if (!$this->client->get('consent')) {
+            $this->log('O cliente ({id}) {name} não deseja receber alertas via WhatsApp.');
+
+            return;
+        }
+
         try {
             $this->zapme
                 ->withApi($this->configuration->api)

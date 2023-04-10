@@ -32,7 +32,7 @@ class ClientAreaPageLogin extends AbstractHookStructure
         $this->send();
     }
 
-    private function oldest(): bool|string|Collection|null
+    private function oldest(): Collection|null
     {
         $log = Capsule::table('tblactivitylog')
             ->where('user', '=', 'System')
@@ -54,7 +54,7 @@ class ClientAreaPageLogin extends AbstractHookStructure
         return $this->client($log->userid);
     }
 
-    private function newest(mixed $vars): bool|string|Collection|null
+    private function newest(mixed $vars): Collection|null
     {
         if (($client = Client::where('email', '=', $vars['username'])->first()) === null) {
             return null;
