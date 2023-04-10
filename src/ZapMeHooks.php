@@ -32,7 +32,7 @@ class ZapMeHooks
      * Prepare to dispatch a hook function
      *
      * @param string $hook
-     * 
+     *
      * @return ZapMeHooks
      */
     public function prepare(string $hook): ZapMeHooks
@@ -56,7 +56,7 @@ class ZapMeHooks
      * Dispatch a hook function
      *
      * @param mixed $vars
-     * 
+     *
      * @return void
      */
     public function dispatch($vars)
@@ -65,6 +65,7 @@ class ZapMeHooks
             if (ZAPME_MODULE_ACTIVITY_LOG === true) {
                 logActivity('[ZapMe][' . $this->hook . '] Processo Abortado: Módulo não configurado');
             }
+
             return;
         }
 
@@ -72,6 +73,7 @@ class ZapMeHooks
             if (ZAPME_MODULE_ACTIVITY_LOG === true) {
                 logActivity('[ZapMe][' . $this->hook . '] Processo Abortado: Módulo desativado');
             }
+
             return;
         }
 
@@ -94,7 +96,7 @@ class ZapMeHooks
      * Invoice Created Hook
      *
      * @param mixed $vars
-     * 
+     *
      * @return void
      */
     private function InvoiceCreated($vars)
@@ -114,9 +116,7 @@ class ZapMeHooks
 
         if ($template->templateHasValidConfigurations() === true) {
             if (
-                $template->controlByClient($client) === false ||
-                $template->controlByMinimalValue($invoice) === false ||
-                $template->controlByWeekDay() === false
+                $template->controlByClient($client) === false || $template->controlByMinimalValue($invoice) === false || $template->controlByWeekDay() === false
             ) {
                 return;
             }
@@ -155,9 +155,7 @@ class ZapMeHooks
 
         if ($template->templateHasValidConfigurations() === true) {
             if (
-                $template->controlByClient($client) === false ||
-                $template->controlByMinimalValue($invoice) === false ||
-                $template->controlByWeekDay() === false
+                $template->controlByClient($client) === false || $template->controlByMinimalValue($invoice) === false || $template->controlByWeekDay() === false
             ) {
                 return;
             }
@@ -174,7 +172,7 @@ class ZapMeHooks
      * Invoice Payment Reminder Hook
      *
      * @param mixed $vars
-     * 
+     *
      * @return void
      */
     public function InvoicePaymentReminder($vars, bool $externalAction = false)
@@ -194,10 +192,7 @@ class ZapMeHooks
 
         if ($template->templateHasValidConfigurations() === true) {
             if (
-                $template->controlByClient($client) === false ||
-                $template->controlByMinimalValue($invoice) === false ||
-                $template->controlByWeekDay() === false ||
-                $template->controlByGateway($invoice) === false
+                $template->controlByClient($client) === false || $template->controlByMinimalValue($invoice) === false || $template->controlByWeekDay() === false || $template->controlByGateway($invoice) === false
             ) {
                 return;
             }
@@ -220,7 +215,7 @@ class ZapMeHooks
      * Invoice Paid Hook
      *
      * @param mixed $vars
-     * 
+     *
      * @return void
      */
     private function InvoicePaid($vars)
@@ -240,10 +235,7 @@ class ZapMeHooks
 
         if ($template->templateHasValidConfigurations() === true) {
             if (
-                $template->controlByClient($client) === false ||
-                $template->controlByMinimalValue($invoice) === false ||
-                $template->controlByWeekDay() === false ||
-                $template->controlByGateway($invoice) === false
+                $template->controlByClient($client) === false || $template->controlByMinimalValue($invoice) === false || $template->controlByWeekDay() === false || $template->controlByGateway($invoice) === false
             ) {
                 return;
             }
@@ -259,7 +251,7 @@ class ZapMeHooks
      * Invoice First Overdue Alert Hook
      *
      * @param mixed $vars
-     * 
+     *
      * @return void
      */
     private function InvoiceFirstOverDueAlert($vars)
@@ -279,9 +271,7 @@ class ZapMeHooks
 
         if ($template->templateHasValidConfigurations() === true) {
             if (
-                $template->controlByClient($client) === false ||
-                $template->controlByMinimalValue($invoice) === false ||
-                $template->controlByWeekDay() === false
+                $template->controlByClient($client) === false || $template->controlByMinimalValue($invoice) === false || $template->controlByWeekDay() === false
             ) {
                 return;
             }
@@ -300,7 +290,7 @@ class ZapMeHooks
      * Invoice Second Overdue Alert Hook
      *
      * @param mixed $vars
-     * 
+     *
      * @return void
      */
     private function InvoiceSecondOverDueAlert($vars)
@@ -320,9 +310,7 @@ class ZapMeHooks
 
         if ($template->templateHasValidConfigurations() === true) {
             if (
-                $template->controlByClient($client) === false ||
-                $template->controlByMinimalValue($invoice) === false ||
-                $template->controlByWeekDay() === false
+                $template->controlByClient($client) === false || $template->controlByMinimalValue($invoice) === false || $template->controlByWeekDay() === false
             ) {
                 return;
             }
@@ -341,7 +329,7 @@ class ZapMeHooks
      * Invoice Third Overdue Alert Hook
      *
      * @param mixed $vars
-     * 
+     *
      * @return void
      */
     private function InvoiceThirdOverDueAlert($vars)
@@ -361,9 +349,7 @@ class ZapMeHooks
 
         if ($template->templateHasValidConfigurations() === true) {
             if (
-                $template->controlByClient($client) === false ||
-                $template->controlByMinimalValue($invoice) === false ||
-                $template->controlByWeekDay() === false
+                $template->controlByClient($client) === false || $template->controlByMinimalValue($invoice) === false || $template->controlByWeekDay() === false
             ) {
                 return;
             }
@@ -382,7 +368,7 @@ class ZapMeHooks
      * Ticket Open Hook
      *
      * @param mixed $vars
-     * 
+     *
      * @return void
      */
     private function TicketOpen($vars)
@@ -402,9 +388,7 @@ class ZapMeHooks
 
         if ($template->templateHasValidConfigurations() === true) {
             if (
-                $template->controlByClient($client) === false ||
-                $template->controlByWeekDay() === false ||
-                $template->controlByDeppartment($vars) === false
+                $template->controlByClient($client) === false || $template->controlByWeekDay() === false || $template->controlByDeppartment($vars) === false
             ) {
                 return;
             }
@@ -420,7 +404,7 @@ class ZapMeHooks
      * Ticket Admin Reply Hook
      *
      * @param mixed $vars
-     * 
+     *
      * @return void
      */
     private function TicketAdminReply($vars)
@@ -440,10 +424,7 @@ class ZapMeHooks
 
         if ($template->templateHasValidConfigurations() === true) {
             if (
-                $template->controlByClient($client) === false ||
-                $template->controlByWeekDay() === false ||
-                $template->controlByDeppartment($vars) === false ||
-                $template->controlByTeamMemberName($vars) === false
+                $template->controlByClient($client) === false || $template->controlByWeekDay() === false || $template->controlByDeppartment($vars) === false || $template->controlByTeamMemberName($vars) === false
             ) {
                 return;
             }
@@ -459,7 +440,7 @@ class ZapMeHooks
      * After Module Create Hook
      *
      * @param mixed $vars
-     * 
+     *
      * @return void
      */
     private function AfterModuleCreate($vars)
@@ -480,11 +461,7 @@ class ZapMeHooks
 
         if ($template->templateHasValidConfigurations() === true) {
             if (
-                $template->controlByClient($client) === false ||
-                $template->controlByWeekDay() === false ||
-                $template->controlByServerId($service) === false ||
-                $template->controlByProductId($product) === false ||
-                $template->controlByPartsOfProductName($product) === false
+                $template->controlByClient($client) === false || $template->controlByWeekDay() === false || $template->controlByServerId($service) === false || $template->controlByProductId($product) === false || $template->controlByPartsOfProductName($product) === false
             ) {
                 return;
             }
@@ -500,7 +477,7 @@ class ZapMeHooks
      * After Module Suspend Hook
      *
      * @param mixed $vars
-     * 
+     *
      * @return void
      */
     private function AfterModuleSuspend($vars)
@@ -521,11 +498,7 @@ class ZapMeHooks
 
         if ($template->templateHasValidConfigurations() === true) {
             if (
-                $template->controlByClient($client) === false ||
-                $template->controlByWeekDay() === false ||
-                $template->controlByServerId($service) === false ||
-                $template->controlByProductId($product) === false ||
-                $template->controlByPartsOfProductName($product) === false
+                $template->controlByClient($client) === false || $template->controlByWeekDay() === false || $template->controlByServerId($service) === false || $template->controlByProductId($product) === false || $template->controlByPartsOfProductName($product) === false
             ) {
                 return;
             }
@@ -541,7 +514,7 @@ class ZapMeHooks
      * After Module Unsuspend Hook
      *
      * @param mixed $vars
-     * 
+     *
      * @return void
      */
     private function AfterModuleUnsuspend($vars)
@@ -562,11 +535,7 @@ class ZapMeHooks
 
         if ($template->templateHasValidConfigurations() === true) {
             if (
-                $template->controlByClient($client) === false ||
-                $template->controlByWeekDay() === false ||
-                $template->controlByServerId($service) === false ||
-                $template->controlByProductId($product) === false ||
-                $template->controlByPartsOfProductName($product) === false
+                $template->controlByClient($client) === false || $template->controlByWeekDay() === false || $template->controlByServerId($service) === false || $template->controlByProductId($product) === false || $template->controlByPartsOfProductName($product) === false
             ) {
                 return;
             }
@@ -582,7 +551,7 @@ class ZapMeHooks
      * After Module Terminate Hook
      *
      * @param mixed $vars
-     * 
+     *
      * @return void
      */
     private function AfterModuleTerminate($vars)
@@ -603,11 +572,7 @@ class ZapMeHooks
 
         if ($template->templateHasValidConfigurations() === true) {
             if (
-                $template->controlByClient($client) === false ||
-                $template->controlByWeekDay() === false ||
-                $template->controlByServerId($service) === false ||
-                $template->controlByProductId($product) === false ||
-                $template->controlByPartsOfProductName($product) === false
+                $template->controlByClient($client) === false || $template->controlByWeekDay() === false || $template->controlByServerId($service) === false || $template->controlByProductId($product) === false || $template->controlByPartsOfProductName($product) === false
             ) {
                 return;
             }
@@ -623,7 +588,7 @@ class ZapMeHooks
      * Client Add Hook
      *
      * @param mixed $vars
-     * 
+     *
      * @return void
      */
     private function ClientAdd($vars)
@@ -642,8 +607,7 @@ class ZapMeHooks
 
         if ($template->templateHasValidConfigurations() === true) {
             if (
-                $template->controlByPartsOfEmail($client) === false ||
-                $template->controlByWeekDay() === false
+                $template->controlByPartsOfEmail($client) === false || $template->controlByWeekDay() === false
             ) {
                 return;
             }
@@ -659,7 +623,7 @@ class ZapMeHooks
      * Client Login Hook
      *
      * @param mixed $vars
-     * 
+     *
      * @return void
      */
     private function ClientLogin($vars)
@@ -678,10 +642,7 @@ class ZapMeHooks
 
         if ($template->templateHasValidConfigurations() === true) {
             if (
-                $template->controlByClient($client) === false ||
-                $template->controlByPartsOfEmail($client) === false ||
-                $template->controlByWeekDay() === false ||
-                $template->controlByClientStatus($client) === false
+                $template->controlByClient($client) === false || $template->controlByPartsOfEmail($client) === false || $template->controlByWeekDay() === false || $template->controlByClientStatus($client) === false
             ) {
                 return;
             }
@@ -697,7 +658,7 @@ class ZapMeHooks
      * Client Area Page Login Hook (Failed Access)
      *
      * @param mixed $vars
-     * 
+     *
      * @return void
      */
     private function ClientAreaPageLogin($vars)
@@ -727,10 +688,7 @@ class ZapMeHooks
 
         if ($template->templateHasValidConfigurations() === true) {
             if (
-                $template->controlByClient($client) === false ||
-                $template->controlByPartsOfEmail($client) === false ||
-                $template->controlByWeekDay() === false ||
-                $template->controlByClientStatus($client) === false
+                $template->controlByClient($client) === false || $template->controlByPartsOfEmail($client) === false || $template->controlByWeekDay() === false || $template->controlByClientStatus($client) === false
             ) {
                 return;
             }
@@ -740,7 +698,7 @@ class ZapMeHooks
         $phone   = clientPhoneNumber($client, $this->module->clientphonefieldid);
 
         $logDate     = new DateTime($log->date);
-        $currentDate = new DateTime;
+        $currentDate = new DateTime();
         $dateDiff    = $logDate->diff($currentDate);
 
         if ($dateDiff->d == 0 && $dateDiff->i == 0 && ($dateDiff->s < 2)) {
@@ -752,7 +710,7 @@ class ZapMeHooks
      * Client Change Password Hook
      *
      * @param mixed $vars
-     * 
+     *
      * @return void
      */
     private function ClientChangePassword($vars)
@@ -771,10 +729,7 @@ class ZapMeHooks
 
         if ($template->templateHasValidConfigurations() === true) {
             if (
-                $template->controlByClient($client) === false ||
-                $template->controlByPartsOfEmail($client) === false ||
-                $template->controlByWeekDay() === false ||
-                $template->controlByClientStatus($client) === false
+                $template->controlByClient($client) === false || $template->controlByPartsOfEmail($client) === false || $template->controlByWeekDay() === false || $template->controlByClientStatus($client) === false
             ) {
                 return;
             }
@@ -794,7 +749,7 @@ class ZapMeHooks
      */
     private function DailyCronJob($vars)
     {
-        $date = (int) date('d');
+        $date = (int)date('d');
 
         if ($date == 1 && $this->module->logautoremove == 1) {
             if (ZAPME_MODULE_ACTIVITY_LOG === true) {

@@ -9,7 +9,7 @@ abstract class AbstractTemplateStructure
         $class     = new static();
         $variables = $class->variables();
 
-        return (object) array_merge(
+        return (object)array_merge(
             $class->base(),
             ['print'     => $class->print($paghiper, $variables)],
             ['variables' => $variables],
@@ -18,7 +18,7 @@ abstract class AbstractTemplateStructure
 
     public function print(bool $paghiper, array $variables): string
     {
-        $alert  = "<div class=\"alert alert-info text-center\">";
+        $alert = "<div class=\"alert alert-info text-center\">";
         $alert .= "<b>%name%:</b> Nome do Cliente (completo)<br>";
         $alert .= "<b>%firstname%:</b> Primeiro Nome do Cliente<br>";
         $alert .= "<b>%lastname%:</b> Último Nome do Cliente<br>";

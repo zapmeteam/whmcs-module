@@ -9,7 +9,6 @@ use ZapMe\Whmcs\DTO\ConfigurationDTO;
 
 class WhmcsClient
 {
-
     public function __construct(
         int $id,
         private ?ConfigurationDTO $module = null,
@@ -45,9 +44,7 @@ class WhmcsClient
     private function consent(): bool
     {
         if (
-            !$this->module->clientConsentFieldId ||
-            $this->module->clientConsentFieldId == 0 ||
-            empty($fields = $this->client->customFieldValues)
+            !$this->module->clientConsentFieldId || $this->module->clientConsentFieldId == 0 || empty($fields = $this->client->customFieldValues)
         ) {
             return true;
         }
@@ -64,8 +61,7 @@ class WhmcsClient
         $original = sanitize($this->client->phonenumber);
 
         if (
-            !$this->module->clientPhoneFieldId ||
-            $this->module->clientPhoneFieldId == 0
+            !$this->module->clientPhoneFieldId || $this->module->clientPhoneFieldId == 0
         ) {
             return $original;
         }
@@ -73,7 +69,7 @@ class WhmcsClient
         $value = collect($this->client->customFieldValues)
             ->map(function (object $field) {
                 return [
-                    'id'    => (int) $field->fieldId,
+                    'id'    => (int)$field->fieldId,
                     'value' => sanitize($field->value)
                 ];
             })

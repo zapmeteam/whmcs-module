@@ -3,7 +3,7 @@
         'name' => 'zapmeteam/whmcs-module',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '80ce2d16f9ad20ef6ea6b202d579d5b4e7d5ce7f',
+        'reference' => 'd0fc5e2af933fe76a06a5f86bafdecdaef3c3912',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -35,7 +35,7 @@
         'guzzlehttp/psr7' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '3cf1b6d4f0c820a2cf8bcaec39fc698f3443b5cf',
+            'reference' => 'bfe7c39159e6b6ff7f5cc7e7af1a086f8fec6ef0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../guzzlehttp/psr7',
             'aliases' => array(
@@ -46,7 +46,7 @@
         'psr/http-client' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '22b2ef5687f43679481615605d7a15c557ce85b1',
+            'reference' => '0955afe48220520692d2d09f7ab7e0f93ffd6a31',
             'type' => 'library',
             'install_path' => __DIR__ . '/../psr/http-client',
             'aliases' => array(
@@ -63,7 +63,7 @@
         'psr/http-factory' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '5a4f141ac2e5bc35e615134f127e1833158d2944',
+            'reference' => 'e616d01114759c4c489f93b099585439f795fe35',
             'type' => 'library',
             'install_path' => __DIR__ . '/../psr/http-factory',
             'aliases' => array(
@@ -78,14 +78,12 @@
             ),
         ),
         'psr/http-message' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => 'efd67d1dc14a7ef4fc4e518e7dee91c271d524e4',
+            'pretty_version' => '1.1',
+            'version' => '1.1.0.0',
+            'reference' => 'cb6ce4845ce34a8ad9e68117c10ee90a29919eba',
             'type' => 'library',
             'install_path' => __DIR__ . '/../psr/http-message',
-            'aliases' => array(
-                0 => '1.0.x-dev',
-            ),
+            'aliases' => array(),
             'dev_requirement' => false,
         ),
         'psr/http-message-implementation' => array(
@@ -157,7 +155,7 @@
         'zapmeteam/whmcs-module' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '80ce2d16f9ad20ef6ea6b202d579d5b4e7d5ce7f',
+            'reference' => 'd0fc5e2af933fe76a06a5f86bafdecdaef3c3912',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

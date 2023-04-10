@@ -3,15 +3,14 @@
 namespace ZapMe\Whmcs\Actions\Hooks;
 
 use WHMCS\User\Client;
-use WHMCS\Database\Capsule;
 use Illuminate\Support\Str;
+use WHMCS\Database\Capsule;
 use Illuminate\Support\Collection;
 use ZapMe\Whmcs\Helper\Hooks\AbstractHookStructure;
 use ZapMe\Whmcs\Helper\Template\TemplateParseVariable;
 
 class ClientAreaPageLogin extends AbstractHookStructure
 {
-
     public function execute(mixed $vars): void
     {
         if ($this->impersonating()) {

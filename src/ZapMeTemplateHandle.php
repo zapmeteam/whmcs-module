@@ -21,9 +21,9 @@ class ZapMeTemplateHandle
     public function __construct(string $hook)
     {
         $this->hook = $hook;
-        $hook = strtolower($hook);
+        $hook       = strtolower($hook);
 
-        $template = Capsule::table('mod_zapme_templates')->where('code', $hook)->first();
+        $template                 = Capsule::table('mod_zapme_templates')->where('code', $hook)->first();
         $template->configurations = unserialize($template->configurations);
 
         $this->template = $template;
@@ -40,6 +40,7 @@ class ZapMeTemplateHandle
             if (ZAPME_MODULE_ACTIVITY_LOG === true) {
                 logActivity('[ZapMe][' . $this->hook . '] Envio de Mensagem Abortado: Template Desativado');
             }
+
             return false;
         }
 
@@ -60,7 +61,7 @@ class ZapMeTemplateHandle
      * Check if template has valid rule configurations
      *
      * @param string $rule
-     * 
+     *
      * @return bool
      */
     private function templateHasValidRuleConfiguration(string $rule): bool
@@ -72,7 +73,7 @@ class ZapMeTemplateHandle
      * Perform controlByClient rule action
      *
      * @param mixed $client
-     * 
+     *
      * @return bool
      */
     public function controlByClient($client): bool
@@ -86,10 +87,11 @@ class ZapMeTemplateHandle
         $clients = explode(',', $this->template->configurations[$rule]);
 
         foreach ($clients as $key => $value) {
-            if ($value !== '' && (int) $client->id == (int) $value) {
+            if ($value !== '' && (int)$client->id == (int)$value) {
                 if (ZAPME_MODULE_ACTIVITY_LOG === true) {
                     logActivity('[ZapMe][' . $this->hook . '] Envio de Mensagem Abortado: O id do cliente (#' . $client->id . ') foi detectado nas regras de controle de envio');
                 }
+
                 return false;
             }
         }
@@ -101,7 +103,7 @@ class ZapMeTemplateHandle
      * Perform controlByMinimalValue rule action
      *
      * @param mixed $invoice
-     * 
+     *
      * @return bool
      */
     public function controlByMinimalValue($invoice): bool
@@ -116,6 +118,7 @@ class ZapMeTemplateHandle
             if (ZAPME_MODULE_ACTIVITY_LOG === true) {
                 logActivity('[ZapMe][' . $this->hook . '] Envio de Mensagem Abortado: O valor da fatura é inferior ao determinado (' . $this->template->configurations[$rule] . ') nas regras de controle de envio');
             }
+
             return false;
         }
 
@@ -142,6 +145,7 @@ class ZapMeTemplateHandle
                 if (ZAPME_MODULE_ACTIVITY_LOG === true) {
                     logActivity('[ZapMe][' . $this->hook . '] Envio de Mensagem Abortado: O dia do envio foi determinado nas regras de controle de envio');
                 }
+
                 return false;
             }
         }
@@ -153,7 +157,7 @@ class ZapMeTemplateHandle
      * Perform controlByGateway rule action
      *
      * @param mixed $invoice
-     * 
+     *
      * @return bool
      */
     public function controlByGateway($invoice): bool
@@ -171,6 +175,7 @@ class ZapMeTemplateHandle
                 if (ZAPME_MODULE_ACTIVITY_LOG === true) {
                     logActivity('[ZapMe][' . $this->hook . '] Envio de Mensagem Abortado: O gateway do pagamento foi determinado nas regras de controle de envio');
                 }
+
                 return false;
             }
         }
@@ -182,7 +187,7 @@ class ZapMeTemplateHandle
      * Perform controlByDeppartment rule action
      *
      * @param mixed $vars
-     * 
+     *
      * @return bool
      */
     public function controlByDeppartment($vars): bool
@@ -196,10 +201,11 @@ class ZapMeTemplateHandle
         $depparments = explode(',', $this->template->configurations[$rule]);
 
         foreach ($depparments as $key => $value) {
-            if ($value !== '' && (int) $value == (int) $vars['deptid']) {
+            if ($value !== '' && (int)$value == (int)$vars['deptid']) {
                 if (ZAPME_MODULE_ACTIVITY_LOG === true) {
                     logActivity('[ZapMe][' . $this->hook . '] Envio de Mensagem Abortado: O departamento do ticket foi determinado nas regras de controle de envio');
                 }
+
                 return false;
             }
         }
@@ -211,7 +217,7 @@ class ZapMeTemplateHandle
      * Perform controlByTeamMemberName rule action
      *
      * @param mixed $vars
-     * 
+     *
      * @return bool
      */
     public function controlByTeamMemberName($vars): bool
@@ -229,6 +235,7 @@ class ZapMeTemplateHandle
                 if (ZAPME_MODULE_ACTIVITY_LOG === true) {
                     logActivity('[ZapMe][' . $this->hook . '] Envio de Mensagem Abortado: Nome do membro da equipe foi determinado nas regras de controle de envio');
                 }
+
                 return false;
             }
         }
@@ -240,7 +247,7 @@ class ZapMeTemplateHandle
      * Perform controlByPartsOfEmail rule action
      *
      * @param mixed $vars
-     * 
+     *
      * @return bool
      */
     public function controlByPartsOfEmail($vars): bool
@@ -258,6 +265,7 @@ class ZapMeTemplateHandle
                 if (ZAPME_MODULE_ACTIVITY_LOG === true) {
                     logActivity('[ZapMe][' . $this->hook . '] Envio de Mensagem Abortado: Parte do e-mail do cliente foi determinado nas regras de controle de envio');
                 }
+
                 return false;
             }
         }
@@ -269,7 +277,7 @@ class ZapMeTemplateHandle
      * Perform controlByClientStatus rule action
      *
      * @param mixed $client
-     * 
+     *
      * @return bool
      */
     public function controlByClientStatus($client): bool
@@ -292,6 +300,7 @@ class ZapMeTemplateHandle
             if (ZAPME_MODULE_ACTIVITY_LOG === true) {
                 logActivity('[ZapMe][' . $this->hook . '] Envio de Mensagem Abortado: O status do cliente foi determinado nas regras de controle de envio');
             }
+
             return false;
         }
 
@@ -302,7 +311,7 @@ class ZapMeTemplateHandle
      * Perform controlByServerId rule action
      *
      * @param mixed $service
-     * 
+     *
      * @return bool
      */
     public function controlByServerId($service): bool
@@ -316,10 +325,11 @@ class ZapMeTemplateHandle
         $servers = explode(',', $this->template->configurations[$rule]);
 
         foreach ($servers as $key => $value) {
-            if ($value !== '' && (int) $value == (int) $service['id']) {
+            if ($value !== '' && (int)$value == (int)$service['id']) {
                 if (ZAPME_MODULE_ACTIVITY_LOG === true) {
                     logActivity('[ZapMe][' . $this->hook . '] Envio de Mensagem Abortado: Id do servidor foi determinado nas regras de controle de envio');
                 }
+
                 return false;
             }
         }
@@ -329,7 +339,7 @@ class ZapMeTemplateHandle
      * Perform controlByProductId rule action
      *
      * @param mixed $product
-     * 
+     *
      * @return bool
      */
     public function controlByProductId($product): bool
@@ -343,10 +353,11 @@ class ZapMeTemplateHandle
         $products = explode(',', $this->template->configurations[$rule]);
 
         foreach ($products as $key => $value) {
-            if ($value !== '' && (int) $value == (int) $product['id']) {
+            if ($value !== '' && (int)$value == (int)$product['id']) {
                 if (ZAPME_MODULE_ACTIVITY_LOG === true) {
                     logActivity('[ZapMe][' . $this->hook . '] Envio de Mensagem Abortado: Id do produto foi determinado nas regras de controle de envio');
                 }
+
                 return false;
             }
         }
@@ -356,7 +367,7 @@ class ZapMeTemplateHandle
      * Perform controlByPartsOfProductName rule action
      *
      * @param mixed $product
-     * 
+     *
      * @return bool
      */
     public function controlByPartsOfProductName($product): bool
@@ -374,6 +385,7 @@ class ZapMeTemplateHandle
                 if (ZAPME_MODULE_ACTIVITY_LOG === true) {
                     logActivity('[ZapMe][' . $this->hook . '] Envio de Mensagem Abortado: Parte do nome do produto foi determinado nas regras de controle de envio');
                 }
+
                 return false;
             }
         }
@@ -384,7 +396,7 @@ class ZapMeTemplateHandle
      *
      * @param mixed $client
      * @param mixed $alternativeMessage
-     * 
+     *
      * @return ZapMeTemplateHandle
      */
     public function defaultVariables($client, $alternativeMessage = null): ZapMeTemplateHandle
@@ -418,7 +430,7 @@ class ZapMeTemplateHandle
      * @param mixed $client
      * @param mixed $vars
      * @param string $type
-     * 
+     *
      * @return ZapMeTemplateHandle
      */
     public function clientVariables($client, $vars, string $type = 'simple'): ZapMeTemplateHandle
@@ -457,7 +469,7 @@ class ZapMeTemplateHandle
      * Set invoice variables into template message
      *
      * @param mixed $invoice
-     * 
+     *
      * @return ZapMeTemplateHandle
      */
     public function invoicesVariables($invoice): ZapMeTemplateHandle
@@ -478,7 +490,7 @@ class ZapMeTemplateHandle
      *
      * @param mixed $ticket
      * @param mixed $vars
-     * 
+     *
      * @return ZapMeTemplateHandle
      */
     public function ticketsVariables($ticket, $vars): ZapMeTemplateHandle
@@ -502,7 +514,7 @@ class ZapMeTemplateHandle
      *
      * @param mixed $service
      * @param mixed $product
-     * 
+     *
      * @return ZapMeTemplateHandle
      */
     public function serviceVariables($service, $product): ZapMeTemplateHandle
@@ -528,7 +540,7 @@ class ZapMeTemplateHandle
      *
      * @param mixed $invoice
      * @param mixed $client
-     * 
+     *
      * @return array
      */
     public function attachPagHiperBilletOnHooks($invoice, $client): array
@@ -536,7 +548,7 @@ class ZapMeTemplateHandle
         $document = [];
 
         if (
-            mb_strpos($this->template->message, '%paghiper_barcode%') === false
+            mb_strpos($this->template->message, '%paghiper_barcode%')   === false
             && mb_strpos($this->template->message, '%paghiper_boleto%') === false
         ) {
             return $document;
@@ -547,6 +559,7 @@ class ZapMeTemplateHandle
             if (ZAPME_MODULE_ACTIVITY_LOG === true) {
                 logActivity('[ZapMe][' . $this->hook . '] Inclusão de detalhes do Boleto Bancário da PagHiper foram rejeitados: O gateway PagHiper não está configurado como ativado e visível.');
             }
+
             return $document;
         }
 
@@ -555,6 +568,7 @@ class ZapMeTemplateHandle
             if (ZAPME_MODULE_ACTIVITY_LOG === true) {
                 logActivity('[ZapMe][' . $this->hook . '] Inclusão de detalhes do Boleto Bancário da PagHiper foram rejeitados: A fatura não está com o método de pagamento PagHiper.');
             }
+
             return $document;
         }
 
@@ -563,6 +577,7 @@ class ZapMeTemplateHandle
             if (ZAPME_MODULE_ACTIVITY_LOG === true) {
                 logActivity('[ZapMe][' . $this->hook . '] Inclusão de detalhes do Boleto Bancário da PagHiper foram rejeitados: A fatura é inferior a R$ 3,00');
             }
+
             return $document;
         }
 

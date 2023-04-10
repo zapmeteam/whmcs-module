@@ -3,8 +3,8 @@
 namespace ZapMe\Whmcs\Actions;
 
 use ZapMeSdk\Base as ZapMeSdk;
-use ZapMe\Whmcs\Module\Template;
 use ZapMe\Whmcs\DTO\TemplateDTO;
+use ZapMe\Whmcs\Module\Template;
 use ZapMe\Whmcs\Module\Configuration;
 
 class Hooks
@@ -19,7 +19,7 @@ class Hooks
         $module   = (new Configuration())->fromDto();
         $template = (new Template($hook))->dto()->first();
 
-        $class       = "ZapMe\\Whmcs\\Actions\\Hooks\\".$hook;
+        $class       = "ZapMe\\Whmcs\\Actions\\Hooks\\" . $hook;
         $this->hooks = new $class($hook, $zapme, $module, $template, $version);
 
         $this->template = $template;

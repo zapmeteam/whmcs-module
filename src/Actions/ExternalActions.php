@@ -11,7 +11,7 @@ class ExternalActions
     //TODO: refactor
     private function externalActionInvoiceReminder(ParameterBag $get = null): string
     {
-        $invoicePaymentReminder = (new ZapMeHooks)->prepare('InvoicePaymentReminder')->InvoicePaymentReminder(['invoiceid' => $get->get('invoiceid')], true);
+        $invoicePaymentReminder = (new ZapMeHooks())->prepare('InvoicePaymentReminder')->InvoicePaymentReminder(['invoiceid' => $get->get('invoiceid')], true);
 
         if ($invoicePaymentReminder === true) {
             return alert('Tudo certo! <b>Procedimento efetuado com sucesso.</b>');
@@ -24,7 +24,7 @@ class ExternalActions
     private function externalActionServiceReady(ParameterBag $get = null): string
     {
         $template = new ZapMeTemplateHandle('AfterModuleReady');
-        $hooks    = new ZapMeHooks;
+        $hooks    = new ZapMeHooks();
         $module   = $hooks->getModuleConfiguration();
 
         if ($template->templateStatus() === false) {
@@ -51,6 +51,7 @@ class ExternalActions
             if ($module->logsystem == 1) {
                 moduleSaveLog($message, 'aftermoduleready', $client->id);
             }
+
             return alert('Tudo certo! <b>Procedimento efetuado com sucesso.</b>');
         }
 
@@ -65,7 +66,7 @@ class ExternalActions
     private function externalActionManualMessage(ParameterBag $post = null): string
     {
         $template = new ZapMeTemplateHandle('AfterModuleReady');
-        $hooks    = new ZapMeHooks;
+        $hooks    = new ZapMeHooks();
         $module   = $hooks->getModuleConfiguration();
 
         $client = Client::find($post->get('userid'));
@@ -86,6 +87,7 @@ class ExternalActions
             if ($module->logsystem == 1) {
                 moduleSaveLog($message, 'manualmessage', $client->id);
             }
+
             return alert('Tudo certo! <b>Procedimento efetuado com sucesso.</b>');
         }
 

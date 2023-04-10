@@ -2,8 +2,8 @@
 
 namespace ZapMe\Whmcs\Module;
 
-use WHMCS\Database\Capsule;
 use Illuminate\Support\Str;
+use WHMCS\Database\Capsule;
 use Illuminate\Support\Carbon;
 use ZapMe\Whmcs\DTO\TemplateDTO;
 use Illuminate\Support\Collection;
@@ -13,9 +13,9 @@ use ZapMe\Whmcs\Helper\Template\TemplateParseVariable;
 class Template
 {
     public function __construct(
+        protected ?string $code = null,
         protected ?Collection $template = null,
-        protected ?PagHiper $paghiper = null,
-        protected ?string $code = null
+        protected ?PagHiper $paghiper = null
     ) {
         $this->template = Capsule::table('mod_zapme_templates')
             ->when($code && ctype_alpha($code), fn (Builder $query) => $query->where('code', '=', $code))
@@ -54,7 +54,7 @@ class Template
                     ->__toString();
 
                 $class               = "ZapMe\\Whmcs\\Helper\\Template\\Structures\\" . $class;
-                $template->structure = (new $class)::execute($this->paghiper->active());
+                $template->structure = (new $class())::execute($this->paghiper->active());
             });
 
         return $template;

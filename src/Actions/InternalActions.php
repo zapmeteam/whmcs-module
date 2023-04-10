@@ -58,7 +58,7 @@ class InternalActions extends Base
         $template = $post->get('template');
 
         try {
-            $capsule  = Capsule::table('mod_zapme_templates');
+            $capsule = Capsule::table('mod_zapme_templates');
 
             if (
                 $capsule->where('id', '=', $template)
@@ -69,8 +69,8 @@ class InternalActions extends Base
 
             $capsule->where('id', '=', $template)
                 ->update([
-                   'message'    => $post->get('message'),
-                   'is_active'  => $post->get('is_active'),
+                    'message'   => $post->get('message'),
+                    'is_active' => $post->get('is_active'),
                     ...[
                         ...$this->updatedAt()
                     ],
