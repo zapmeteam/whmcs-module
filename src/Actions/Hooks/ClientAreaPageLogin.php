@@ -18,7 +18,7 @@ class ClientAreaPageLogin extends AbstractHookStructure
             return;
         }
 
-        $this->client = $this->version >= 8 ?
+        $this->client = $this->whmcs >= 8 ?
             $this->newest($vars) :
             $this->oldest();
 

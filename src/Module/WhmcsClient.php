@@ -9,11 +9,12 @@ use ZapMe\Whmcs\DTO\ConfigurationDTO;
 
 class WhmcsClient
 {
-    protected object $client;
-    private ?ConfigurationDTO $module = null;
 
-    public function __construct(int $id)
-    {
+    public function __construct(
+        int $id,
+        private ?ConfigurationDTO $module = null,
+        protected ?object $client = null
+    ) {
         $this->client = Client::find($id);
     }
 

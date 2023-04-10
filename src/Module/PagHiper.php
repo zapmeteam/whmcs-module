@@ -13,6 +13,6 @@ class PagHiper
             ->where('gateway', '=', 'paghiper')
             ->where('setting', '=', 'visible')
             ->first()
-            ->value === 'on';
+            ?->value === 'on';
     }
 }

@@ -12,12 +12,11 @@ use ZapMe\Whmcs\Helper\Template\TemplateParseVariable;
 
 class Template
 {
-    protected Collection|null $template = null;
-
-    protected PagHiper $paghiper;
-
-    public function __construct(?string $code = null)
-    {
+    public function __construct(
+        protected ?Collection $template = null,
+        protected ?PagHiper $paghiper = null,
+        protected ?string $code = null
+    ) {
         $this->template = Capsule::table('mod_zapme_templates')
             ->when($code && ctype_alpha($code), fn (Builder $query) => $query->where('code', '=', $code))
             ->when($code && ctype_digit($code), fn (Builder $query) => $query->where('id', '=', $code))
