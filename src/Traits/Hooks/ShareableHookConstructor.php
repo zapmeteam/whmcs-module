@@ -16,11 +16,14 @@ trait ShareableHookConstructor
 
     protected ConfigurationDTO $module;
 
-    public function __construct(string $hook, ZapMeSdk $zapme, ConfigurationDTO $module, TemplateDTO $template)
+    protected int $version;
+
+    public function __construct(string $hook, ZapMeSdk $zapme, ConfigurationDTO $module, TemplateDTO $template, int $version)
     {
         $this->hook     = $hook;
         $this->zapme    = $zapme;
         $this->module   = $module;
         $this->template = $template;
+        $this->version  = $version;
     }
 }

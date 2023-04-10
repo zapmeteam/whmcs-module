@@ -18,7 +18,7 @@ class Base
     {
         $this->zapme = (new ZapMeSdk())->toUrl(ZAPME_MODULE_API_URL);
 
-        $this->carbonInstance();
+        $this->carbon();
     }
 
     public function success(string $message): string

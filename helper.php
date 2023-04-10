@@ -22,7 +22,7 @@ if (!function_exists('throwlable')) {
         $file   = explode('zapme/whmcs', $source);
         $file   = $file[1] ?? $source;
 
-        logActivity("[ZapMe] Erro: {$exception->getMessage()} | {$file}:{$exception->getLine()}");
+        logActivity("[ZapMe] Erro: {$exception->getMessage()} | {$file}: {$exception->getLine()}");
     }
 }
 
@@ -143,6 +143,18 @@ if (!function_exists('clientPhoneNumber')) {
         $value = $ddi . $value;
 
         return $value;
+    }
+}
+
+if (!function_exists('whmcs_version')) {
+    function whmcs_version(): int
+    {
+        $value = Capsule::table('tblconfiguration')
+            ->where('setting', '=', 'Version')
+            ->first()
+            ->value;
+
+        return substr($value, 0,1);
     }
 }
 

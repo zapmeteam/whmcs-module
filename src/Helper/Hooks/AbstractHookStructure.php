@@ -2,31 +2,35 @@
 
 namespace ZapMe\Whmcs\Helper\Hooks;
 
+use Throwable;
 use Illuminate\Support\Collection;
 use ZapMe\Whmcs\Module\WhmcsClient;
+use ZapMe\Whmcs\Traits\InteractWithCarbon;
 use ZapMe\Whmcs\Traits\Hooks\ShareableHookConstructor;
 
 abstract class AbstractHookStructure
 {
+    use InteractWithCarbon;
     use ShareableHookConstructor;
 
-    protected ?object $client = null;
+    protected bool|string|Collection|null $client = null;
 
-    public function impersonate(): bool
+    public function impersonating(): bool
     {
         return isset($_SESSION['adminid']);
     }
 
     protected function send(
-        string $message,
-        string $phone,
-        int $client,
         array $attachment = []
     ): void {
-        $result = $this->zapme
-            ->withApi($this->module->api)
-            ->withSecret($this->module->secret)
-            ->sendMessage($phone, $message, $attachment);
+        try {
+            $this->zapme
+                ->withApi($this->module->api)
+                ->withSecret($this->module->secret)
+                ->sendMessage($this->client->get('phone'), $this->template->message, $attachment);
+        } catch (Throwable $e) {
+            throwlable($e);
+        }
     }
 
     protected function client(int $id, ?string $index = null): bool|string|Collection|null
@@ -38,12 +42,14 @@ abstract class AbstractHookStructure
 
     protected function log(string $message): void
     {
+        $client = $this->client->get('whmcs');
+
         $message = str_replace(
             ['{id}', '{name}', '{hook}'],
-            [$this->client->id, $this->client->fullName, $this->hook],
+            [$client->id, $client->fullName, $this->hook],
             $message
         );
 
-        logActivity("[ZapMe][Hook: $this->hook] $message", $this->client);
+        logActivity("[ZapMe][Hook: $this->hook] $message", $client);
     }
 }

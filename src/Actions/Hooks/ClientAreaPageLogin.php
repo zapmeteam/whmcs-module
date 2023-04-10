@@ -5,6 +5,7 @@ namespace ZapMe\Whmcs\Actions\Hooks;
 use WHMCS\User\Client;
 use WHMCS\Database\Capsule;
 use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 use ZapMe\Whmcs\Helper\Hooks\AbstractHookStructure;
 use ZapMe\Whmcs\Helper\Template\TemplateParseVariable;
 
@@ -13,68 +14,53 @@ class ClientAreaPageLogin extends AbstractHookStructure
 
     public function execute(mixed $vars): void
     {
-        if ($this->impersonate()) {
+        if ($this->impersonating()) {
             return;
         }
 
+        $this->client = $this->version >= 8 ?
+            $this->newest($vars) :
+            $this->oldest();
+
+        if (!$this->client) {
+            return;
+        }
+
+        $this->template = (new TemplateParseVariable($this->template, $this->client))
+            ->client()
+            ->parsed();
+
+        $this->send();
+    }
+
+    private function oldest(): bool|string|Collection|null
+    {
         $log = Capsule::table('tblactivitylog')
             ->where('user', '=', 'System')
-            ->oldest('date')
+            ->latest('date')
             ->first();
 
-        if (!Str::of($log->description)->contains('Failed Login Attempt')) {
-            return;
+        if (!$log || !Str::of($log->description)->contains('Failed Login Attempt')) {
+            return null;
         }
 
-        if (($this->client = $this->client($log->userid)) === null) {
-            return;
+        if (
+            $this->carbon()
+                ->parse($log->date)
+                ->diffInMinutes($this->carbon) > 2
+        ) {
+            return null;
         }
 
-        if ($this->client->get('consent') === false) {
-            $this->log('O cliente: ({id}) {name} optou por não receber alertas');
-            return;
+        return $this->client($log->userid);
+    }
+
+    private function newest(mixed $vars): bool|string|Collection|null
+    {
+        if (($client = Client::where('email', '=', $vars['username'])->first()) === null) {
+            return null;
         }
 
-        if (!$this->template->isActive) {
-            return;
-        }
-
-        $this->template = (new TemplateParseVariable($this->template))
-            ->client($this->client)
-            ->get();
-
-//        if (clientConsentiment($this->hook, $client, $this->module->clientconsentfieldid) === false) {
-//            return;
-//        }
-
-//        $template = new ZapMeTemplateHandle($this->hook);
-//
-//        if ($template->templateStatus() === false) {
-//            return;
-//        }
-//
-//        if ($template->templateHasValidConfigurations() === true) {
-//            if (
-//                $template->controlByClient($client) === false ||
-//                $template->controlByPartsOfEmail($client) === false ||
-//                $template->controlByWeekDay() === false ||
-//                $template->controlByClientStatus($client) === false
-//            ) {
-//                return;
-//            }
-//        }
-//
-//        $message = $template->defaultVariables($client)->clientVariables($client, $vars)->getTemplateMessage();
-//        $phone   = clientPhoneNumber($client, $this->module->clientphonefieldid);
-//
-//        $logDate     = new DateTime($log->date);
-//        $currentDate = new DateTime;
-//        $dateDiff    = $logDate->diff($currentDate);
-//
-//        if ($dateDiff->d == 0 && $dateDiff->i == 0 && ($dateDiff->s < 2)) {
-//            $this->endOfDispatch($message, $phone, $client->id);
-//        }
-//
-//        logActivity(var_export($_SESSION, true));
+        return $this->client($client->id);
     }
 }

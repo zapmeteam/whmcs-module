@@ -10,6 +10,8 @@ if (!defined('WHMCS')) {
 	die;
 }
 
+$version = whmcs_version();
+
 add_hook('InvoiceCreated', 1, fn ($vars) => (new Hooks('InvoiceCreated'))->dispatch($vars));
 
 add_hook('InvoiceCancelled', 1, function ($vars) {
@@ -60,7 +62,7 @@ add_hook('ClientLogin', 1, function ($vars) {
 	//$zapMeHooks->prepare('ClientLogin')->dispatch($vars);
 });
 
-add_hook('ClientAreaHomepage', 1, fn ($vars) => (new Hooks('ClientAreaPageLogin'))->dispatch($vars));
+add_hook($version >= 8 ? 'ClientLoginShare' : 'ClientAreaPageLogin', 1, fn ($vars) => (new Hooks('ClientAreaPageLogin', $version))->dispatch($vars));
 
 add_hook('ClientChangePassword', 1, function ($vars) {
 	//$zapMeHooks->prepare('ClientChangePassword')->dispatch($vars);

@@ -8,7 +8,7 @@ trait InteractWithCarbon
 {
     protected Carbon $carbon;
 
-    public function carbonInstance(): Carbon
+    public function carbon(): Carbon
     {
         $this->carbon = Carbon::now('America/Sao_Paulo');
 

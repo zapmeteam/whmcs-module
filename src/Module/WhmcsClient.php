@@ -51,20 +51,11 @@ class WhmcsClient
             return true;
         }
 
-        $value = collect($fields)
-            ->map(function (object $field) {
-                return [
-                    'id'    => (int) $field->fieldId,
-                    'value' => Str::of($field->value)
-                        ->lower()
-                        ->replace('ã', 'a')
-                        ->__toString()
-                ];
-            })
-            ->firstWhere('id', '=', $this->module->clientConsentFieldId)
-            ->value;
+        $value = Str::of($fields->firstWhere('id', '=', $this->module->clientConsentFieldId)?->value ?? '')
+            ->lower()
+            ->replace('ã', 'a');
 
-        return in_array($value, ['n', 'nao']);
+        return in_array($value, ['s', 'sim']);
     }
 
     private function phone(): string
