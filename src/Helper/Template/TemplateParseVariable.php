@@ -3,7 +3,6 @@
 namespace ZapMe\Whmcs\Helper\Template;
 
 use WHMCS\Database\Capsule;
-use Illuminate\Support\Carbon;
 use ZapMe\Whmcs\DTO\TemplateDTO;
 use ZapMe\Whmcs\Traits\InteractWithCarbon;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +21,7 @@ class TemplateParseVariable
     ) {
         $this->template->message = $this->translate();
 
-        $this->newCarbonInstance();
+        $this->carbonInstance();
     }
 
     public function client(object $client): self
