@@ -24,6 +24,14 @@ abstract class AbstractTemplateStructure
         $alert .= "<b>%lastname%:</b> Último Nome do Cliente<br>";
         $alert .= "<b>%email%:</b> E-mail do Cliente<br>";
         $alert .= "<b>%company%:</b> Compania do Cliente<br>";
+        $alert .= "<b>%website%:</b> Domínio do WHMCS<br>";
+        $alert .= "<b>%companyname%:</b> Nome da Empresa<br>";
+        $alert .= "<b>%whmcs%:</b> Link do WHMCS<br>";
+        $alert .= "<b>%ipaddr%:</b> IP da Requisição<br>";
+        $alert .= "<b>%date%:</b> Data (d/m/Y)<br>";
+        $alert .= "<b>%hour%:</b> Data (H:m)<br>";
+
+        $alert .= "<hr>";
 
         foreach ($variables as $key => $value) {
             if (!$paghiper && mb_strpos($key, 'paghiper')) {

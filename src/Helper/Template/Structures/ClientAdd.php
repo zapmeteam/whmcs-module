@@ -16,10 +16,6 @@ class ClientAdd extends AbstractTemplateStructure
 
     public function variables(): array
     {
-        return [
-            'website'     => 'Link do Site',
-            'whmcs'       => 'Link do WHMCS',
-            'companyname' => 'Nome da Empresa',
-        ];
+        return [];
     }
 }

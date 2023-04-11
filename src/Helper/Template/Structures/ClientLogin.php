@@ -16,10 +16,6 @@ class ClientLogin extends AbstractTemplateStructure
 
     public function variables(): array
     {
-        return [
-            'ipaddr' => 'IP de Acesso',
-            'date'   => 'Data do Registro',
-            'hour'   => 'Hora do Registro',
-        ];
+        return [];
     }
 }

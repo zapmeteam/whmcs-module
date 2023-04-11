@@ -31,9 +31,6 @@
  */
 
 return [
-    /**
-     * Invoice Created
-     */
     'invoicecreated' => 'Hi %name%,
 
 A new invoice has been created on your account at Customer Center. Below you can check some details of this invoice.

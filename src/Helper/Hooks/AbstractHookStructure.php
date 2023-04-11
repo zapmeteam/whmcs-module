@@ -6,6 +6,7 @@ use Throwable;
 use Illuminate\Support\Collection;
 use ZapMe\Whmcs\Module\WhmcsClient;
 use ZapMe\Whmcs\Traits\InteractWithCarbon;
+use ZapMe\Whmcs\Helper\Template\TemplateParseVariable;
 use ZapMe\Whmcs\Traits\Hooks\ShareableHookConstructor;
 
 abstract class AbstractHookStructure
@@ -14,6 +15,8 @@ abstract class AbstractHookStructure
     use ShareableHookConstructor;
 
     protected bool|string|Collection|null $client = null;
+
+    protected bool $parsed = false;
 
     public function impersonating(): bool
     {
@@ -27,6 +30,10 @@ abstract class AbstractHookStructure
             $this->log('O cliente ({id}) {name} não deseja receber alertas via WhatsApp.');
 
             return;
+        }
+
+        if (!$this->parsed) {
+            $this->parse();
         }
 
         try {
@@ -57,5 +64,20 @@ abstract class AbstractHookStructure
         );
 
         logActivity("[ZapMe][Hook: $this->hook] $message", $client);
+    }
+
+    protected function parse(array $methods = []): void
+    {
+        $parse = new TemplateParseVariable($this->template, $this->client);
+
+        foreach ($methods as $method => $parameters) {
+            if (!method_exists($this, $method)) {
+                continue;
+            }
+
+            $parse->$method(...$parameters);
+        }
+
+        $this->template = $parse->parsed();
     }
 }

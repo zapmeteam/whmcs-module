@@ -79,7 +79,7 @@ $finder = new Finder();
 
 $finder->in([
     __DIR__.'/src',
-    __DIR__.'/language',
+    __DIR__.'/translations',
 ]);
 
 $config = new Config();

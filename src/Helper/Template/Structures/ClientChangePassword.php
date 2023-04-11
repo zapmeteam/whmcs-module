@@ -16,6 +16,6 @@ class ClientChangePassword extends AbstractTemplateStructure
 
     public function variables(): array
     {
-        return (new ClientLogin())->variables();
+        return [];
     }
 }

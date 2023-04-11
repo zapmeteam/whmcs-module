@@ -4,7 +4,6 @@ namespace ZapMe\Whmcs\Actions\Hooks;
 
 use Illuminate\Support\Collection;
 use ZapMe\Whmcs\Helper\Hooks\AbstractHookStructure;
-use ZapMe\Whmcs\Helper\Template\TemplateParseVariable;
 
 class ClientLogin extends AbstractHookStructure
 {
@@ -17,10 +16,6 @@ class ClientLogin extends AbstractHookStructure
         $this->client = $this->whmcs >= 8 ?
             $this->newest($vars) :
             $this->oldest($vars);
-
-        $this->template = (new TemplateParseVariable($this->template, $this->client))
-            ->client()
-            ->parsed();
 
         $this->send();
     }

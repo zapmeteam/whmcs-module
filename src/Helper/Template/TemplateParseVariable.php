@@ -16,82 +16,70 @@ class TemplateParseVariable
         protected TemplateDTO $template,
         protected Collection $client,
     ) {
-        $this->template->message = $this->translate();
-
         $this->carbon();
         $this->default();
     }
 
-    public function client(): self
-    {
-        $request       = Request::createFromGlobals();
-        $configuration = Capsule::table('tblconfiguration')
-            ->whereIn('setting', ['CompanyName', 'Domain', 'SystemURL'])
-            ->get();
-
-        $this->template->message = str_replace('%website%', $configuration->firstWhere('setting', '=', 'Domain')->value, $this->template->message);
-        $this->template->message = str_replace('%companyname%', $configuration->firstWhere('setting', '=', 'CompanyName')->value, $this->template->message);
-        $this->template->message = str_replace('%whmcs%', $configuration->firstWhere('setting', '=', 'SystemURL')->value, $this->template->message);
-        $this->template->message = str_replace('%ipaddr%', $request->getClientIp(), $this->template->message);
-        $this->template->message = str_replace('%date%', $this->carbon->format('d/m/Y'), $this->template->message);
-        $this->template->message = str_replace('%hour%', $this->carbon->format('H:i'), $this->template->message);
-
-        return $this;
-    }
-
-    public function ticket(object $ticket): self
-    {
-        // $this->ticket = $ticket;
-
-        return $this;
-    }
-
-    public function service(object $service): self
-    {
-        // $this->service = $service;
-
-        return $this;
-    }
-
-    public function product(object $product): self
-    {
-        // $this->product = $product;
-
-        return $this;
-    }
-
-    public function parsed(): TemplateDTO
-    {
-        return $this->template;
-    }
-
     private function default(): void
     {
-        $client = $this->client->get('whmcs');
+        $client        = $this->client->get('whmcs');
+        $request       = Request::createFromGlobals();
+        $configuration = Capsule::table('tblconfiguration')->whereIn('setting', ['CompanyName', 'Domain', 'SystemURL'])->get();
+
+        $this->translate($client);
 
         $this->template->message = str_replace('%name%', $client->fullname, $this->template->message);
         $this->template->message = str_replace('%firstname%', $client->firstname, $this->template->message);
         $this->template->message = str_replace('%lastname%', $client->lastname, $this->template->message);
         $this->template->message = str_replace('%email%', $client->email, $this->template->message);
         $this->template->message = str_replace('%company%', $client->companyName, $this->template->message);
+        $this->template->message = str_replace('%website%', $configuration->firstWhere('setting', '=', 'Domain')->value, $this->template->message);
+        $this->template->message = str_replace('%companyname%', $configuration->firstWhere('setting', '=', 'CompanyName')->value, $this->template->message);
+        $this->template->message = str_replace('%whmcs%', $configuration->firstWhere('setting', '=', 'SystemURL')->value, $this->template->message);
+        $this->template->message = str_replace('%ipaddr%', $request->getClientIp(), $this->template->message);
+        $this->template->message = str_replace('%date%', $this->carbon->format('d/m/Y'), $this->template->message);
+        $this->template->message = str_replace('%hour%', $this->carbon->format('H:i'), $this->template->message);
     }
 
-    private function translate(): string
+    private function translate(object $client): void
     {
-        $default = $this->template->message;
-
-        if (!file_exists(ZAPME_MODULE_PATH . '/language/messages.php')) {
-            return $default;
+        if (empty($language = $client->language) || $language === 'portuguese-br') {
+            return;
         }
 
-        include ZAPME_MODULE_PATH . '/language/messages.php';
+        $file = ZAPME_MODULE_PATH . "/translations/$language.php";
 
-        $hook = strtolower($this->template->code);
-
-        if (!isset($language[$hook]) || $this->client->country === 'BR') {
-            return $default;
+        if (!file_exists($file)) {
+            return;
         }
 
-        return $language[$hook];
+        $hook     = strtolower($this->template->code);
+        $language = collect(require $file);
+
+        if (!$language->has($hook)) {
+            return;
+        }
+
+        $this->template->message = $language->get($hook, $this->template->message);
+    }
+
+    public function ticket(object $ticket): self
+    {
+        return $this;
+    }
+
+    public function service(object $service): self
+    {
+        return $this;
+    }
+
+    public function product(object $product): self
+    {
+        return $this;
+    }
+
+    public function parsed(): TemplateDTO
+    {
+        return $this->template;
     }
 }

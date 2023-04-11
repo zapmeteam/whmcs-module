@@ -20,8 +20,8 @@ class TicketOpen extends AbstractTemplateStructure
             'id'          => 'Id do Ticket',
             'tid'         => 'Tid do Ticket',
             'title'       => 'Título do Ticket',
-            'date'        => 'Data da Abertura do Ticket',
-            'hour'        => 'Hora da Abertura do Ticket',
+            'ticketdate'  => 'Data da Abertura do Ticket',
+            'tickethour'  => 'Hora da Abertura do Ticket',
             'deppartment' => 'Departamento do Ticket',
         ];
     }

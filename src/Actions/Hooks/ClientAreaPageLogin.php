@@ -7,7 +7,6 @@ use Illuminate\Support\Str;
 use WHMCS\Database\Capsule;
 use Illuminate\Support\Collection;
 use ZapMe\Whmcs\Helper\Hooks\AbstractHookStructure;
-use ZapMe\Whmcs\Helper\Template\TemplateParseVariable;
 
 class ClientAreaPageLogin extends AbstractHookStructure
 {
@@ -24,10 +23,6 @@ class ClientAreaPageLogin extends AbstractHookStructure
         if (!$this->client) {
             return;
         }
-
-        $this->template = (new TemplateParseVariable($this->template, $this->client))
-            ->client()
-            ->parsed();
 
         $this->send();
     }

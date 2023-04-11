@@ -2,6 +2,7 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
+use WHMCS\User\Client;
 use WHMCS\Service\Service;
 use WHMCS\Database\Capsule;
 use ZapMe\Whmcs\Actions\Hooks;
@@ -65,6 +66,20 @@ add_hook('ClientAdd', 1, function ($vars) {
 add_hook($whmcs >= 8 ? 'UserLogin' : 'ClientLogin', 1, fn ($vars) => (new Hooks('ClientLogin', $whmcs))->dispatch($vars));
 
 add_hook($whmcs >= 8 ? 'ClientLoginShare' : 'ClientAreaPageLogin', 1, fn ($vars) => (new Hooks('ClientAreaPageLogin', $whmcs))->dispatch($vars));
+
+add_hook('ClientAreaHomepage', 1, function ($vars) {
+//    dd(Client::find($_SESSION['uid']));
+//
+//    $file = ZAPME_MODULE_PATH . "/translations/english.php";
+//
+//    if (!file_exists($file)) {
+//        return;
+//    }
+//
+//    $language = collect(require $file);
+//
+//    dd($language);
+});
 
 add_hook('ClientChangePassword', 1, function ($vars) {
 	//$zapMeHooks->prepare('ClientChangePassword')->dispatch($vars);
