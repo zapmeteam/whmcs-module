@@ -368,7 +368,9 @@ function zapme_output($vars)
         </div>
         <!-- Logs -->
         <div class="tab-pane <?= selected($tab === 'logs', 'active') ?>" id="logs">
-            <button class="btn btn-danger btn-sm" style="margin: 0px 0px 15px 0px;" data-toggle="modal" data-target="#clearlogs">APAGAR REGISTROS</button>
+            <button class="btn btn-danger btn-sm" style="margin: 0px 0px 15px 0px;" data-toggle="modal" data-target="#clearlogs">
+                <i class="fa fa-trash"></i>
+            </button>
             <table id="tablelog" class="table table-striped table-responsive" style="width: 100% !important">
                 <thead>
                     <tr>
@@ -422,12 +424,12 @@ function zapme_output($vars)
                                 <p class="justify">Este procedimento irá remover todos os registros de logs do módulo existentes em seu banco de dados. <b>Para prosseguir confirme o procedimento abaixo:</b></p>
                                 <div class="form-group">
                                     <div class="form-check">
-                                        <input id="my-input" class="form-check-input" type="checkbox" name="clearlogs">
+                                        <input class="form-check-input" type="checkbox" name="clearlogs" id="input-clearlogs">
                                         <label class="form-check-label text-danger">Estou ciente e desejo prosseguir com a limpeza dos logs do sistema</label>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="submit" class="btn btn-primary">Salvar</button>
+                                    <button type="submit" class="btn btn-primary" id="save" disabled>Salvar</button>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                                 </div>
                             </form>
@@ -453,6 +455,9 @@ function zapme_output($vars)
                     [0, "asc"]
                 ],
                 responsive: true
+            });
+            $('#input-clearlogs').click(function() {
+                $('#save').attr('disabled', !$(this).prop('checked'));
             });
         });
     </script>
