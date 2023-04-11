@@ -41,6 +41,8 @@ abstract class AbstractHookStructure
                 ->withApi($this->configuration->api)
                 ->withSecret($this->configuration->secret)
                 ->sendMessage($this->client->get('phone'), $this->template->message, $attachment);
+
+            //TODO: log
         } catch (Throwable $e) {
             throwlable($e);
         }
