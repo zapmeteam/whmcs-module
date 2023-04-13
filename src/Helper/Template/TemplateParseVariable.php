@@ -14,7 +14,7 @@ class TemplateParseVariable
 
     public function __construct(
         protected TemplateDTO $template,
-        protected Collection $client,
+        protected ?Collection $client = null,
     ) {
         $this->carbon();
         $this->default();

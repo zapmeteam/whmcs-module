@@ -51,9 +51,7 @@ add_hook('AfterModuleTerminate', 1, function ($vars) {
 	//$zapMeHooks->prepare('AfterModuleTerminate')->dispatch($vars);
 });
 
-add_hook('ClientAdd', 1, function ($vars) {
-	//$zapMeHooks->prepare('ClientAdd')->dispatch($vars);
-});
+add_hook('ClientAdd', 1, fn ($vars) => (new Hooks('ClientAdd', $whmcs))->dispatch($vars));
 
 /*add_hook('ClientLogin', 1, function ($vars) {
 	if (isset($_SESSION['adminid'])) {

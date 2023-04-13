@@ -5,6 +5,7 @@ namespace ZapMe\Whmcs\Helper\Hooks;
 use Throwable;
 use Illuminate\Support\Collection;
 use ZapMe\Whmcs\Module\WhmcsClient;
+use ZapMe\Whmcs\Actions\Log\CreateLog;
 use ZapMe\Whmcs\Traits\InteractWithCarbon;
 use ZapMe\Whmcs\Helper\Template\TemplateParseVariable;
 use ZapMe\Whmcs\Traits\Hooks\ShareableHookConstructor;
@@ -26,7 +27,7 @@ abstract class AbstractHookStructure
     protected function send(
         array $attachment = []
     ): void {
-        if (!$this->client->get('consent')) {
+        if (!$this->client->get('new') && $this->client->get('consent')) {
             $this->log('O cliente ({id}) {name} não deseja receber alertas via WhatsApp.');
 
             return;
@@ -42,7 +43,15 @@ abstract class AbstractHookStructure
                 ->withSecret($this->configuration->secret)
                 ->sendMessage($this->client->get('phone'), $this->template->message, $attachment);
 
-            //TODO: log
+            if (!$this->configuration->logSystem) {
+                return;
+            }
+
+            CreateLog::execute(
+                $this->template->message,
+                $this->template->code,
+                $this->client->get('whmcs')->id
+            );
         } catch (Throwable $e) {
             throwlable($e);
         }
@@ -80,6 +89,7 @@ abstract class AbstractHookStructure
             $parse->$method(...$parameters);
         }
 
+        $this->parsed   = true;
         $this->template = $parse->parsed();
     }
 }

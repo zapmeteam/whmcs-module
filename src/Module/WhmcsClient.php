@@ -4,11 +4,15 @@ namespace ZapMe\Whmcs\Module;
 
 use WHMCS\User\Client;
 use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use ZapMe\Whmcs\DTO\ConfigurationDTO;
+use ZapMe\Whmcs\Traits\InteractWithCarbon;
 
 class WhmcsClient
 {
+    use InteractWithCarbon;
+
     public function __construct(
         int $id,
         private ?ConfigurationDTO $configuration = null,
@@ -36,6 +40,7 @@ class WhmcsClient
             'whmcs'   => $this->client,
             'phone'   => $this->phone(),
             'consent' => $this->consent(),
+            'new'     => $this->new(),
         ])->when($index, function (Collection $collection) use ($index) {
             return $collection->get($index);
         });
@@ -56,26 +61,17 @@ class WhmcsClient
         return in_array($value, ['s', 'sim']);
     }
 
-    //TODO: refactor like above method
     private function phone(): string
     {
         $original = sanitize($this->client->phonenumber);
 
         if (
-            !$this->configuration->clientPhoneFieldId || $this->configuration->clientPhoneFieldId == 0
+            !$this->configuration->clientPhoneFieldId || $this->configuration->clientPhoneFieldId == 0 || empty($fields = $this->client->customFieldValues)
         ) {
             return $original;
         }
 
-        $value = collect($this->client->customFieldValues)
-            ->map(function (object $field) {
-                return [
-                    'id'    => (int)$field->fieldId,
-                    'value' => sanitize($field->value)
-                ];
-            })
-            ->firstWhere('id', '=', $this->configuration->clientPhoneFieldId)
-            ->value ?? null;
+        $value = $fields->firstWhere('id', '=', $this->configuration->clientPhoneFieldId)?->value ?? null;
 
         if (!$value) {
             return $original;
@@ -84,6 +80,15 @@ class WhmcsClient
         $phone = explode('.', $this->client->phonenumber);
         $ddi   = sanitize($phone[0]);
 
-        return $ddi . $value;
+        return $ddi . sanitize($value);
+    }
+
+    private function new(): bool
+    {
+        $this->carbon();
+
+        return $this->carbon
+            ->parse($this->client->created_at)
+            ->diffInMinutes($this->carbon) <= 1;
     }
 }

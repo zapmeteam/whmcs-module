@@ -243,7 +243,7 @@ function zapme_output($vars)
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="inputConfirmPassword">Chave Secreta</label>
-                                    <input type="text" name="secret" class="form-control" value="<?= $module?->secret ?>" placeholder="Insira sua sua Chave Secreta" required>
+                                    <input type="password" name="secret" class="form-control" value="<?= $module?->secret ?>" placeholder="Insira sua sua Chave Secreta" required>
                                 </div>
                             </div>
                             <div class="col-md-12">
