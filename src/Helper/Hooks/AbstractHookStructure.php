@@ -74,6 +74,10 @@ abstract class AbstractHookStructure
             $message
         );
 
+        if (!ZAPME_MODULE_ACTIVITY_LOG) {
+            return;
+        }
+
         logActivity("[ZapMe][Hook: $this->hook] $message", $client);
     }
 

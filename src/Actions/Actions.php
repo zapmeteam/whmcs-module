@@ -33,19 +33,16 @@ class Actions
         }
 
         $externals = [
-            'manualmessage',
-            'invoicereminder',
             'serviceready',
+            'invoicereminder',
         ];
 
         $method = self::ACTIONS[$this->action];
 
-        if (($request = $this->request->getMethod()) === 'GET' && in_array($this->action, $externals)) {
+        if (
+            ((($this->request->getMethod() === 'GET' && in_array($this->action, $externals))) || $this->action === 'manualmessage')
+        ) {
             return (new ExternalActions())->{$method}($this->request);
-        }
-
-        if ($request !== 'POST') {
-            return null;
         }
 
         return (new InternalActions())->{$method}($this->request);
