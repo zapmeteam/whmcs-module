@@ -18,13 +18,15 @@ add_hook('InvoiceCreated', 1, fn ($vars) => (new Hooks('InvoiceCreated'))->dispa
 
 add_hook('InvoiceCancelled', 1, fn ($vars) => (new Hooks('InvoiceCancelled'))->dispatch($vars));
 
+add_hook('InvoicePaid', 1, fn ($vars) => (new Hooks('InvoicePaid'))->dispatch($vars));
+
 add_hook('InvoicePaymentReminder', 1, function ($vars) {
 	//$zapMeHooks->prepare('InvoicePaymentReminder')->dispatch($vars);
 });
 
-add_hook('InvoicePaid', 1, function ($vars) {
-	//$zapMeHooks->prepare('InvoicePaid')->dispatch($vars);
-});
+//add_hook('InvoicePaid', 1, function ($vars) {
+//	$zapMeHooks->prepare('InvoicePaid')->dispatch($vars);
+//});
 
 add_hook('TicketOpen', 1, function ($vars) {
 	//$zapMeHooks->prepare('TicketOpen')->dispatch($vars);
