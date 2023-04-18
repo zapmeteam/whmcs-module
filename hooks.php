@@ -20,13 +20,9 @@ add_hook('InvoiceCancelled', 1, fn ($vars) => (new Hooks('InvoiceCancelled'))->d
 
 add_hook('InvoicePaid', 1, fn ($vars) => (new Hooks('InvoicePaid'))->dispatch($vars));
 
-add_hook('InvoicePaymentReminder', 1, function ($vars) {
-	//$zapMeHooks->prepare('InvoicePaymentReminder')->dispatch($vars);
-});
+//TODO: PagHiper (automatico)
+add_hook('InvoicePaymentReminder', 1, fn ($vars) => (new Hooks('InvoicePaymentReminder'))->dispatch($vars));
 
-//add_hook('InvoicePaid', 1, function ($vars) {
-//	$zapMeHooks->prepare('InvoicePaid')->dispatch($vars);
-//});
 
 add_hook('TicketOpen', 1, function ($vars) {
 	//$zapMeHooks->prepare('TicketOpen')->dispatch($vars);
@@ -51,8 +47,6 @@ add_hook('AfterModuleUnsuspend', 1, function ($vars) {
 add_hook('AfterModuleTerminate', 1, function ($vars) {
 	//$zapMeHooks->prepare('AfterModuleTerminate')->dispatch($vars);
 });
-
-
 
 /*add_hook('ClientLogin', 1, function ($vars) {
 	if (isset($_SESSION['adminid'])) {
