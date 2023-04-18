@@ -5,7 +5,7 @@ namespace ZapMe\Whmcs\Actions\Hooks;
 use WHMCS\Database\Capsule;
 use ZapMe\Whmcs\Helper\Hooks\AbstractHookStructure;
 
-class InvoiceCreated extends AbstractHookStructure
+class InvoiceCancelled extends AbstractHookStructure
 {
     public function execute(mixed $vars): void
     {

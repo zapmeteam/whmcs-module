@@ -17,7 +17,7 @@ abstract class AbstractHookStructure
 
     protected bool|string|Collection|null $client = null;
 
-    protected bool $parsed = false;
+    private bool $parsed = false;
 
     public function impersonating(): bool
     {
@@ -82,11 +82,11 @@ abstract class AbstractHookStructure
         $parse = new TemplateParseVariable($this->template, $this->client);
 
         foreach ($methods as $method => $parameters) {
-            if (!method_exists($this, $method)) {
+            if (!method_exists($parse, $method)) {
                 continue;
             }
 
-            $parse->$method(...$parameters);
+            $parse->$method($parameters);
         }
 
         $this->parsed   = true;

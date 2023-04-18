@@ -13,11 +13,10 @@ if (!defined('WHMCS')) {
 
 $whmcs = whmcs_version();
 
+//TODO: PagHiper
 add_hook('InvoiceCreated', 1, fn ($vars) => (new Hooks('InvoiceCreated'))->dispatch($vars));
 
-add_hook('InvoiceCancelled', 1, function ($vars) {
-	//$zapMeHooks->prepare('invoicecancelled')->dispatch($vars);
-});
+add_hook('InvoiceCancelled', 1, fn ($vars) => (new Hooks('InvoiceCancelled'))->dispatch($vars));
 
 add_hook('InvoicePaymentReminder', 1, function ($vars) {
 	//$zapMeHooks->prepare('InvoicePaymentReminder')->dispatch($vars);

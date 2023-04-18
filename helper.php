@@ -146,6 +146,13 @@ if (!function_exists('clientPhoneNumber')) {
     }
 }
 
+if (!function_exists('format_number')) {
+    function format_number(string $number): string
+    {
+        return number_format($number, 2, ',', '.');
+    }
+}
+
 if (!function_exists('whmcs_version')) {
     function whmcs_version(): int
     {

@@ -3,6 +3,7 @@
 namespace ZapMe\Whmcs\Helper\Template;
 
 use WHMCS\Database\Capsule;
+use Illuminate\Support\Carbon;
 use ZapMe\Whmcs\DTO\TemplateDTO;
 use Illuminate\Support\Collection;
 use ZapMe\Whmcs\Traits\InteractWithCarbon;
@@ -65,6 +66,15 @@ class TemplateParseVariable
 
     public function ticket(object $ticket): self
     {
+        return $this;
+    }
+
+    public function invoice(object $invoice): self
+    {
+        $this->template->message = str_replace('%invoiceid%', $invoice->id, $this->template->message);
+        $this->template->message = str_replace('%duedate%', Carbon::parse($invoice->duedate)->format('d/m/Y'), $this->template->message);
+        $this->template->message = str_replace('%value%', format_number($invoice->total), $this->template->message);
+
         return $this;
     }
 
