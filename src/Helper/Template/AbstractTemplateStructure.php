@@ -31,7 +31,9 @@ abstract class AbstractTemplateStructure
         $alert .= "<b>%date%:</b> Data (d/m/Y)<br>";
         $alert .= "<b>%hour%:</b> Data (H:m)<br>";
 
-        $alert .= "<hr>";
+        if (count($variables) > 0) {
+            $alert .= "<hr>";
+        }
 
         foreach ($variables as $key => $value) {
             if (!$paghiper && mb_strpos($key, 'paghiper')) {

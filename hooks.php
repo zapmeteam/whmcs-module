@@ -51,7 +51,7 @@ add_hook('AfterModuleTerminate', 1, function ($vars) {
 	//$zapMeHooks->prepare('AfterModuleTerminate')->dispatch($vars);
 });
 
-add_hook('ClientAdd', 1, fn ($vars) => (new Hooks('ClientAdd', $whmcs))->dispatch($vars));
+
 
 /*add_hook('ClientLogin', 1, function ($vars) {
 	if (isset($_SESSION['adminid'])) {
@@ -61,9 +61,13 @@ add_hook('ClientAdd', 1, fn ($vars) => (new Hooks('ClientAdd', $whmcs))->dispatc
 	$zapMeHooks->prepare('ClientLogin')->dispatch($vars);
 });*/
 
+add_hook('ClientAdd', 1, fn ($vars) => (new Hooks('ClientAdd', $whmcs))->dispatch($vars));
+
 add_hook($whmcs >= 8 ? 'UserLogin' : 'ClientLogin', 1, fn ($vars) => (new Hooks('ClientLogin', $whmcs))->dispatch($vars));
 
 add_hook($whmcs >= 8 ? 'ClientLoginShare' : 'ClientAreaPageLogin', 1, fn ($vars) => (new Hooks('ClientAreaPageLogin', $whmcs))->dispatch($vars));
+
+add_hook($whmcs >= 8 ? 'UserChangePassword' : 'ClientChangePassword', 1, fn ($vars) => (new Hooks('ClientChangePassword'))->dispatch($vars));
 
 add_hook('ClientAreaHomepage', 1, function ($vars) {
 //    dd(Client::find($_SESSION['uid']));
@@ -77,10 +81,6 @@ add_hook('ClientAreaHomepage', 1, function ($vars) {
 //    $language = collect(require $file);
 //
 //    dd($language);
-});
-
-add_hook('ClientChangePassword', 1, function ($vars) {
-	//$zapMeHooks->prepare('ClientChangePassword')->dispatch($vars);
 });
 
 add_hook('AdminInvoicesControlsOutput', 1, function ($vars) {

@@ -4,7 +4,6 @@ namespace ZapMe\Whmcs\Module;
 
 use WHMCS\User\Client;
 use Illuminate\Support\Str;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use ZapMe\Whmcs\DTO\ConfigurationDTO;
 use ZapMe\Whmcs\Traits\InteractWithCarbon;

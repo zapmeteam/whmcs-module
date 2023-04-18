@@ -27,7 +27,7 @@ abstract class AbstractHookStructure
     protected function send(
         array $attachment = []
     ): void {
-        if (!$this->client->get('new') && $this->client->get('consent')) {
+        if (!$this->client->get('new') && !$this->client->get('consent')) {
             $this->log('O cliente ({id}) {name} não deseja receber alertas via WhatsApp.');
 
             return;
