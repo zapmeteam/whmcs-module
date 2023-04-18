@@ -6,10 +6,12 @@ use ZapMe\Whmcs\Helper\Hooks\AbstractHookStructure;
 
 class ClientChangePassword extends AbstractHookStructure
 {
-    public function execute(mixed $vars): void
+    public function execute(mixed $vars): bool
     {
         $this->client = $this->client($vars['userid']);
 
         $this->send();
+
+        return true;
     }
 }

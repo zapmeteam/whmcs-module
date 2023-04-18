@@ -2,22 +2,32 @@
 
 namespace ZapMe\Whmcs\Actions;
 
+use WHMCS\Database\Capsule;
 use ZapMe\Whmcs\ZapMeHooks;
+use ZapMe\Whmcs\Module\Base;
 use ZapMe\Whmcs\ZapMeTemplateHandle;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-class ExternalActions
+class ExternalActions extends Base
 {
-    //TODO: refactor
-    private function externalActionInvoiceReminder(ParameterBag $get = null): string
+    public function sendInvoiceReminderMessage(Request $request): string
     {
-        $invoicePaymentReminder = (new ZapMeHooks())->prepare('InvoicePaymentReminder')->InvoicePaymentReminder(['invoiceid' => $get->get('invoiceid')], true);
+        $invoice = Capsule::table('tblinvoices')
+            ->where('id', $request->get('invoiceid'))
+            ->first();
 
-        if ($invoicePaymentReminder === true) {
-            return alert('Tudo certo! <b>Procedimento efetuado com sucesso.</b>');
+        if ($invoice->status !== 'Unpaid') {
+            return $this->danger("Ops! <b>O procedimento não foi realizado!</b> A fatura não está em aberto.");
         }
 
-        return alert('Ops! <b>O procedimento não foi realizado!</b> Confira os logs do sistema.', 'danger');
+        $result = (new Hooks('InvoicePaymentReminder'))->dispatch(['invoiceid' => $invoice->id]);
+
+        if ($result) {
+            return $this->success("Tudo certo! <b>Procedimento efetuado com sucesso.</b>");
+        }
+
+        return $this->danger("Ops! <b>O procedimento não foi realizado!</b> Confira os logs do sistema.");
     }
 
     //TODO: refactor

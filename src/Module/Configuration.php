@@ -15,7 +15,7 @@ class Configuration
         $this->configuration = Capsule::table('mod_zapme')->first();
     }
 
-    public function fromDto(): ConfigurationDTO
+    public function dto(): ConfigurationDTO
     {
         return (new ConfigurationDTO(
             configured: $this->configuration !== null,

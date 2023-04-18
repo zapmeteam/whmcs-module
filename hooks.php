@@ -6,12 +6,14 @@ use WHMCS\User\Client;
 use WHMCS\Service\Service;
 use WHMCS\Database\Capsule;
 use ZapMe\Whmcs\Actions\Hooks;
+use ZapMe\Whmcs\Module\Configuration;
 
 if (!defined('WHMCS')) {
 	die;
 }
 
-$whmcs = whmcs_version();
+$whmcs  = whmcs_version();
+$module = (new Configuration())->dto();
 
 //TODO: PagHiper
 add_hook('InvoiceCreated', 1, fn ($vars) => (new Hooks('InvoiceCreated'))->dispatch($vars));
@@ -73,13 +75,24 @@ add_hook('ClientAreaHomepage', 1, function ($vars) {
 //    dd($language);
 });
 
-add_hook('AdminInvoicesControlsOutput', 1, function ($vars) {
-//	if (isset($zapMeModule->id) && $zapMeModule->status == 1) {
-//		$invoice = Capsule::table('tblinvoices')->where('id', $vars['invoiceid'])->first();
-//		if ($invoice->status === 'Unpaid') {
-//			return '<br /><br /><a href="addonmodules.php?module=zapme&externalaction=invoicereminder&invoiceid=' . $vars['invoiceid'] . '" target="_blank" class="btn btn-warning">[ZapMe] Fatura em Aberto</a>';
-//		}
-//	}
+add_hook('AdminInvoicesControlsOutput', 1, function ($vars) use ($module) {
+    if (!$module || !$module->isActive) {
+        return;
+    }
+
+    $invoice = Capsule::table('tblinvoices')
+        ->where('id', $vars['invoiceid'])
+        ->first();
+
+    if ($invoice->status !== 'Unpaid') {
+        return;
+    }
+
+    return "
+        <a href=\"addonmodules.php?module=zapme&action=invoicereminder&invoiceid=$invoice->id\" target=\"_blank\" class=\"btn btn-warning\">
+            <i class=\"fa fa-bell\"></i> Lembrete de Fatura em Aberto
+        </a>
+    ";
 });
 
 add_hook('AdminClientServicesTabFields', 1, function ($vars) {

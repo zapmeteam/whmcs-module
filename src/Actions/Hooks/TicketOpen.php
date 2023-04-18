@@ -7,7 +7,7 @@ use ZapMe\Whmcs\Helper\Hooks\AbstractHookStructure;
 
 class TicketOpen extends AbstractHookStructure
 {
-    public function execute(mixed $vars): void
+    public function execute(mixed $vars): bool
     {
         $ticket = Capsule::table('tbltickets')
             ->where('id', $vars['ticketid'])
@@ -21,6 +21,7 @@ class TicketOpen extends AbstractHookStructure
         ]]);
 
         $this->send();
+
+        return true;
     }
 }
-

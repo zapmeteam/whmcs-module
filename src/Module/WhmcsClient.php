@@ -29,7 +29,7 @@ class WhmcsClient
 
     public function get(?string $index = null): bool|string|Collection|null
     {
-        $this->configuration ??= (new Configuration())->fromDto();
+        $this->configuration ??= (new Configuration())->dto();
 
         if (!$this->client) {
             return null;

@@ -129,7 +129,7 @@ function zapme_output($vars)
 
     echo (new Actions($request))->execute();
 
-    $module = (new Configuration())->fromDto();
+    $module = (new Configuration())->dto();
 
     switch ($tab) {
         case 'templates':

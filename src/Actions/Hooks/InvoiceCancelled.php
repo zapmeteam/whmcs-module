@@ -7,7 +7,7 @@ use ZapMe\Whmcs\Helper\Hooks\AbstractHookStructure;
 
 class InvoiceCancelled extends AbstractHookStructure
 {
-    public function execute(mixed $vars): void
+    public function execute(mixed $vars): bool
     {
         $invoice = Capsule::table('tblinvoices')
             ->where('id', $vars['invoiceid'])
@@ -18,5 +18,7 @@ class InvoiceCancelled extends AbstractHookStructure
         $this->parse(['invoice' => $invoice]);
 
         $this->send();
+
+        return true;
     }
 }

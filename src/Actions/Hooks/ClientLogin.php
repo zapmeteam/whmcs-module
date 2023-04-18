@@ -7,10 +7,10 @@ use ZapMe\Whmcs\Helper\Hooks\AbstractHookStructure;
 
 class ClientLogin extends AbstractHookStructure
 {
-    public function execute(mixed $vars): void
+    public function execute(mixed $vars): bool
     {
         if ($this->impersonating()) {
-            return;
+            return false;
         }
 
         $this->client = $this->whmcs >= 8 ?
@@ -18,6 +18,8 @@ class ClientLogin extends AbstractHookStructure
             $this->oldest($vars);
 
         $this->send();
+
+        return true;
     }
 
     private function oldest(mixed $vars): Collection

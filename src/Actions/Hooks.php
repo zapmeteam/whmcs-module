@@ -16,7 +16,7 @@ class Hooks
         protected mixed $hooks = null
     ) {
         $zapme         = (new ZapMeSdk())->toUrl(ZAPME_MODULE_API_URL);
-        $configuration = (new Configuration())->fromDto();
+        $configuration = (new Configuration())->dto();
         $template      = (new Template($hook))->dto()->first();
         $class         = "ZapMe\\Whmcs\\Actions\\Hooks\\" . $hook;
 
@@ -24,14 +24,14 @@ class Hooks
         $this->template = $template;
     }
 
-    public function dispatch(mixed $vars): void
+    public function dispatch(mixed $vars): bool
     {
         if (!$this->template->isActive) {
             logActivity("[ZapMe][Hook: $this->hook] Envio Abortado. Template Desabilitado.");
 
-            return;
+            return false;
         }
 
-        $this->hooks->execute($vars);
+        return $this->hooks->execute($vars);
     }
 }

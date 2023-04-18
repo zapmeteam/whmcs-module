@@ -7,13 +7,15 @@ use ZapMe\Whmcs\Helper\Hooks\AbstractHookStructure;
 
 class ClientAdd extends AbstractHookStructure
 {
-    public function execute(mixed $vars): void
+    public function execute(mixed $vars): bool
     {
         $this->client = $this->whmcs >= 8 ?
             $this->newest($vars) :
             $this->oldest($vars);
 
         $this->send();
+
+        return true;
     }
 
     private function oldest(mixed $vars): Collection
