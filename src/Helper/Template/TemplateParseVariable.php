@@ -64,8 +64,17 @@ class TemplateParseVariable
         $this->template->message = $language->get($hook, $this->template->message);
     }
 
-    public function ticket(object $ticket): self
+    public function ticket(object $ticket, mixed $vars): self
     {
+        $date = Carbon::parse($ticket->lastreply);
+
+        $this->template->message = str_replace('%id%', $ticket->id, $this->template->message);
+        $this->template->message = str_replace('%tid%', $ticket->tid, $this->template->message);
+        $this->template->message = str_replace('%title%', $ticket->title, $this->template->message);
+        $this->template->message = str_replace('%ticketdate%', $date->format('d/m/Y'), $this->template->message);
+        $this->template->message = str_replace('%tickethour%', $date->format('H:i'), $this->template->message);
+        $this->template->message = str_replace('%deppartment%', $vars['deptname'], $this->template->message);
+
         return $this;
     }
 

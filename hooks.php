@@ -23,14 +23,9 @@ add_hook('InvoicePaid', 1, fn ($vars) => (new Hooks('InvoicePaid'))->dispatch($v
 //TODO: PagHiper (automatico)
 add_hook('InvoicePaymentReminder', 1, fn ($vars) => (new Hooks('InvoicePaymentReminder'))->dispatch($vars));
 
+add_hook('TicketOpen', 1, fn ($vars) => (new Hooks('TicketOpen'))->dispatch($vars));
 
-add_hook('TicketOpen', 1, function ($vars) {
-	//$zapMeHooks->prepare('TicketOpen')->dispatch($vars);
-});
-
-add_hook('TicketAdminReply', 1, function ($vars) {
-	//$zapMeHooks->prepare('TicketAdminReply')->dispatch($vars);
-});
+add_hook('TicketAdminReply', 1, fn ($vars) => (new Hooks('TicketAdminReply'))->dispatch($vars));
 
 add_hook('AfterModuleCreate', 1, function ($vars) {
 	//$zapMeHooks->prepare('AfterModuleCreate')->dispatch($vars);

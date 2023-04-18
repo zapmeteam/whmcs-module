@@ -86,7 +86,11 @@ abstract class AbstractHookStructure
                 continue;
             }
 
-            $parse->$method($parameters);
+            if (is_array($parameters)) {
+                $parse->$method(...$parameters);
+            } else {
+                $parse->$method($parameters);
+            }
         }
 
         $this->parsed   = true;
