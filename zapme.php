@@ -385,7 +385,7 @@ function zapme_output($vars)
                         $client = Client::find($log->client_id); ?>
                         <tr>
                             <th><?= $log->id ?></th>
-                            <th><a href="clientssummary.php?userid=<?= $client->id ?>" target=_blank><?= $client->firstname . ' ' . $client->lastname . ' (#' . $log->clientid . ')' ?></a></th>
+                            <th><a href="clientssummary.php?userid=<?= $client->id ?>" target=_blank><?= '(#' . $log->client_id . ') ' . $client->fullname ?></a></th>
                             <th><?= date('d/m/Y H:i:s', strtotime($log->created_at)) ?></th>
                             <th> </a> <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#seelogmessage-<?= $log->id ?>"><i class="fa fa-eye" aria-hidden="true"></i></button> </th>
                         </tr>
