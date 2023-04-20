@@ -89,11 +89,15 @@ class TemplateParseVariable
 
     public function service(object $service): self
     {
-        return $this;
-    }
+        $this->template->message = str_replace('%id%', $service->id, $this->template->message);
+        $this->template->message = str_replace('%product%', $service->product->name, $this->template->message);
+        $this->template->message = str_replace('%duedate%', Carbon::parse($service->nextduedate)->format('d/m/Y'), $this->template->message);
+        $this->template->message = str_replace('%value%', format_number($service->amount), $this->template->message);
+        $this->template->message = str_replace('%ip%', $service->dedicatedip, $this->template->message);
+        $this->template->message = str_replace('%domain%', $service->domain, $this->template->message);
+        $this->template->message = str_replace('%user%', $service->username, $this->template->message);
+        $this->template->message = str_replace('%password%', decrypt($service->password), $this->template->message);
 
-    public function product(object $product): self
-    {
         return $this;
     }
 

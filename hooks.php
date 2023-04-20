@@ -95,19 +95,19 @@ add_hook('AdminInvoicesControlsOutput', 1, function ($vars) use ($module) {
     ";
 });
 
-add_hook('AdminClientServicesTabFields', 1, function ($vars) {
-//	if (isset($zapMeModule->id) && $zapMeModule->status == 1) {
-//		$service = Service::find($vars['id']);
-//		if ($service->domainStatus === 'Active') {
-//			$div = '';
-//			$div .= '<div class="row">';
-//			$div .= '<div class="col-md-1" style="margin-bottom: 10px !important;">';
-//			$div .= '<a href="addonmodules.php?module=zapme&externalaction=serviceready&serviceid=' . $vars['id'] . '" class="btn btn-warning">[ZapMe] Serviço Pronto</a>';
-//			$div .= '</div>';
-//			$div .= '</div>';
-//			echo $div;
-//		}
-//	}
+add_hook('AdminClientServicesTabFields', 1, function ($vars) use ($module) {
+    if (!$module || !$module->isActive || Service::find($vars['id'])->domainStatus !== 'Active') {
+        return;
+    }
+
+    echo "<div class=\"row\">
+            <div class=\"col-md-1\" style=\"margin-bottom: 10px !important;\">
+                <a href=\"addonmodules.php?module=zapme&action=serviceready&service={$vars['id']}\" class=\"btn btn-warning\">
+                    <i class=\"fa fa-bell\"></i>
+                    Serviço Pronto
+                </a>
+            </div>
+        </div>";
 });
 
 add_hook('AdminAreaClientSummaryPage', 1, function ($vars) use ($module) {
@@ -115,54 +115,54 @@ add_hook('AdminAreaClientSummaryPage', 1, function ($vars) use ($module) {
         return;
     }
 
-    return '
-        <a href="#" data-toggle="modal" data-target="#zapmemessage" target="_blank" class="btn btn-warning">
-            <i class="fa fa-bell"></i>	
+    return "
+        <a href=\"#\" data-toggle=\"modal\" data-target=\"#zapmemessage\" target=\"_blank\" class=\"btn btn-warning\">
+            <i class=\"fa fa-bell\"></i>	
             Envio Manual de Mensagem
         </a>
-		<div class="modal fade" id="zapmemessage">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-						<h5 class="modal-title">
-						    <i class="fa fa-bell"></i>	
+		<div class=\"modal fade\" id=\"zapmemessage\">
+			<div class=\"modal-dialog\">
+				<div class=\"modal-content\">
+					<div class=\"modal-header\">
+						<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>
+						<h5 class=\"modal-title\">
+						    <i class=\"fa fa-bell\"></i>	
 						    Envio de Mensagem Manual
 						</h5>
 					</div>
-					<form action="addonmodules.php?module=zapme&action=manualmessage" class="form-horizontal" method="post">
-						<input type="hidden" name="userid" value="' . $vars['userid'] . '" />
-						<div class="modal-body">
-							<div class="row">
-								<div class="col-md-12">
+					<form action=\"addonmodules.php?module=zapme&action=manualmessage\" class=\"form-horizontal\" method=\"post\">
+						<input type=\"hidden\" name=\"userid\" value=\"{$vars['userid']}\" />
+						<div class=\"modal-body\">
+							<div class=\"row\">
+								<div class=\"col-md-12\">
 									<label>Mensagem</label>
-									<textarea name="message" rows="10" class="form-control" style="resize: none;" required></textarea>
+									<textarea name=\"message\" rows=\"10\" class=\"form-control\" style=\"resize: none;\" required></textarea>
 								</div>
 							</div>
-							<p style="margin-top: 10px !important;">Variáveis Disponíveis</p>
-							<div class="alert alert-info text-center">
+							<p style=\"margin-top: 10px !important;\">Variáveis Disponíveis</p>
+							<div class=\"alert alert-info text-center\">
 								%name% - Nome do cliente (completo)<br>
 								%firstname% - Primeiro nome do cliente<br>
 								%lastname% - Último nome do cliente<br>
 								%email% - E-mail do cliente<br>
 								%company% - Compania do Cliente<br>
 							</div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <input class="form-check-input" type="checkbox" name="ignore_consent" id="ignore_consent">
-                                    <label class="form-check-label text-danger" for="ignore_consent">Ignorar Consentimento de Mensagem</label>
-                                    <i class="fas fa-question-circle text-danger" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-html="true" title="O módulo irá ignorar o conscentimento de mensagens do cliente."></i>
+                            <div class=\"row\">
+                                <div class=\"col-md-12\">
+                                    <input class=\"form-check-input\" type=\"checkbox\" name=\"ignore_consent\" id=\"ignore_consent\">
+                                    <label class=\"form-check-label text-danger\" for=\"ignore_consent\">Ignorar Consentimento de Mensagem</label>
+                                    <i class=\"fas fa-question-circle text-danger\" aria-hidden=\"true\" data-toggle=\"tooltip\" data-placement=\"top\" data-html=\"true\" title=\"O módulo irá ignorar o conscentimento de mensagens do cliente.\"></i>
                                 </div>
                             </div>
 						</div>
-						<div class="modal-footer">
-							<button type="submit" class="btn btn-success">Enviar</button>
-							<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+						<div class=\"modal-footer\">
+							<button type=\"submit\" class=\"btn btn-success\">Enviar</button>
+							<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Fechar</button>
 						</div>
 					</form>
 				</div>
 			</div>
-		</div>';
+		</div>";
 });
 
 add_hook('EmailPreSend', 1, function ($vars) {
