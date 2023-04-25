@@ -1,24 +1,17 @@
 <?php
 
-namespace ZapMe\Whmcs\Module;
+namespace ZapMe\Whmcs\Traits;
 
-use Illuminate\Support\Carbon;
 use ZapMeSdk\Base as ZapMeSdk;
-use ZapMe\Whmcs\Traits\InteractWithCarbon;
+use ZapMe\Whmcs\Actions\PrepareSdkInstance;
 
-class Base
+trait InteractWithModuleActions
 {
     use InteractWithCarbon;
 
-    protected ZapMeSdk $zapme;
-
-    protected Carbon $carbon;
-
-    public function __construct()
+    public function sdk(): ZapMeSdk
     {
-        $this->zapme = (new ZapMeSdk())->toUrl(ZAPME_MODULE_API_URL);
-
-        $this->carbon();
+        return PrepareSdkInstance::execute();
     }
 
     public function success(string $message): string

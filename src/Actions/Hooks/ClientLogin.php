@@ -3,9 +3,9 @@
 namespace ZapMe\Whmcs\Actions\Hooks;
 
 use Illuminate\Support\Collection;
-use ZapMe\Whmcs\Helper\Hooks\AbstractHookStructure;
+use ZapMe\Whmcs\Helper\Hooks\HookExecutionStructure;
 
-class ClientLogin extends AbstractHookStructure
+class ClientLogin extends HookExecutionStructure
 {
     public function execute(mixed $vars): bool
     {

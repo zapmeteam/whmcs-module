@@ -6,7 +6,7 @@ use ZapMe\Whmcs\Helper\Template\AbstractTemplateStructure;
 
 class InvoiceThirdOverdueAlert extends AbstractTemplateStructure
 {
-    public function base(): array
+    public function descriptions(): array
     {
         return [
             'name'        => 'Fatura em Atraso <b>[3]</b>',

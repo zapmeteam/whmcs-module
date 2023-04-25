@@ -5,7 +5,7 @@ require __DIR__ . '/helper.php';
 
 use WHMCS\User\Client;
 use WHMCS\Database\Capsule;
-use ZapMe\Whmcs\Actions\Actions;
+use ZapMe\Whmcs\Actions\HandleModuleActions;
 use ZapMe\Whmcs\Module\Template;
 use ZapMe\Whmcs\Module\Configuration;
 use Symfony\Component\HttpFoundation\Request;
@@ -127,7 +127,7 @@ function zapme_output($vars)
     $tab = $request->get('action') ?? $request->get('tab');
     $tab = $tab === 'configuration' || $tab === 'manualmessage' ? null : $tab;
 
-    echo (new Actions($request))->execute();
+    echo (new HandleModuleActions($request))->execute();
 
     $module = (new Configuration())->dto();
 

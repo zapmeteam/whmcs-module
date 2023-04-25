@@ -3,9 +3,9 @@
 namespace ZapMe\Whmcs\Actions\Hooks;
 
 use WHMCS\Database\Capsule;
-use ZapMe\Whmcs\Helper\Hooks\AbstractHookStructure;
+use ZapMe\Whmcs\Helper\Hooks\HookExecutionStructure;
 
-class TicketOpen extends AbstractHookStructure
+class TicketOpen extends HookExecutionStructure
 {
     public function execute(mixed $vars): bool
     {

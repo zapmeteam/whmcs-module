@@ -6,7 +6,7 @@ use ZapMe\Whmcs\Helper\Template\AbstractTemplateStructure;
 
 class AfterModuleUnsuspend extends AbstractTemplateStructure
 {
-    public function base(): array
+    public function descriptions(): array
     {
         return [
             'name'        => 'Serviço Reativado',

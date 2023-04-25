@@ -6,9 +6,9 @@ use WHMCS\User\Client;
 use Illuminate\Support\Str;
 use WHMCS\Database\Capsule;
 use Illuminate\Support\Collection;
-use ZapMe\Whmcs\Helper\Hooks\AbstractHookStructure;
+use ZapMe\Whmcs\Helper\Hooks\HookExecutionStructure;
 
-class ClientAreaPageLogin extends AbstractHookStructure
+class ClientAreaPageLogin extends HookExecutionStructure
 {
     public function execute(mixed $vars): bool
     {

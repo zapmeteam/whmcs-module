@@ -3,9 +3,9 @@
 namespace ZapMe\Whmcs\Actions\Hooks;
 
 use WHMCS\Database\Capsule;
-use ZapMe\Whmcs\Helper\Hooks\AbstractHookStructure;
+use ZapMe\Whmcs\Helper\Hooks\HookExecutionStructure;
 
-class InvoicePaymentReminder extends AbstractHookStructure
+class InvoicePaymentReminder extends HookExecutionStructure
 {
     public function execute(mixed $vars): bool
     {

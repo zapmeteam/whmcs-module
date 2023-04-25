@@ -3,14 +3,16 @@
 namespace ZapMe\Whmcs\Actions;
 
 use WHMCS\Database\Capsule;
-use ZapMe\Whmcs\Module\Base;
 use ZapMe\Whmcs\Module\WhmcsClient;
 use ZapMe\Whmcs\Module\Configuration;
-use ZapMe\Whmcs\Actions\Log\CreateLog;
+use ZapMe\Whmcs\Actions\Log\CreateModuleLog;
 use Symfony\Component\HttpFoundation\Request;
+use ZapMe\Whmcs\Traits\InteractWithModuleActions;
 
-class ExternalActions extends Base
+class ExecuteModuleExternalActions
 {
+    use InteractWithModuleActions;
+
     public function sendInvoiceReminderMessage(Request $request): string
     {
         $invoice = Capsule::table('tblinvoices')
@@ -21,7 +23,7 @@ class ExternalActions extends Base
             return $this->danger("Ops! <b>O procedimento não foi realizado!</b> A fatura não está em aberto.");
         }
 
-        $result = (new Hooks('InvoicePaymentReminder'))->dispatch(['invoiceid' => $invoice->id]);
+        $result = (new HookExecution('InvoicePaymentReminder'))->dispatch(['invoiceid' => $invoice->id]);
 
         if ($result) {
             return $this->success("Tudo certo! <b>Procedimento efetuado com sucesso.</b>");
@@ -50,13 +52,13 @@ class ExternalActions extends Base
         $message = str_replace('%company%', $client->companyName, $message);
 
         try {
-            $this->zapme
+            $this->sdk()
                 ->withApi($module->api)
                 ->withSecret($module->secret)
                 ->sendMessage($whmcs->get('phone'), $message);
 
             if ($module->logSystem) {
-                CreateLog::execute(
+                CreateModuleLog::execute(
                     $message,
                     'manual',
                     $client->id,
@@ -73,7 +75,7 @@ class ExternalActions extends Base
 
     public function sendServiceReadyMessage(Request $request): string
     {
-        $result = (new Hooks('AfterModuleReady'))->dispatch(['service' => $request->get('service')]);
+        $result = (new HookExecution('AfterModuleReady'))->dispatch(['service' => $request->get('service')]);
 
         if ($result) {
             return $this->success("Tudo certo! <b>Procedimento efetuado com sucesso.</b>");

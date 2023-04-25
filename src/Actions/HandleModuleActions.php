@@ -4,7 +4,7 @@ namespace ZapMe\Whmcs\Actions;
 
 use Symfony\Component\HttpFoundation\Request;
 
-class Actions
+class HandleModuleActions
 {
     protected Request $request;
 
@@ -26,6 +26,7 @@ class Actions
         $this->action  = $request->get('action');
     }
 
+    //TODO: refactor this!
     public function execute(): mixed
     {
         if (!$this->action) {
@@ -42,9 +43,9 @@ class Actions
         if (
             ((($this->request->getMethod() === 'GET' && in_array($this->action, $externals))) || $this->action === 'manualmessage')
         ) {
-            return (new ExternalActions())->{$method}($this->request);
+            return (new ExecuteModuleExternalActions())->{$method}($this->request);
         }
 
-        return (new InternalActions())->{$method}($this->request);
+        return (new ExecuteModuleInternalActions())->{$method}($this->request);
     }
 }

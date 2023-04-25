@@ -6,7 +6,7 @@ use ZapMe\Whmcs\Helper\Template\AbstractTemplateStructure;
 
 class ClientChangePassword extends AbstractTemplateStructure
 {
-    public function base(): array
+    public function descriptions(): array
     {
         return [
             'name'        => 'Troca de Senha',

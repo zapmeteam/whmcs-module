@@ -7,7 +7,7 @@ use ZapMe\Whmcs\DTO\TemplateDto;
 use ZapMe\Whmcs\Module\Template;
 use ZapMe\Whmcs\Module\Configuration;
 
-class Hooks
+class HookExecution
 {
     public function __construct(
         protected string $hook,

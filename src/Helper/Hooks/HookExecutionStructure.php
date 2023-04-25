@@ -8,21 +8,21 @@ use ZapMe\Whmcs\DTO\TemplateDto;
 use Illuminate\Support\Collection;
 use ZapMe\Whmcs\Module\WhmcsClient;
 use ZapMe\Whmcs\DTO\ConfigurationDto;
-use ZapMe\Whmcs\Actions\Log\CreateLog;
 use ZapMe\Whmcs\Traits\InteractWithCarbon;
+use ZapMe\Whmcs\Actions\Log\CreateModuleLog;
 use ZapMe\Whmcs\Helper\Template\TemplateParseVariable;
 
-abstract class AbstractHookStructure
+class HookExecutionStructure
 {
     use InteractWithCarbon;
 
+    private bool $parsed = false;
     protected string $hook;
     protected ZapMeSdk $zapme;
     protected ConfigurationDto $configuration;
     protected TemplateDto $template;
     protected ?int $whmcs                         = null;
     protected bool|string|Collection|null $client = null;
-    private bool $parsed                          = false;
 
     public function __construct(
         string $hook,
@@ -66,7 +66,7 @@ abstract class AbstractHookStructure
                 return;
             }
 
-            CreateLog::execute(
+            CreateModuleLog::execute(
                 $this->template->message,
                 $this->template->code,
                 $this->client->get('whmcs')->id

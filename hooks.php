@@ -5,7 +5,7 @@ require __DIR__ . '/vendor/autoload.php';
 use WHMCS\User\Client;
 use WHMCS\Service\Service;
 use WHMCS\Database\Capsule;
-use ZapMe\Whmcs\Actions\Hooks;
+use ZapMe\Whmcs\Actions\HookExecution;
 use ZapMe\Whmcs\Module\Configuration;
 
 if (!defined('WHMCS')) {
@@ -16,34 +16,34 @@ $whmcs  = whmcs_version();
 $module = (new Configuration())->dto();
 
 //TODO: PagHiper
-add_hook('InvoiceCreated', 1, fn ($vars) => (new Hooks('InvoiceCreated'))->dispatch($vars));
+add_hook('InvoiceCreated', 1, fn ($vars) => (new HookExecution('InvoiceCreated'))->dispatch($vars));
 
-add_hook('InvoiceCancelled', 1, fn ($vars) => (new Hooks('InvoiceCancelled'))->dispatch($vars));
+add_hook('InvoiceCancelled', 1, fn ($vars) => (new HookExecution('InvoiceCancelled'))->dispatch($vars));
 
-add_hook('InvoicePaid', 1, fn ($vars) => (new Hooks('InvoicePaid'))->dispatch($vars));
+add_hook('InvoicePaid', 1, fn ($vars) => (new HookExecution('InvoicePaid'))->dispatch($vars));
 
 //TODO: PagHiper (automatico)
-add_hook('InvoicePaymentReminder', 1, fn ($vars) => (new Hooks('InvoicePaymentReminder'))->dispatch($vars));
+add_hook('InvoicePaymentReminder', 1, fn ($vars) => (new HookExecution('InvoicePaymentReminder'))->dispatch($vars));
 
-add_hook('TicketOpen', 1, fn ($vars) => (new Hooks('TicketOpen'))->dispatch($vars));
+add_hook('TicketOpen', 1, fn ($vars) => (new HookExecution('TicketOpen'))->dispatch($vars));
 
-add_hook('TicketAdminReply', 1, fn ($vars) => (new Hooks('TicketAdminReply'))->dispatch($vars));
+add_hook('TicketAdminReply', 1, fn ($vars) => (new HookExecution('TicketAdminReply'))->dispatch($vars));
 
-add_hook('AfterModuleCreate', 1, fn ($vars) => (new Hooks('AfterModuleCreate'))->dispatch($vars));
+add_hook('AfterModuleCreate', 1, fn ($vars) => (new HookExecution('AfterModuleCreate'))->dispatch($vars));
 
-add_hook('AfterModuleSuspend', 1, fn ($vars) => (new Hooks('AfterModuleSuspend'))->dispatch($vars));
+add_hook('AfterModuleSuspend', 1, fn ($vars) => (new HookExecution('AfterModuleSuspend'))->dispatch($vars));
 
-add_hook('AfterModuleUnsuspend', 1, fn ($vars) => (new Hooks('AfterModuleUnsuspend'))->dispatch($vars));
+add_hook('AfterModuleUnsuspend', 1, fn ($vars) => (new HookExecution('AfterModuleUnsuspend'))->dispatch($vars));
 
-add_hook('AfterModuleTerminate', 1, fn ($vars) => (new Hooks('AfterModuleTerminate'))->dispatch($vars));
+add_hook('AfterModuleTerminate', 1, fn ($vars) => (new HookExecution('AfterModuleTerminate'))->dispatch($vars));
 
-add_hook('ClientAdd', 1, fn ($vars) => (new Hooks('ClientAdd', $whmcs))->dispatch($vars));
+add_hook('ClientAdd', 1, fn ($vars) => (new HookExecution('ClientAdd', $whmcs))->dispatch($vars));
 
-add_hook($whmcs >= 8 ? 'UserLogin' : 'ClientLogin', 1, fn ($vars) => (new Hooks('ClientLogin', $whmcs))->dispatch($vars));
+add_hook($whmcs >= 8 ? 'UserLogin' : 'ClientLogin', 1, fn ($vars) => (new HookExecution('ClientLogin', $whmcs))->dispatch($vars));
 
-add_hook($whmcs >= 8 ? 'ClientLoginShare' : 'ClientAreaPageLogin', 1, fn ($vars) => (new Hooks('ClientAreaPageLogin', $whmcs))->dispatch($vars));
+add_hook($whmcs >= 8 ? 'ClientLoginShare' : 'ClientAreaPageLogin', 1, fn ($vars) => (new HookExecution('ClientAreaPageLogin', $whmcs))->dispatch($vars));
 
-add_hook($whmcs >= 8 ? 'UserChangePassword' : 'ClientChangePassword', 1, fn ($vars) => (new Hooks('ClientChangePassword'))->dispatch($vars));
+add_hook($whmcs >= 8 ? 'UserChangePassword' : 'ClientChangePassword', 1, fn ($vars) => (new HookExecution('ClientChangePassword'))->dispatch($vars));
 
 //TODO: implement
 //add_hook('DailyCronJob', 1, fn ($vars) => (new Hooks('DailyCronJob'))->dispatch($vars));

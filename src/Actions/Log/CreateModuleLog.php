@@ -5,7 +5,7 @@ namespace ZapMe\Whmcs\Actions\Log;
 use WHMCS\Database\Capsule;
 use ZapMe\Whmcs\Traits\InteractWithCarbon;
 
-class CreateLog
+class CreateModuleLog
 {
     use InteractWithCarbon;
 

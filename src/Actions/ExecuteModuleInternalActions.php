@@ -5,11 +5,13 @@ namespace ZapMe\Whmcs\Actions;
 use Throwable;
 use Punic\Exception;
 use WHMCS\Database\Capsule;
-use ZapMe\Whmcs\Module\Base;
 use Symfony\Component\HttpFoundation\Request;
+use ZapMe\Whmcs\Traits\InteractWithModuleActions;
 
-class InternalActions extends Base
+class ExecuteModuleInternalActions
 {
+    use InteractWithModuleActions;
+
     public function editModuleConfigurations(Request $request): string
     {
         $post   = $request->request;
@@ -17,7 +19,7 @@ class InternalActions extends Base
         $secret = $post->get('secret');
 
         try {
-            $response = $this->zapme
+            $response = $this->sdk()
                 ->withApi($api)
                 ->withSecret($secret)
                 ->accountStatus();

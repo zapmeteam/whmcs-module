@@ -6,7 +6,7 @@ use Illuminate\Support\Carbon;
 
 trait InteractWithCarbon
 {
-    protected Carbon $carbon;
+    protected ?Carbon $carbon = null;
 
     public function carbon(): Carbon
     {
@@ -17,11 +17,19 @@ trait InteractWithCarbon
 
     public function createdAt(): array
     {
+        if (!$this->carbon) {
+            $this->carbon();
+        }
+
         return ['created_at' => $this->carbon->format('Y-m-d H:i:s')];
     }
 
     public function updatedAt(): array
     {
+        if (!$this->carbon) {
+            $this->carbon();
+        }
+
         return ['updated_at' => $this->carbon->format('Y-m-d H:i:s')];
     }
 }
