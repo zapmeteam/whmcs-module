@@ -29,29 +29,13 @@ add_hook('TicketOpen', 1, fn ($vars) => (new Hooks('TicketOpen'))->dispatch($var
 
 add_hook('TicketAdminReply', 1, fn ($vars) => (new Hooks('TicketAdminReply'))->dispatch($vars));
 
-add_hook('AfterModuleCreate', 1, function ($vars) {
-	//$zapMeHooks->prepare('AfterModuleCreate')->dispatch($vars);
-});
+add_hook('AfterModuleCreate', 1, fn ($vars) => (new Hooks('AfterModuleCreate'))->dispatch($vars));
 
-add_hook('AfterModuleSuspend', 1, function ($vars) {
-	//$zapMeHooks->prepare('AfterModuleSuspend')->dispatch($vars);
-});
+add_hook('AfterModuleSuspend', 1, fn ($vars) => (new Hooks('AfterModuleSuspend'))->dispatch($vars));
 
-add_hook('AfterModuleUnsuspend', 1, function ($vars) {
-	//$zapMeHooks->prepare('AfterModuleUnsuspend')->dispatch($vars);
-});
+add_hook('AfterModuleUnsuspend', 1, fn ($vars) => (new Hooks('AfterModuleUnsuspend'))->dispatch($vars));
 
-add_hook('AfterModuleTerminate', 1, function ($vars) {
-	//$zapMeHooks->prepare('AfterModuleTerminate')->dispatch($vars);
-});
-
-/*add_hook('ClientLogin', 1, function ($vars) {
-	if (isset($_SESSION['adminid'])) {
-		return;
-	}
-
-	$zapMeHooks->prepare('ClientLogin')->dispatch($vars);
-});*/
+add_hook('AfterModuleTerminate', 1, fn ($vars) => (new Hooks('AfterModuleTerminate'))->dispatch($vars));
 
 add_hook('ClientAdd', 1, fn ($vars) => (new Hooks('ClientAdd', $whmcs))->dispatch($vars));
 
@@ -61,19 +45,8 @@ add_hook($whmcs >= 8 ? 'ClientLoginShare' : 'ClientAreaPageLogin', 1, fn ($vars)
 
 add_hook($whmcs >= 8 ? 'UserChangePassword' : 'ClientChangePassword', 1, fn ($vars) => (new Hooks('ClientChangePassword'))->dispatch($vars));
 
-add_hook('ClientAreaHomepage', 1, function ($vars) {
-//    dd(Client::find($_SESSION['uid']));
-//
-//    $file = ZAPME_MODULE_PATH . "/translations/english.php";
-//
-//    if (!file_exists($file)) {
-//        return;
-//    }
-//
-//    $language = collect(require $file);
-//
-//    dd($language);
-});
+//TODO: implement
+//add_hook('DailyCronJob', 1, fn ($vars) => (new Hooks('DailyCronJob'))->dispatch($vars));
 
 add_hook('AdminInvoicesControlsOutput', 1, function ($vars) use ($module) {
     if (!$module || !$module->isActive) {
@@ -165,6 +138,7 @@ add_hook('AdminAreaClientSummaryPage', 1, function ($vars) use ($module) {
 		</div>";
 });
 
+//TODO: implement
 add_hook('EmailPreSend', 1, function ($vars) {
 //	$template = $vars['messagename'];
 //
@@ -178,6 +152,3 @@ add_hook('EmailPreSend', 1, function ($vars) {
 //	}
 });
 
-add_hook('DailyCronJob', 1, function ($vars) {
-	//$zapMeHooks->prepare('DailyCronJob')->dispatch($vars);
-});
