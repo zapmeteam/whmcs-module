@@ -9,43 +9,41 @@ class HandleModuleActions
     protected Request $request;
 
     protected ?string $action = null;
+    protected ?string $type   = null;
 
     private const ACTIONS = [
-        'configuration'   => 'editModuleConfigurations',
-        'templates'       => 'editModuleTemplateConfigurations',
-        'editrules'       => 'editModuleTemplateRulesConfigurations',
-        'logs'            => 'editModuleLogsConfigurations',
-        'manualmessage'   => 'sendManualMessage',
-        'serviceready'    => 'sendServiceReadyMessage',
-        'invoicereminder' => 'sendInvoiceReminderMessage',
+        'internal' => [
+            'configuration' => 'editModuleConfigurations',
+            'templates'     => 'editModuleTemplateConfigurations',
+            'logs'          => 'editModuleLogsConfigurations',
+        ],
+
+        'external' => [
+            'manualmessage'   => 'sendManualMessage',
+            'serviceready'    => 'sendServiceReadyMessage',
+            'invoicereminder' => 'sendInvoiceReminderMessage',
+        ]
     ];
 
     public function __construct(Request $request)
     {
         $this->request = $request;
         $this->action  = $request->get('action');
+        $this->type    = $request->get('type');
     }
 
-    //TODO: refactor this!
     public function execute(): mixed
     {
-        if (!$this->action) {
+        if (!$this->action || !$this->type) {
             return null;
         }
 
-        $externals = [
-            'serviceready',
-            'invoicereminder',
-        ];
+        $method = data_get(self::ACTIONS, "{$this->type}.{$this->action}");
 
-        $method = self::ACTIONS[$this->action];
-
-        if (
-            ((($this->request->getMethod() === 'GET' && in_array($this->action, $externals))) || $this->action === 'manualmessage')
-        ) {
-            return (new ExecuteModuleExternalActions())->{$method}($this->request);
+        if ($this->type === 'internal') {
+            return (new ExecuteModuleInternalActions())->{$method}($this->request);
         }
 
-        return (new ExecuteModuleInternalActions())->{$method}($this->request);
+        return (new ExecuteModuleExternalActions())->{$method}($this->request);
     }
 }

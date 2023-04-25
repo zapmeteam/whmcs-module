@@ -3,7 +3,7 @@
 namespace ZapMe\Whmcs\Traits;
 
 use ZapMeSdk\Base as ZapMeSdk;
-use ZapMe\Whmcs\Actions\PrepareSdkInstance;
+use ZapMe\Whmcs\Actions\CreateSdkInstance;
 
 trait InteractWithModuleActions
 {
@@ -11,7 +11,7 @@ trait InteractWithModuleActions
 
     public function sdk(): ZapMeSdk
     {
-        return PrepareSdkInstance::execute();
+        return CreateSdkInstance::execute();
     }
 
     public function success(string $message): string

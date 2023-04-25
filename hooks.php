@@ -62,7 +62,7 @@ add_hook('AdminInvoicesControlsOutput', 1, function ($vars) use ($module) {
     }
 
     return "
-        <a href=\"addonmodules.php?module=zapme&action=invoicereminder&invoiceid=$invoice->id\" target=\"_blank\" class=\"btn btn-warning\">
+        <a href=\"addonmodules.php?module=zapme&action=invoicereminder&type=external&invoiceid=$invoice->id\" target=\"_blank\" class=\"btn btn-warning\">
             <i class=\"fa fa-bell\"></i> Lembrete de Fatura em Aberto
         </a>
     ";
@@ -75,7 +75,7 @@ add_hook('AdminClientServicesTabFields', 1, function ($vars) use ($module) {
 
     echo "<div class=\"row\">
             <div class=\"col-md-1\" style=\"margin-bottom: 10px !important;\">
-                <a href=\"addonmodules.php?module=zapme&action=serviceready&service={$vars['id']}\" class=\"btn btn-warning\">
+                <a href=\"addonmodules.php?module=zapme&action=serviceready&type=external&service={$vars['id']}\" class=\"btn btn-warning\">
                     <i class=\"fa fa-bell\"></i>
                     Serviço Pronto
                 </a>
@@ -103,7 +103,7 @@ add_hook('AdminAreaClientSummaryPage', 1, function ($vars) use ($module) {
 						    Envio de Mensagem Manual
 						</h5>
 					</div>
-					<form action=\"addonmodules.php?module=zapme&action=manualmessage\" class=\"form-horizontal\" method=\"post\">
+					<form action=\"addonmodules.php?module=zapme&action=manualmessage&type=external\" class=\"form-horizontal\" method=\"post\">
 						<input type=\"hidden\" name=\"userid\" value=\"{$vars['userid']}\" />
 						<div class=\"modal-body\">
 							<div class=\"row\">

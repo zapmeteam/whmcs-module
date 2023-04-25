@@ -7,6 +7,7 @@ use ZapMe\Whmcs\Helper\Hooks\HookExecutionStructure;
 
 class AfterModuleReady extends HookExecutionStructure
 {
+    //TODO: change parameter
     public function execute(mixed $vars): bool
     {
         $service      = Service::find($vars['service']);

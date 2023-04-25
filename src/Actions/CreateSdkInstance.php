@@ -4,7 +4,7 @@ namespace ZapMe\Whmcs\Actions;
 
 use ZapMeSdk\Base as ZapMeSdk;
 
-class PrepareSdkInstance
+class CreateSdkInstance
 {
     public static function execute(): ZapMeSdk
     {

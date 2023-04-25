@@ -223,7 +223,7 @@ function zapme_output($vars)
         <div class="tab-pane <?= selected(!$tab, 'active') ?>" id="configurations">
             <div class="auth-container" style="margin: auto !important; border-top: none;">
                 <div class="row">
-                    <form action="addonmodules.php?module=zapme&internalconfig=true&action=configuration" method="post">
+                    <form action="addonmodules.php?module=zapme&action=configuration&type=internal" method="post">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -329,7 +329,7 @@ function zapme_output($vars)
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <form action="addonmodules.php?module=zapme&internalconfig=true&action=templates" method="post">
+                                    <form action="addonmodules.php?module=zapme&action=templates&type=internal" method="post">
                                         <input type="hidden" name="template" value="<?= $template->id ?>">
                                         <div class="modal-body">
                                             <div class="form-group">
@@ -420,7 +420,7 @@ function zapme_output($vars)
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form action="addonmodules.php?module=zapme&internalconfig=true&action=logs" method="post">
+                            <form action="addonmodules.php?module=zapme&action=logs&type=internal" method="post">
                                 <p class="justify">Este procedimento irá remover todos os registros de logs do módulo existentes em seu banco de dados. <b>Para prosseguir confirme o procedimento abaixo:</b></p>
                                 <div class="form-group">
                                     <div class="form-check">
