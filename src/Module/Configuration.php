@@ -4,7 +4,7 @@ namespace ZapMe\Whmcs\Module;
 
 use WHMCS\Database\Capsule;
 use Illuminate\Support\Carbon;
-use ZapMe\Whmcs\DTO\ConfigurationDTO;
+use ZapMe\Whmcs\DTO\ConfigurationDto;
 
 class Configuration
 {
@@ -15,9 +15,9 @@ class Configuration
         $this->configuration = Capsule::table('mod_zapme')->first();
     }
 
-    public function dto(): ConfigurationDTO
+    public function dto(): ConfigurationDto
     {
-        return (new ConfigurationDTO(
+        return (new ConfigurationDto(
             configured: $this->configuration !== null,
             api: $this->configuration?->api,
             secret: $this->configuration?->secret,

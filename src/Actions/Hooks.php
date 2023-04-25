@@ -3,7 +3,7 @@
 namespace ZapMe\Whmcs\Actions;
 
 use ZapMeSdk\Base as ZapMeSdk;
-use ZapMe\Whmcs\DTO\TemplateDTO;
+use ZapMe\Whmcs\DTO\TemplateDto;
 use ZapMe\Whmcs\Module\Template;
 use ZapMe\Whmcs\Module\Configuration;
 
@@ -12,7 +12,7 @@ class Hooks
     public function __construct(
         protected string $hook,
         protected ?int $whmcs = null,
-        protected ?TemplateDTO $template = null,
+        protected ?TemplateDto $template = null,
         protected mixed $hooks = null
     ) {
         $zapme         = (new ZapMeSdk())->toUrl(ZAPME_MODULE_API_URL);

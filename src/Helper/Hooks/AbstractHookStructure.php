@@ -3,21 +3,40 @@
 namespace ZapMe\Whmcs\Helper\Hooks;
 
 use Throwable;
+use ZapMeSdk\Base as ZapMeSdk;
+use ZapMe\Whmcs\DTO\TemplateDto;
 use Illuminate\Support\Collection;
 use ZapMe\Whmcs\Module\WhmcsClient;
+use ZapMe\Whmcs\DTO\ConfigurationDto;
 use ZapMe\Whmcs\Actions\Log\CreateLog;
 use ZapMe\Whmcs\Traits\InteractWithCarbon;
 use ZapMe\Whmcs\Helper\Template\TemplateParseVariable;
-use ZapMe\Whmcs\Traits\Hooks\ShareableHookConstructor;
 
 abstract class AbstractHookStructure
 {
     use InteractWithCarbon;
-    use ShareableHookConstructor;
 
+    protected string $hook;
+    protected ZapMeSdk $zapme;
+    protected ConfigurationDto $configuration;
+    protected TemplateDto $template;
+    protected ?int $whmcs                         = null;
     protected bool|string|Collection|null $client = null;
+    private bool $parsed                          = false;
 
-    private bool $parsed = false;
+    public function __construct(
+        string $hook,
+        ZapMeSdk $zapme,
+        ConfigurationDto $configuration,
+        TemplateDto $template,
+        ?int $whmcs = null
+    ) {
+        $this->hook          = $hook;
+        $this->zapme         = $zapme;
+        $this->configuration = $configuration;
+        $this->template      = $template;
+        $this->whmcs         = $whmcs;
+    }
 
     public function impersonating(): bool
     {

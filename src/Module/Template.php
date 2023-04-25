@@ -5,7 +5,7 @@ namespace ZapMe\Whmcs\Module;
 use Illuminate\Support\Str;
 use WHMCS\Database\Capsule;
 use Illuminate\Support\Carbon;
-use ZapMe\Whmcs\DTO\TemplateDTO;
+use ZapMe\Whmcs\DTO\TemplateDto;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Query\Builder;
 use ZapMe\Whmcs\Helper\Template\TemplateParseVariable;
@@ -30,7 +30,7 @@ class Template
         return $this->template->transform(function (object $item) {
             $item = $this->structure($item);
 
-            return (new TemplateDTO(
+            return (new TemplateDto(
                 id: $item->id,
                 name: $item->structure?->name ?? $item->code,
                 code: $item->code,
@@ -60,7 +60,7 @@ class Template
         return $template;
     }
 
-    public function variables(TemplateDTO $template): TemplateParseVariable
+    public function variables(TemplateDto $template): TemplateParseVariable
     {
         return new TemplateParseVariable($template);
     }

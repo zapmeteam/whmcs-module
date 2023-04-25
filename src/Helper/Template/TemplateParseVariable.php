@@ -4,7 +4,7 @@ namespace ZapMe\Whmcs\Helper\Template;
 
 use WHMCS\Database\Capsule;
 use Illuminate\Support\Carbon;
-use ZapMe\Whmcs\DTO\TemplateDTO;
+use ZapMe\Whmcs\DTO\TemplateDto;
 use Illuminate\Support\Collection;
 use ZapMe\Whmcs\Traits\InteractWithCarbon;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +14,7 @@ class TemplateParseVariable
     use InteractWithCarbon;
 
     public function __construct(
-        protected TemplateDTO $template,
+        protected TemplateDto $template,
         protected ?Collection $client = null,
     ) {
         $this->carbon();
@@ -101,7 +101,7 @@ class TemplateParseVariable
         return $this;
     }
 
-    public function parsed(): TemplateDTO
+    public function parsed(): TemplateDto
     {
         return $this->template;
     }

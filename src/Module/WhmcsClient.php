@@ -5,7 +5,7 @@ namespace ZapMe\Whmcs\Module;
 use WHMCS\User\Client;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
-use ZapMe\Whmcs\DTO\ConfigurationDTO;
+use ZapMe\Whmcs\DTO\ConfigurationDto;
 use ZapMe\Whmcs\Traits\InteractWithCarbon;
 
 class WhmcsClient
@@ -14,13 +14,13 @@ class WhmcsClient
 
     public function __construct(
         int $id,
-        private ?ConfigurationDTO $configuration = null,
+        private ?ConfigurationDto $configuration = null,
         protected ?object $client = null
     ) {
         $this->client = Client::find($id);
     }
 
-    public function configuration(ConfigurationDTO $module): self
+    public function configuration(ConfigurationDto $module): self
     {
         $this->configuration = $module;
 

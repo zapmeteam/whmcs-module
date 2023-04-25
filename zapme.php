@@ -308,7 +308,7 @@ function zapme_output($vars)
                 </tr>
                 </thead>
                 <tbody>
-                <?php /** @var \ZapMe\Whmcs\DTO\TemplateDTO $template */
+                <?php /** @var \ZapMe\Whmcs\DTO\TemplateDto $template */
                     foreach ($templates as $template): ?>
                     <tr>
                         <th><?= $template->id ?></th>
