@@ -13,7 +13,7 @@ class CreateModuleLog
             'client_id' => $client,
             'message'   => $message,
             ...[
-                ...carbonToDatabase(['created_at', 'updated_at']),
+                ...carbonToDatabase(),
             ]
         ]);
     }

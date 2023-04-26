@@ -41,7 +41,7 @@ class InternalActions
                 'client_consent_field_id' => $post->get('client_consent_field_id'),
                 'account'                 => serialize($response['data']),
                 ...[
-                    ...carbonToDatabase(['created_at', 'updated_at']),
+                    ...carbonToDatabase(),
                 ],
             ]);
 

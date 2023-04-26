@@ -148,17 +148,17 @@ if (!function_exists('clientPhoneNumber')) {
 }
 
 if (!function_exists('carbonToDatabase')) {
-    function carbonToDatabase(string|array $columns): array
+    function carbonToDatabase(?string $column = null): array
     {
         $carbon = now();
         $format = [];
 
-        if (is_array($columns)) {
-            foreach ($columns as $column) {
-                $format += [$column => $carbon->format('Y-m-d H:i:s')];
+        if (!$column) {
+            foreach (['created_at', 'updated_at'] as $columns) {
+                $format += [$columns => $carbon->format('Y-m-d H:i:s')];
             }
         } else {
-            $format = [$columns => $carbon->format('Y-m-d H:i:s')];
+            $format = [$column => $carbon->format('Y-m-d H:i:s')];
         }
 
         return $format;
