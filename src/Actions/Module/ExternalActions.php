@@ -74,7 +74,7 @@ class ExternalActions
 
     public function sendServiceReadyMessage(Request $request): string
     {
-        $result = (new HookExecution('AfterModuleReady'))->dispatch(['service' => $request->get('service')]);
+        $result = (new HookExecution('AfterModuleReady'))->dispatch($request->get('service'));
 
         if ($result) {
             return $this->success("Tudo certo! <b>Procedimento efetuado com sucesso.</b>");
