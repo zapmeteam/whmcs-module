@@ -2,6 +2,7 @@
 
 use WHMCS\User\Client;
 use WHMCS\Database\Capsule;
+use Illuminate\Support\Carbon;
 
 if (!defined('WHMCS')) {
     die;
@@ -143,6 +144,31 @@ if (!function_exists('clientPhoneNumber')) {
         $value = $ddi . $value;
 
         return $value;
+    }
+}
+
+if (!function_exists('carbonToDatabase')) {
+    function carbonToDatabase(string|array $columns): array
+    {
+        $carbon = now();
+        $format = [];
+
+        if (is_array($columns)) {
+            foreach ($columns as $column) {
+                $format += [$column => $carbon->format('Y-m-d H:i:s')];
+            }
+        } else {
+            $format = [$columns => $carbon->format('Y-m-d H:i:s')];
+        }
+
+        return $format;
+    }
+}
+
+if (!function_exists('now')) {
+    function now(): Carbon
+    {
+        return Carbon::now('America/Sao_Paulo');
     }
 }
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace ZapMe\Whmcs\Actions\Hooks;
+namespace ZapMe\Whmcs\Actions\Hooks\Executions;
 
 use WHMCS\Service\Service;
 use ZapMe\Whmcs\Helper\Hooks\HookExecutionStructure;
 
-class AfterModuleUnsuspend extends HookExecutionStructure
+class AfterModuleCreate extends HookExecutionStructure
 {
     public function execute(mixed $vars): bool
     {

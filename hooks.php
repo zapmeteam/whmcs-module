@@ -5,7 +5,7 @@ require __DIR__ . '/vendor/autoload.php';
 use WHMCS\User\Client;
 use WHMCS\Service\Service;
 use WHMCS\Database\Capsule;
-use ZapMe\Whmcs\Actions\HookExecution;
+use ZapMe\Whmcs\Actions\Hooks\HookExecution;
 use ZapMe\Whmcs\Module\Configuration;
 
 if (!defined('WHMCS')) {
@@ -45,8 +45,7 @@ add_hook($whmcs >= 8 ? 'ClientLoginShare' : 'ClientAreaPageLogin', 1, fn ($vars)
 
 add_hook($whmcs >= 8 ? 'UserChangePassword' : 'ClientChangePassword', 1, fn ($vars) => (new HookExecution('ClientChangePassword'))->dispatch($vars));
 
-//TODO: implement
-//add_hook('DailyCronJob', 1, fn ($vars) => (new Hooks('DailyCronJob'))->dispatch($vars));
+add_hook('DailyCronJob', 1, fn ($vars) => (new HookExecution('DailyCronJob'))->dispatch($vars));
 
 add_hook('AdminInvoicesControlsOutput', 1, function ($vars) use ($module) {
     if (!$module || !$module->isActive) {

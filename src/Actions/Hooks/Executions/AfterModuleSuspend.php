@@ -1,13 +1,12 @@
 <?php
 
-namespace ZapMe\Whmcs\Actions\Hooks;
+namespace ZapMe\Whmcs\Actions\Hooks\Executions;
 
 use WHMCS\Service\Service;
 use ZapMe\Whmcs\Helper\Hooks\HookExecutionStructure;
 
-class AfterModuleReady extends HookExecutionStructure
+class AfterModuleSuspend extends HookExecutionStructure
 {
-    //TODO: change parameter
     public function execute(mixed $vars): bool
     {
         $service      = Service::find($vars['service']);

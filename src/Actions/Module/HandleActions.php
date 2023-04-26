@@ -1,10 +1,10 @@
 <?php
 
-namespace ZapMe\Whmcs\Actions;
+namespace ZapMe\Whmcs\Actions\Module;
 
 use Symfony\Component\HttpFoundation\Request;
 
-class HandleModuleActions
+class HandleActions
 {
     protected Request $request;
 
@@ -39,11 +39,8 @@ class HandleModuleActions
         }
 
         $method = data_get(self::ACTIONS, "{$this->type}.{$this->action}");
+        $class  = $this->type === 'internal' ? new InternalActions() : new ExternalActions();
 
-        if ($this->type === 'internal') {
-            return (new ExecuteModuleInternalActions())->{$method}($this->request);
-        }
-
-        return (new ExecuteModuleExternalActions())->{$method}($this->request);
+        return $class->{$method}($this->request);
     }
 }

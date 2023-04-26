@@ -1,11 +1,11 @@
 <?php
 
-namespace ZapMe\Whmcs\Actions\Hooks;
+namespace ZapMe\Whmcs\Actions\Hooks\Executions;
 
 use WHMCS\Database\Capsule;
 use ZapMe\Whmcs\Helper\Hooks\HookExecutionStructure;
 
-class InvoicePaid extends HookExecutionStructure
+class InvoiceCreated extends HookExecutionStructure
 {
     public function execute(mixed $vars): bool
     {

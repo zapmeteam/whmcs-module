@@ -1,15 +1,17 @@
 <?php
 
-namespace ZapMe\Whmcs\Actions;
+namespace ZapMe\Whmcs\Actions\Module;
 
+use Throwable;
 use WHMCS\Database\Capsule;
 use ZapMe\Whmcs\Module\WhmcsClient;
 use ZapMe\Whmcs\Module\Configuration;
+use ZapMe\Whmcs\Actions\Hooks\HookExecution;
 use ZapMe\Whmcs\Actions\Log\CreateModuleLog;
 use Symfony\Component\HttpFoundation\Request;
 use ZapMe\Whmcs\Traits\InteractWithModuleActions;
 
-class ExecuteModuleExternalActions
+class ExternalActions
 {
     use InteractWithModuleActions;
 
@@ -42,8 +44,8 @@ class ExecuteModuleExternalActions
             return $this->danger("Ops! <b>O procedimento não foi realizado!</b> O cliente não deseja receber alertas via WhatsApp.");
         }
 
-        $message = $post->get('message');
-        $module  = (new Configuration())->dto();
+        $message       = $post->get('message');
+        $configuration = (new Configuration())->dto();
 
         $message = str_replace('%name%', $client->fullname, $message);
         $message = str_replace('%firstname%', $client->firstname, $message);
@@ -52,12 +54,9 @@ class ExecuteModuleExternalActions
         $message = str_replace('%company%', $client->companyName, $message);
 
         try {
-            $this->sdk()
-                ->withApi($module->api)
-                ->withSecret($module->secret)
-                ->sendMessage($whmcs->get('phone'), $message);
+            $this->sdk($configuration)->sendMessage($whmcs->get('phone'), $message);
 
-            if ($module->logSystem) {
+            if ($configuration->logSystem) {
                 CreateModuleLog::execute(
                     $message,
                     'manual',

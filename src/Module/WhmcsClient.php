@@ -6,12 +6,9 @@ use WHMCS\User\Client;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use ZapMe\Whmcs\DTO\ConfigurationDto;
-use ZapMe\Whmcs\Traits\InteractWithCarbon;
 
 class WhmcsClient
 {
-    use InteractWithCarbon;
-
     public function __construct(
         int $id,
         private ?ConfigurationDto $configuration = null,
@@ -84,10 +81,10 @@ class WhmcsClient
 
     private function new(): bool
     {
-        $this->carbon();
+        $carbon = now();
 
-        return $this->carbon
+        return $carbon
             ->parse($this->client->created_at)
-            ->diffInMinutes($this->carbon) <= 1;
+            ->diffInMinutes($carbon) <= 1;
     }
 }

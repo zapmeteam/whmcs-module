@@ -1,6 +1,6 @@
 <?php
 
-namespace ZapMe\Whmcs\Actions;
+namespace ZapMe\Whmcs\Actions\Module;
 
 use Throwable;
 use Punic\Exception;
@@ -8,7 +8,7 @@ use WHMCS\Database\Capsule;
 use Symfony\Component\HttpFoundation\Request;
 use ZapMe\Whmcs\Traits\InteractWithModuleActions;
 
-class ExecuteModuleInternalActions
+class InternalActions
 {
     use InteractWithModuleActions;
 
@@ -41,8 +41,7 @@ class ExecuteModuleInternalActions
                 'client_consent_field_id' => $post->get('client_consent_field_id'),
                 'account'                 => serialize($response['data']),
                 ...[
-                    ...$this->createdAt(),
-                    ...$this->updatedAt()
+                    ...carbonToDatabase(['created_at', 'updated_at']),
                 ],
             ]);
 
@@ -74,7 +73,7 @@ class ExecuteModuleInternalActions
                     'message'   => $post->get('message'),
                     'is_active' => $post->get('is_active'),
                     ...[
-                        ...$this->updatedAt()
+                        ...carbonToDatabase('updated_at'),
                     ],
                 ]);
 

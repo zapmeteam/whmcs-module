@@ -6,23 +6,20 @@ use WHMCS\Database\Capsule;
 use Illuminate\Support\Carbon;
 use ZapMe\Whmcs\DTO\TemplateDto;
 use Illuminate\Support\Collection;
-use ZapMe\Whmcs\Traits\InteractWithCarbon;
 use Symfony\Component\HttpFoundation\Request;
 
 class TemplateParseVariable
 {
-    use InteractWithCarbon;
-
     public function __construct(
         protected TemplateDto $template,
         protected ?Collection $client = null,
     ) {
-        $this->carbon();
         $this->default();
     }
 
     private function default(): void
     {
+        $carbon        = now();
         $client        = $this->client->get('whmcs');
         $request       = Request::createFromGlobals();
         $configuration = Capsule::table('tblconfiguration')->whereIn('setting', ['CompanyName', 'Domain', 'SystemURL'])->get();
@@ -38,8 +35,8 @@ class TemplateParseVariable
         $this->template->message = str_replace('%companyname%', $configuration->firstWhere('setting', '=', 'CompanyName')->value, $this->template->message);
         $this->template->message = str_replace('%whmcs%', $configuration->firstWhere('setting', '=', 'SystemURL')->value, $this->template->message);
         $this->template->message = str_replace('%ipaddr%', $request->getClientIp(), $this->template->message);
-        $this->template->message = str_replace('%date%', $this->carbon->format('d/m/Y'), $this->template->message);
-        $this->template->message = str_replace('%hour%', $this->carbon->format('H:i'), $this->template->message);
+        $this->template->message = str_replace('%date%', $carbon->format('d/m/Y'), $this->template->message);
+        $this->template->message = str_replace('%hour%', $carbon->format('H:i'), $this->template->message);
     }
 
     private function translate(object $client): void

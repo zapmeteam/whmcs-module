@@ -1,6 +1,6 @@
 <?php
 
-namespace ZapMe\Whmcs\Actions\Hooks;
+namespace ZapMe\Whmcs\Actions\Hooks\Executions;
 
 use WHMCS\User\Client;
 use Illuminate\Support\Str;

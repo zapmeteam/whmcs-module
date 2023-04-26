@@ -8,32 +8,29 @@ use ZapMe\Whmcs\DTO\TemplateDto;
 use Illuminate\Support\Collection;
 use ZapMe\Whmcs\Module\WhmcsClient;
 use ZapMe\Whmcs\DTO\ConfigurationDto;
-use ZapMe\Whmcs\Traits\InteractWithCarbon;
+use ZapMe\Whmcs\Module\Configuration;
 use ZapMe\Whmcs\Actions\Log\CreateModuleLog;
+use ZapMe\Whmcs\Actions\Sdk\CreateSdkInstance;
 use ZapMe\Whmcs\Helper\Template\TemplateParseVariable;
 
 class HookExecutionStructure
 {
-    use InteractWithCarbon;
-
-    private bool $parsed = false;
-    protected string $hook;
     protected ZapMeSdk $zapme;
     protected ConfigurationDto $configuration;
-    protected TemplateDto $template;
+    protected string $hook;
+    protected ?TemplateDto $template              = null;
     protected ?int $whmcs                         = null;
+    private bool $parsed                          = false;
     protected bool|string|Collection|null $client = null;
 
     public function __construct(
         string $hook,
-        ZapMeSdk $zapme,
-        ConfigurationDto $configuration,
-        TemplateDto $template,
+        ?TemplateDto $template = null,
         ?int $whmcs = null
     ) {
+        $this->configuration = (new Configuration())->dto();
+        $this->zapme         = CreateSdkInstance::execute($this->configuration);
         $this->hook          = $hook;
-        $this->zapme         = $zapme;
-        $this->configuration = $configuration;
         $this->template      = $template;
         $this->whmcs         = $whmcs;
     }
@@ -57,10 +54,7 @@ class HookExecutionStructure
         }
 
         try {
-            $this->zapme
-                ->withApi($this->configuration->api)
-                ->withSecret($this->configuration->secret)
-                ->sendMessage($this->client->get('phone'), $this->template->message, $attachment);
+            $this->zapme->sendMessage($this->client->get('phone'), $this->template->message, $attachment);
 
             if (!$this->configuration->logSystem) {
                 return;
@@ -85,11 +79,11 @@ class HookExecutionStructure
 
     protected function log(string $message): void
     {
-        $client = $this->client->get('whmcs');
+        $client = $this->client?->get('whmcs');
 
         $message = str_replace(
             ['{id}', '{name}', '{hook}'],
-            [$client->id, $client->fullName, $this->hook],
+            [$client?->id, $client?->fullName, $this->hook],
             $message
         );
 
