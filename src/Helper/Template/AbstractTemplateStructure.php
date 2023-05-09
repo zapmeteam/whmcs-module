@@ -4,19 +4,19 @@ namespace ZapMe\Whmcs\Helper\Template;
 
 abstract class AbstractTemplateStructure
 {
-    public static function execute(bool $paghiper): object
+    public static function execute(): object
     {
         $class     = new static();
         $variables = $class->variables();
 
         return (object)array_merge(
             $class->descriptions(),
-            ['print'     => $class->printable($paghiper, $variables)],
+            ['print'     => $class->printable($variables)],
             ['variables' => $variables],
         );
     }
 
-    public function printable(bool $paghiper, array $variables): string
+    public function printable(array $variables): string
     {
         $alert = "<div class=\"alert alert-info text-center\">";
         $alert .= "<b>%name%:</b> Nome do Cliente (completo)<br>";
@@ -34,6 +34,8 @@ abstract class AbstractTemplateStructure
         if (count($variables) > 0) {
             $alert .= "<hr>";
         }
+
+        $paghiper = paghiper_active();
 
         foreach ($variables as $key => $value) {
             if (!$paghiper && mb_strpos($key, 'paghiper')) {

@@ -5,6 +5,7 @@ require __DIR__ . '/vendor/autoload.php';
 use WHMCS\User\Client;
 use WHMCS\Service\Service;
 use WHMCS\Database\Capsule;
+use Illuminate\Support\Str;
 use ZapMe\Whmcs\Actions\Hooks\HookExecution;
 use ZapMe\Whmcs\Module\Configuration;
 
@@ -46,6 +47,24 @@ add_hook($whmcs >= 8 ? 'ClientLoginShare' : 'ClientAreaPageLogin', 1, fn ($vars)
 add_hook($whmcs >= 8 ? 'UserChangePassword' : 'ClientChangePassword', 1, fn ($vars) => (new HookExecution('ClientChangePassword'))->dispatch($vars));
 
 add_hook('DailyCronJob', 1, fn ($vars) => (new HookExecution('DailyCronJob'))->dispatch($vars));
+
+//TODO: PagHiper (automatico)
+add_hook('EmailPreSend', 1, function ($vars) {
+	$message    = $vars['messagename'];
+    $stringable = Str::of($message);
+
+    if (! $stringable->contains('Invoice Overdue Notice')) {
+        return;
+    }
+
+    $hook = ucfirst($stringable->explode(' ')->first());
+
+    if (!in_array($hook, ['First', 'Second', 'Third'])) {
+        return;
+    }
+
+    (new HookExecution("Invoice{$hook}OverDueAlert"))->dispatch($vars);
+});
 
 add_hook('AdminInvoicesControlsOutput', 1, function ($vars) use ($module) {
     if (!$module || !$module->isActive) {

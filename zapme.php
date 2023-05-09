@@ -343,7 +343,7 @@ function zapme_output($vars)
                                                 <div class="alert alert-warning text-center">
                                                     Para anexar o boleto bancário do PagHiper neste template escreva: %paghiper_boleto% em qualquer parte da mensagem
                                                 </div>
-                                                <small class="text-danger"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> O boleto bancário do PagHiper só será enviado se o sistema atender as seguintes condições: <b>I.</b> A fatura for superior à R$ 3,00. <b>II.</b> A fatura estiver com o método de pagamento PagHiper. <b>III.</b> O módulo do PagHiper estiver ativado e marcado como visível. <b>Caso contrário, as variáveis %paghiper_barcode% e %paghiper_boleto% serão removidas do envio</b></small>
+                                                <small class="text-danger"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> O boleto bancário do PagHiper só será enviado se o sistema atender as seguintes condições: <b>I.</b> A fatura for superior à R$ 3,00. <b>II.</b> A fatura estiver com o método de pagamento PagHiper. <b>III.</b> O módulo do PagHiper estiver ativado e marcado como visível. <b>Caso contrário, as variáveis %paghiper_codigo% e %paghiper_boleto% serão removidas do envio</b></small>
                                             <?php endif; ?>
                                             <hr>
                                             <div class="form-group">

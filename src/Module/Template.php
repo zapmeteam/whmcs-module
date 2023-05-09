@@ -14,15 +14,12 @@ class Template
 {
     public function __construct(
         protected ?string $code = null,
-        protected ?Collection $template = null,
-        protected ?PagHiper $paghiper = null
+        protected ?Collection $template = null
     ) {
         $this->template = Capsule::table('mod_zapme_templates')
             ->when($code && ctype_alpha($code), fn (Builder $query) => $query->where('code', '=', $code))
             ->when($code && ctype_digit($code), fn (Builder $query) => $query->where('id', '=', $code))
             ->get();
-
-        $this->paghiper = new PagHiper();
     }
 
     public function dto(): Collection
@@ -54,7 +51,7 @@ class Template
                     ->__toString();
 
                 $class               = "ZapMe\\Whmcs\\Helper\\Template\\Structures\\" . $class;
-                $template->structure = (new $class())::execute($this->paghiper->active());
+                $template->structure = (new $class())::execute();
             });
 
         return $template;

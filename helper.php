@@ -179,6 +179,17 @@ if (!function_exists('format_number')) {
     }
 }
 
+if (!function_exists('paghiper_active')) {
+    function paghiper_active(): bool
+    {
+        return Capsule::table('tblpaymentgateways')
+            ->select('value')
+            ->where('gateway', '=', 'paghiper')
+            ->where('setting', '=', 'visible')
+            ->first()?->value === 'on';
+    }
+}
+
 if (!function_exists('whmcs_version')) {
     function whmcs_version(): int
     {

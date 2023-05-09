@@ -5,6 +5,7 @@ namespace ZapMe\Whmcs\Helper\Hooks;
 use Throwable;
 use ZapMeSdk\Base as ZapMeSdk;
 use ZapMe\Whmcs\DTO\TemplateDto;
+use ZapMe\Whmcs\Module\PagHiper;
 use Illuminate\Support\Collection;
 use ZapMe\Whmcs\Module\WhmcsClient;
 use ZapMe\Whmcs\DTO\ConfigurationDto;
@@ -22,6 +23,7 @@ class HookExecutionStructure
     protected ?int $whmcs                         = null;
     private bool $parsed                          = false;
     protected bool|string|Collection|null $client = null;
+    protected array $attachment                   = [];
 
     public function __construct(
         string $hook,
@@ -40,9 +42,8 @@ class HookExecutionStructure
         return isset($_SESSION['adminid']);
     }
 
-    protected function send(
-        array $attachment = []
-    ): void {
+    protected function send(): void
+    {
         if (!$this->client->get('new') && !$this->client->get('consent')) {
             $this->log('O cliente ({id}) {name} não deseja receber alertas via WhatsApp.');
 
@@ -54,7 +55,7 @@ class HookExecutionStructure
         }
 
         try {
-            $this->zapme->sendMessage($this->client->get('phone'), $this->template->message, $attachment);
+            $this->zapme->sendMessage($this->client->get('phone'), $this->template->message, $this->attachment);
 
             if (!$this->configuration->logSystem) {
                 return;
@@ -112,5 +113,13 @@ class HookExecutionStructure
 
         $this->parsed   = true;
         $this->template = $parse->parsed();
+    }
+
+    protected function paghiper(object $invoice): void
+    {
+        [$message, $attachment] = (new PagHiper($this->template, $this->client->get('whmcs')))->generate($invoice);
+
+        $this->template->message = $message;
+        $this->attachment        = $attachment;
     }
 }
