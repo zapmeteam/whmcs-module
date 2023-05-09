@@ -16,6 +16,7 @@ class InvoiceFirstOverDueAlert extends HookExecutionStructure
         $this->client = $this->client($invoice->userid);
 
         $this->parse(['invoice' => $invoice]);
+        $this->paghiper($invoice);
 
         $this->send();
 

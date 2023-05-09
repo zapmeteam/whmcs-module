@@ -1,12 +1,13 @@
 <?php
 
-namespace ZapMe\Whmcs\Module;
+namespace ZapMe\Whmcs\Actions\PagHiper;
 
+use App;
 use Exception;
 use Illuminate\Support\Str;
 use ZapMe\Whmcs\DTO\TemplateDto;
 
-class PagHiper
+class PagHiperBillet
 {
     public function __construct(
         protected TemplateDto $template,
@@ -15,12 +16,13 @@ class PagHiper
         //
     }
 
-    public function generate(object $invoice): array
+    public static function execute(TemplateDto $template, object $client, object $invoice): array
     {
-        $attachment = $this->parse($invoice);
+        $class      = new static($template, $client);
+        $attachment = $class->parse($invoice);
 
         return [
-            $this->template->message,
+            $class->template->message,
             $attachment,
         ];
     }
@@ -32,19 +34,15 @@ class PagHiper
         if (
             !paghiper_active() || !Str::of($invoice->paymentmethod)->contains('paghiper') || $invoice->total < 3.00
         ) {
-            $this->extract();
+            $this->erase();
 
             return $document;
         }
 
-        $whmcsurl = rtrim(\App::getSystemUrl(), "/");
-        $billet   = json_decode(file_get_contents($whmcsurl . '/modules/gateways/paghiper.php?invoiceid=' . $invoice->id . '&uuid=' . $this->client->id . '&mail=' . $this->client->email . '&json=1'), true);
-
-        $code = $billet['bank_slip']['digitable_line'] ?? null;
-        $pdf  = $billet['bank_slip']['url_slip_pdf']   ?? null;
+        [$code, $pdf] = $this->billet($invoice);
 
         if (!$code || !$pdf) {
-            $this->extract();
+            $this->erase();
 
             return $document;
         }
@@ -52,15 +50,15 @@ class PagHiper
         $this->template->message = str_replace('%paghiper_codigo%', $code, $this->template->message);
 
         if (($generate = Str::of($this->template->message)->contains('%paghiper_boleto%')) === false) {
-            $this->extract('boleto');
+            $this->erase('boleto');
 
             return $document;
         }
 
-        $billet = $generate ? $this->billet($pdf) : null;
+        $billet = $generate ? $this->convert($pdf) : null;
 
         if ($billet) {
-            $this->extract('boleto');
+            $this->erase('boleto');
 
             $document = ['file_content' => $billet, 'file_extension' => 'pdf'];
         }
@@ -68,7 +66,18 @@ class PagHiper
         return $document;
     }
 
-    private function billet(string $link): ?string
+    private function billet(object $invoice): array
+    {
+        $whmcs  = rtrim(App::getSystemUrl(), "/");
+        $billet = json_decode(file_get_contents($whmcs . '/modules/gateways/paghiper.php?invoiceid=' . $invoice->id . '&uuid=' . $this->client->id . '&mail=' . $this->client->email . '&json=1'), true);
+
+        return [
+            $billet['bank_slip']['digitable_line'] ?? null,
+            $billet['bank_slip']['url_slip_pdf']   ?? null,
+        ];
+    }
+
+    private function convert(string $link): ?string
     {
         $billet = null;
 
@@ -81,7 +90,7 @@ class PagHiper
         return $billet;
     }
 
-    private function extract(string $what = null): void
+    private function erase(string $what = null): void
     {
         $words = $what ? ["%paghiper_{$what}%"] : ['%paghiper_codigo%', '%paghiper_boleto%'];
 

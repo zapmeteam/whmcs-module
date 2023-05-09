@@ -5,13 +5,13 @@ namespace ZapMe\Whmcs\Helper\Hooks;
 use Throwable;
 use ZapMeSdk\Base as ZapMeSdk;
 use ZapMe\Whmcs\DTO\TemplateDto;
-use ZapMe\Whmcs\Module\PagHiper;
 use Illuminate\Support\Collection;
 use ZapMe\Whmcs\Module\WhmcsClient;
 use ZapMe\Whmcs\DTO\ConfigurationDto;
 use ZapMe\Whmcs\Module\Configuration;
 use ZapMe\Whmcs\Actions\Log\CreateModuleLog;
 use ZapMe\Whmcs\Actions\Sdk\CreateSdkInstance;
+use ZapMe\Whmcs\Actions\PagHiper\PagHiperBillet;
 use ZapMe\Whmcs\Helper\Template\TemplateParseVariable;
 
 class HookExecutionStructure
@@ -117,7 +117,7 @@ class HookExecutionStructure
 
     protected function paghiper(object $invoice): void
     {
-        [$message, $attachment] = (new PagHiper($this->template, $this->client->get('whmcs')))->generate($invoice);
+        [$message, $attachment] = PagHiperBillet::execute($this->template, $this->client->get('whmcs'), $invoice);
 
         $this->template->message = $message;
         $this->attachment        = $attachment;

@@ -16,14 +16,12 @@ if (!defined('WHMCS')) {
 $whmcs  = whmcs_version();
 $module = (new Configuration())->dto();
 
-//TODO: PagHiper
 add_hook('InvoiceCreated', 1, fn ($vars) => (new HookExecution('InvoiceCreated'))->dispatch($vars));
 
 add_hook('InvoiceCancelled', 1, fn ($vars) => (new HookExecution('InvoiceCancelled'))->dispatch($vars));
 
 add_hook('InvoicePaid', 1, fn ($vars) => (new HookExecution('InvoicePaid'))->dispatch($vars));
 
-//TODO: PagHiper (automatico)
 add_hook('InvoicePaymentReminder', 1, fn ($vars) => (new HookExecution('InvoicePaymentReminder'))->dispatch($vars));
 
 add_hook('TicketOpen', 1, fn ($vars) => (new HookExecution('TicketOpen'))->dispatch($vars));
@@ -48,7 +46,6 @@ add_hook($whmcs >= 8 ? 'UserChangePassword' : 'ClientChangePassword', 1, fn ($va
 
 add_hook('DailyCronJob', 1, fn ($vars) => (new HookExecution('DailyCronJob'))->dispatch($vars));
 
-//TODO: PagHiper (automatico)
 add_hook('EmailPreSend', 1, function ($vars) {
 	$message    = $vars['messagename'];
     $stringable = Str::of($message);
@@ -154,19 +151,5 @@ add_hook('AdminAreaClientSummaryPage', 1, function ($vars) use ($module) {
 				</div>
 			</div>
 		</div>";
-});
-
-//TODO: implement
-add_hook('EmailPreSend', 1, function ($vars) {
-//	$template = $vars['messagename'];
-//
-//	if (mb_strpos($template, 'Invoice Overdue Notice') !== false) {
-//		$type = explode(' ', $template);
-//		$hook = $type[0];
-//
-//		if ($hook === 'First' || $hook === 'Second' || $hook === 'Third') {
-//			$zapMeHooks->prepare('Invoice' . $hook . 'OverDueAlert')->dispatch($vars);
-//		}
-//	}
 });
 
