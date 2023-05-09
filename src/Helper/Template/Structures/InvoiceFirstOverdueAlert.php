@@ -17,11 +17,6 @@ class InvoiceFirstOverdueAlert extends AbstractTemplateStructure
 
     public function variables(): array
     {
-        return [
-            'invoiceid'       => 'Id da fatura',
-            'duedate'         => 'Vencimento da fatura',
-            'value'           => 'Valor total',
-            'paghiper_codigo' => 'Código de Barras do Boleto Bancário da PagHiper',
-        ];
+        return (new InvoiceCreated())->variables();
     }
 }

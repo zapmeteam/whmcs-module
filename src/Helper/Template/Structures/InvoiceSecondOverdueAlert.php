@@ -17,6 +17,6 @@ class InvoiceSecondOverdueAlert extends AbstractTemplateStructure
 
     public function variables(): array
     {
-        return (new InvoiceFirstOverdueAlert())->variables();
+        return (new InvoiceCreated())->variables();
     }
 }
