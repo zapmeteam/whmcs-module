@@ -10,15 +10,13 @@ class TicketAdminReply extends HookExecutionStructure
     public function execute(mixed $vars): bool
     {
         $ticket = Capsule::table('tbltickets')
-            ->where('id', $vars['ticketid'])
+            ->where('id', '=', $vars['ticketid'])
             ->first();
 
         $this->client = $this->client($ticket->userid);
 
-        $this->parse(['ticket' => [
-            $ticket,
-            $vars
-        ]]);
+        $this->vars($vars);
+        $this->parse(['ticket' => $ticket]);
 
         $this->send();
 

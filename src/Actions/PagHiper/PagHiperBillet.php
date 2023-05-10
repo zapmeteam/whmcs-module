@@ -29,22 +29,20 @@ class PagHiperBillet
 
     private function parse(object $invoice): array
     {
-        $document = [];
-
         if (
             !paghiper_active() || !Str::of($invoice->paymentmethod)->contains('paghiper') || $invoice->total < 3.00
         ) {
             $this->erase();
 
-            return $document;
+            return [];
         }
 
-        [$code, $pdf] = $this->billet($invoice);
+        [$code, $pdf] = $this->create($invoice);
 
         if (!$code || !$pdf) {
             $this->erase();
 
-            return $document;
+            return [];
         }
 
         $this->template->message = str_replace('%paghiper_codigo%', $code, $this->template->message);
@@ -52,24 +50,31 @@ class PagHiperBillet
         if (($generate = Str::of($this->template->message)->contains('%paghiper_boleto%')) === false) {
             $this->erase('boleto');
 
-            return $document;
+            return [];
         }
 
-        $billet = $generate ? $this->convert($pdf) : null;
+        $billet = $generate ? $this->pdf($pdf) : null;
 
-        if ($billet) {
-            $this->erase('boleto');
-
-            $document = ['file_content' => $billet, 'file_extension' => 'pdf'];
+        if (!$billet) {
+            return [];
         }
 
-        return $document;
+        $this->erase('boleto');
+
+        return [
+            'file_content'   => $billet,
+            'file_extension' => 'pdf'
+        ];
     }
 
-    private function billet(object $invoice): array
+    private function create(object $invoice): array
     {
-        $whmcs  = rtrim(App::getSystemUrl(), "/");
-        $billet = json_decode(file_get_contents($whmcs . '/modules/gateways/paghiper.php?invoiceid=' . $invoice->id . '&uuid=' . $this->client->id . '&mail=' . $this->client->email . '&json=1'), true);
+        try {
+            $whmcs  = rtrim(App::getSystemUrl(), "/");
+            $billet = json_decode(file_get_contents($whmcs . '/modules/gateways/paghiper.php?invoiceid=' . $invoice->id . '&uuid=' . $this->client->id . '&mail=' . $this->client->email . '&json=1'), true);
+        } catch (Exception $e) {
+            throwlable($e);
+        }
 
         return [
             $billet['bank_slip']['digitable_line'] ?? null,
@@ -77,7 +82,7 @@ class PagHiperBillet
         ];
     }
 
-    private function convert(string $link): ?string
+    private function pdf(string $link): ?string
     {
         $billet = null;
 

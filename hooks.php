@@ -50,7 +50,7 @@ add_hook('EmailPreSend', 1, function ($vars) {
 	$message    = $vars['messagename'];
     $stringable = Str::of($message);
 
-    if (! $stringable->contains('Invoice Overdue Notice')) {
+    if (!$stringable->contains('Invoice Overdue Notice')) {
         return;
     }
 
@@ -69,7 +69,7 @@ add_hook('AdminInvoicesControlsOutput', 1, function ($vars) use ($module) {
     }
 
     $invoice = Capsule::table('tblinvoices')
-        ->where('id', $vars['invoiceid'])
+        ->where('id', '=', $vars['invoiceid'])
         ->first();
 
     if ($invoice->status !== 'Unpaid') {
@@ -152,4 +152,3 @@ add_hook('AdminAreaClientSummaryPage', 1, function ($vars) use ($module) {
 			</div>
 		</div>";
 });
-

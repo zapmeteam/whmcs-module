@@ -18,7 +18,7 @@ class ExternalActions
     public function sendInvoiceReminderMessage(Request $request): string
     {
         $invoice = Capsule::table('tblinvoices')
-            ->where('id', $request->get('invoiceid'))
+            ->where('id', '=', $request->get('invoiceid'))
             ->first();
 
         if ($invoice->status !== 'Unpaid') {

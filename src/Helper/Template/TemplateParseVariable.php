@@ -13,6 +13,7 @@ class TemplateParseVariable
     public function __construct(
         protected TemplateDto $template,
         protected ?Collection $client = null,
+        protected mixed $vars = null,
     ) {
         $this->default();
     }
@@ -61,7 +62,7 @@ class TemplateParseVariable
         $this->template->message = $language->get($hook, $this->template->message);
     }
 
-    public function ticket(object $ticket, mixed $vars): self
+    public function ticket(object $ticket): self
     {
         $date = Carbon::parse($ticket->lastreply);
 
@@ -70,7 +71,7 @@ class TemplateParseVariable
         $this->template->message = str_replace('%title%', $ticket->title, $this->template->message);
         $this->template->message = str_replace('%ticketdate%', $date->format('d/m/Y'), $this->template->message);
         $this->template->message = str_replace('%tickethour%', $date->format('H:i'), $this->template->message);
-        $this->template->message = str_replace('%deppartment%', $vars['deptname'], $this->template->message);
+        $this->template->message = str_replace('%deppartment%', $this->vars['deptname'], $this->template->message);
 
         return $this;
     }

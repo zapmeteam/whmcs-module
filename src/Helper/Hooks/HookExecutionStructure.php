@@ -23,6 +23,7 @@ class HookExecutionStructure
     protected ?int $whmcs                         = null;
     private bool $parsed                          = false;
     protected bool|string|Collection|null $client = null;
+    protected mixed $vars                         = null;
     protected array $attachment                   = [];
 
     public function __construct(
@@ -95,27 +96,30 @@ class HookExecutionStructure
         logActivity("[ZapMe][Hook: $this->hook] $message", $client);
     }
 
-    protected function parse(array $methods = []): void
+    protected function vars($vars): self
     {
-        $parse = new TemplateParseVariable($this->template, $this->client);
+        $this->vars = $vars;
+
+        return $this;
+    }
+
+    protected function parse(array $methods): void
+    {
+        $parse = new TemplateParseVariable($this->template, $this->client, $this->vars);
 
         foreach ($methods as $method => $parameters) {
             if (!method_exists($parse, $method)) {
                 continue;
             }
 
-            if (is_array($parameters)) {
-                $parse->$method(...$parameters);
-            } else {
-                $parse->$method($parameters);
-            }
+            $parse->$method($parameters);
         }
 
         $this->parsed   = true;
         $this->template = $parse->parsed();
     }
 
-    protected function paghiper(object $invoice): void
+    protected function billet(object $invoice): void
     {
         [$message, $attachment] = PagHiperBillet::execute($this->template, $this->client->get('whmcs'), $invoice);
 

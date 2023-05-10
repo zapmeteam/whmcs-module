@@ -10,7 +10,7 @@ class InvoicePaid extends HookExecutionStructure
     public function execute(mixed $vars): bool
     {
         $invoice = Capsule::table('tblinvoices')
-            ->where('id', $vars['invoiceid'])
+            ->where('id', '=', $vars['invoiceid'])
             ->first();
 
         $this->client = $this->client($invoice->userid);

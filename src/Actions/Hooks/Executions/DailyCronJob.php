@@ -34,11 +34,11 @@ class DailyCronJob extends HookExecutionStructure
                         ...carbonToDatabase('updated_at')
                     ],
                 ]);
+
+            $this->log("Atualização de Dados do Serviço");
         } catch (Throwable $e) {
             throwlable($e);
         }
-
-        $this->log("Atualização de Dados do Serviço");
 
         return true;
     }
