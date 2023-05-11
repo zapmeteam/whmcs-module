@@ -120,12 +120,15 @@ function zapme_deactivate(): array
     }
 }
 
-function zapme_output($vars)
+function zapme_output($vars): void
 {
+    $ignored = ['configuration', 'manualmessage', 'invoicereminder'];
+
     $request = Request::createFromGlobals();
 
-    $tab = $request->get('action') ?? $request->get('tab');
-    $tab = $tab === 'configuration' || $tab === 'manualmessage' ? null : $tab;
+    $tab      = $request->get('action') ?? $request->get('tab');
+    $tab      = in_array($tab, $ignored) ? null : $tab;
+    $paghiper = paghiper_active();
 
     echo (new HandleActions($request))->execute();
 
@@ -149,6 +152,7 @@ function zapme_output($vars)
         <div class="alert alert-danger text-center"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> <b>ATENÇÃO!</b> O módulo encontra-se configurado, mas <b>o status está "Desativado".</b> Nenhuma mensagem será enviada até que o status esteja <b>"Ativo".</b></div>
     <?php endif; ?>
     <?php if ($module->configured) : ?>
+        <!-- service -->
         <div class="signin-apps-container">
             <p class="text-center font-weight-bold">Status do Serviço</p>
             <div class="row">
@@ -297,7 +301,7 @@ function zapme_output($vars)
         </div>
         <!-- Templates -->
         <div class="tab-pane <?= selected($tab === 'templates', 'active') ?>" id="templates">
-            <table id="tabletempalte" class="table table-striped table-responsive" style="width: 100% !important">
+            <table id="tabletemplate" class="table table-striped table-responsive" style="width: 100% !important">
                 <thead>
                 <tr>
                     <td>#</td>
@@ -339,7 +343,7 @@ function zapme_output($vars)
                                             <hr>
                                             <p>Variáveis Disponíveis</p>
                                             <?php echo $template->structure->print; ?>
-                                            <?php if (isset($template->structure->paghiper)) : ?>
+                                            <?php if (isset($template->structure->paghiper) && $paghiper) : ?>
                                                 <div class="alert alert-warning text-center">
                                                     Para anexar o boleto bancário do PagHiper neste template escreva: %paghiper_boleto% em qualquer parte da mensagem
                                                 </div>
@@ -449,7 +453,7 @@ function zapme_output($vars)
                 ],
                 responsive: true
             });
-            $("#tabletempalte").DataTable({
+            $("#tabletemplate").DataTable({
                 "pageLength": 25,
                 "order": [
                     [0, "asc"]
