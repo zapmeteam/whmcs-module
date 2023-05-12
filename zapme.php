@@ -7,6 +7,7 @@ use WHMCS\User\Client;
 use WHMCS\Database\Capsule;
 use ZapMe\Whmcs\Module\Template;
 use ZapMe\Whmcs\Module\Configuration;
+use Illuminate\Database\Schema\Blueprint;
 use Symfony\Component\HttpFoundation\Request;
 use ZapMe\Whmcs\Actions\Module\HandleActions;
 
@@ -32,15 +33,15 @@ function zapme_activate(): array
     }
 
     try {
-        $now    = date('Y-m-d H:i:s');
+        $now    = now()->format('Y-m-d H:i:s');
         $schema = Capsule::schema();
 
         foreach (['mod_zapme', 'mod_zapme_templates', 'mod_zapme_logs'] as $table) {
             $schema->dropIfExists($table);
         }
 
-        $schema->create('mod_zapme', function ($table) {
-            $table->id();
+        $schema->create('mod_zapme', function (Blueprint $table) {
+            $table->increments('id');
             $table->string('api');
             $table->string('secret');
             $table->boolean('is_active')->default(false);
@@ -52,16 +53,16 @@ function zapme_activate(): array
             $table->timestamps();
         });
 
-        $schema->create('mod_zapme_templates', function ($table) {
-            $table->id();
+        $schema->create('mod_zapme_templates', function (Blueprint $table) {
+            $table->increments('id');
             $table->string('code');
             $table->binary('message');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
 
-        $schema->create('mod_zapme_logs', function ($table) {
-            $table->id();
+        $schema->create('mod_zapme_logs', function (Blueprint $table) {
+            $table->increments('id');
             $table->string('code');
             $table->unsignedInteger('client_id');
             $table->binary('message');
