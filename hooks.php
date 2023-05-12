@@ -6,6 +6,7 @@ use WHMCS\User\Client;
 use WHMCS\Service\Service;
 use WHMCS\Database\Capsule;
 use Illuminate\Support\Str;
+use ZapMe\Whmcs\Module\Template;
 use ZapMe\Whmcs\Actions\Hooks\HookExecution;
 use ZapMe\Whmcs\Module\Configuration;
 
@@ -115,6 +116,12 @@ add_hook('AdminInvoicesControlsOutput', 1, function ($vars) use ($module) {
 
 add_hook('AdminClientServicesTabFields', 1, function ($vars) use ($module) {
     if (!$module || !$module->isActive || Service::find($vars['id'])->domainStatus !== 'Active') {
+        return;
+    }
+
+    $template = (new Template('AfterModuleReady'))->dto()->first();
+
+    if (!optional($template)->isActive) {
         return;
     }
 

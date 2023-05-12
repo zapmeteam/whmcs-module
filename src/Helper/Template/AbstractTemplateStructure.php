@@ -11,7 +11,7 @@ abstract class AbstractTemplateStructure
         $class     = new static();
         $variables = $class->variables();
 
-        return array_merge(
+        return (object)array_merge(
             $class->descriptions(),
             ['print'     => $class->printable($variables)],
             ['variables' => $variables],

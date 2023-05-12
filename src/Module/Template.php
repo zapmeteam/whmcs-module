@@ -50,8 +50,8 @@ class Template
     private function structure(object $template): object
     {
         collect(glob(ZAPME_MODULE_PATH . "/src/Helper/Template/Structures/*.php"))
-            ->filter(function (string $file) use ($template) {
-                Str::of($file)->contains($template->code);
+            ->filter(function (string $file) use (&$template) {
+                return Str::of($file)->contains($template->code);
             })
             ->each(function (string $file) use (&$template) {
                 $class = Str::of($file)
