@@ -9,11 +9,16 @@ use ZapMe\Whmcs\DTO\TemplateDto;
 
 class PagHiperBillet
 {
-    public function __construct(
-        protected TemplateDto $template,
-        protected object $client
-    ) {
-        //
+    /** @var TemplateDto */
+    protected $template;
+
+    /** @var object */
+    protected $client;
+    
+    public function __construct(TemplateDto $template, object $client)
+    {
+        $this->template = $template;
+        $this->client   = $client;
     }
 
     public static function execute(TemplateDto $template, object $client, object $invoice): array

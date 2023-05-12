@@ -30,9 +30,7 @@ class DailyCronJob extends HookExecutionStructure
                 ->where('id', '=', 1)
                 ->update([
                     'account' => serialize($response['data']),
-                    ...[
-                        ...carbonToDatabase('updated_at')
-                    ],
+                    'updated_at' => now()->format('Y-m-d H:i:s'),
                 ]);
 
             $this->log("Atualização de Dados do Serviço");

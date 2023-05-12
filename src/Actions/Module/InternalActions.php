@@ -29,6 +29,7 @@ class InternalActions
             }
 
             $capsule = Capsule::table('mod_zapme');
+            $now     = now()->format('Y-m-d H:i:s');
 
             $capsule->truncate();
             $capsule->insert([
@@ -40,9 +41,8 @@ class InternalActions
                 'client_phone_field_id'   => $post->get('client_phone_field_id'),
                 'client_consent_field_id' => $post->get('client_consent_field_id'),
                 'account'                 => serialize($response['data']),
-                ...[
-                    ...carbonToDatabase(),
-                ],
+                'created_at'              => $now,
+                'updated_at'              => $now,
             ]);
 
             return $this->success("Tudo certo! <b>Módulo configurado e atualizado com sucesso.</b>");
@@ -72,9 +72,7 @@ class InternalActions
                 ->update([
                     'message'   => $post->get('message'),
                     'is_active' => $post->get('is_active'),
-                    ...[
-                        ...carbonToDatabase('updated_at'),
-                    ],
+                    'updated_at' => now()->format('Y-m-d H:i:s'),
                 ]);
 
             return $this->success("Tudo certo! <b>Template atualizado com sucesso.</b>");

@@ -27,24 +27,6 @@ if (!function_exists('throwlable')) {
     }
 }
 
-if (!function_exists('carbonToDatabase')) {
-    function carbonToDatabase(?string $column = null): array
-    {
-        $carbon = now();
-        $format = [];
-
-        if (!$column) {
-            foreach (['created_at', 'updated_at'] as $columns) {
-                $format += [$columns => $carbon->format('Y-m-d H:i:s')];
-            }
-        } else {
-            $format = [$column => $carbon->format('Y-m-d H:i:s')];
-        }
-
-        return $format;
-    }
-}
-
 if (!function_exists('now')) {
     function now(): Carbon
     {
@@ -62,11 +44,13 @@ if (!function_exists('format_number')) {
 if (!function_exists('paghiper_active')) {
     function paghiper_active(): bool
     {
-        return Capsule::table('tblpaymentgateways')
+        return optional(
+            Capsule::table('tblpaymentgateways')
             ->select('value')
             ->where('gateway', '=', 'paghiper')
             ->where('setting', '=', 'visible')
-            ->first()?->value === 'on';
+            ->first()
+           )->value === 'on';
     }
 }
 

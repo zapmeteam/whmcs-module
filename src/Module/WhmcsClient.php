@@ -9,11 +9,17 @@ use ZapMe\Whmcs\DTO\ConfigurationDto;
 
 class WhmcsClient
 {
-    public function __construct(
-        int $id,
-        private ?ConfigurationDto $configuration = null,
-        protected ?object $client = null
-    ) {
+    /** @var ConfigurationDto|null */
+    private $configuration = null;
+
+    /** @var object|null */
+    protected $client = null;
+
+    public function __construct(int $id, ?ConfigurationDto $configuration = null, ?object $client = null)
+    {
+        $this->configuration = $configuration;
+        $this->client = $client;
+
         $this->client = Client::find($id);
     }
 
@@ -24,9 +30,13 @@ class WhmcsClient
         return $this;
     }
 
-    public function get(?string $index = null): bool|string|Collection|null
+    /**
+     * @param string|null $index
+     * @return bool|string|Collection|null
+     */
+    public function get(?string $index = null)
     {
-        $this->configuration ??= (new Configuration())->dto();
+        $this->configuration = $this->configuration ?? (new Configuration())->dto();
 
         if (!$this->client) {
             return null;
@@ -50,7 +60,7 @@ class WhmcsClient
             return true;
         }
 
-        $value = Str::of($fields->firstWhere('id', '=', $this->configuration->clientConsentFieldId)?->value ?? '')
+        $value = Str::of($fields->firstWhere('id', '=', optional($this->configuration->clientConsentFieldId)->value ?? ''))
             ->lower()
             ->replace('ã', 'a');
 
@@ -67,7 +77,7 @@ class WhmcsClient
             return $original;
         }
 
-        $value = $fields->firstWhere('id', '=', $this->configuration->clientPhoneFieldId)?->value ?? null;
+        $value = $fields->firstWhere('id', '=', optional($this->configuration->clientPhoneFieldId)->value ?? null);
 
         if (!$value) {
             return $original;
@@ -81,10 +91,10 @@ class WhmcsClient
 
     private function new(): bool
     {
-        $carbon = now();
+        $now = now();
 
-        return $carbon
+        return $now
             ->parse($this->client->created_at)
-            ->diffInMinutes($carbon) <= 1;
+            ->diffInMinutes($now) <= 1;
     }
 }

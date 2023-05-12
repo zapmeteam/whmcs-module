@@ -6,10 +6,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 class HandleActions
 {
-    protected Request $request;
+    /** @var Request */
+    protected $request;
 
-    protected ?string $action = null;
-    protected ?string $type   = null;
+    /** @var string|null */
+    protected $action = null;
+
+    /** @var string|null */
+    protected $type   = null;
 
     private const ACTIONS = [
         'internal' => [
@@ -32,7 +36,7 @@ class HandleActions
         $this->type    = $request->get('type');
     }
 
-    public function execute(): mixed
+    public function execute(): ?string
     {
         if (!$this->action || !$this->type) {
             return null;

@@ -29,7 +29,7 @@ class ClientAreaPageLogin extends HookExecutionStructure
         return true;
     }
 
-    private function oldest(): Collection|null
+    private function oldest(): ?Collection
     {
         $log = Capsule::table('tblactivitylog')
             ->where('user', '=', 'System')
@@ -40,10 +40,11 @@ class ClientAreaPageLogin extends HookExecutionStructure
             return null;
         }
 
+        $now = now();
+
         if (
-            $this->carbon()
-                ->parse($log->date)
-                ->diffInMinutes($this->carbon) > 2
+            $now->parse($log->date)
+                ->diffInMinutes($now) > 2
         ) {
             return null;
         }
@@ -51,7 +52,7 @@ class ClientAreaPageLogin extends HookExecutionStructure
         return $this->client($log->userid);
     }
 
-    private function newest(mixed $vars): Collection|null
+    private function newest($vars): ?Collection
     {
         if (($client = Client::where('email', '=', $vars['username'])->first()) === null) {
             return null;

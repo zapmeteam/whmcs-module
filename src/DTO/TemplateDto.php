@@ -6,14 +6,29 @@ use Illuminate\Support\Carbon;
 
 class TemplateDto
 {
-    public ?int $id           = null;
-    public ?string $name      = null;
-    public ?string $code      = null;
-    public ?string $message   = null;
-    public ?bool $isActive    = null;
-    public ?object $structure = null;
-    public ?Carbon $createdAt = null;
-    public ?Carbon $updatedAt = null;
+    /** @var int|null */
+    public $id           = null;
+
+    /** @var string|null */
+    public $name      = null;
+
+    /** @var string|null */
+    public $code      = null;
+
+    /** @var string|null */
+    public $message   = null;
+
+    /** @var bool|null */
+    public $isActive    = null;
+
+    /** @var object|null */
+    public $structure = null;
+
+    /** @var Carbon|null */
+    public $createdAt = null;
+
+    /** @var Carbon|null */
+    public $updatedAt = null;
 
     public function __construct(
         ?int $id = null,
@@ -23,7 +38,7 @@ class TemplateDto
         ?bool $isActive = null,
         ?object $structure = null,
         ?Carbon $createdAt = null,
-        ?Carbon $updatedAt = null,
+        ?Carbon $updatedAt = null
     ) {
         $this->id        = $id;
         $this->name      = $name;

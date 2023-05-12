@@ -16,15 +16,32 @@ use ZapMe\Whmcs\Helper\Template\TemplateParseVariable;
 
 class HookExecutionStructure
 {
-    protected ZapMeSdk $zapme;
-    protected ConfigurationDto $configuration;
-    protected string $hook;
-    protected ?TemplateDto $template              = null;
-    protected ?int $whmcs                         = null;
-    private bool $parsed                          = false;
-    protected bool|string|Collection|null $client = null;
-    protected mixed $vars                         = null;
-    protected array $attachment                   = [];
+    /** @var ZapMeSdk */
+    protected $zapme;
+
+    /** @var ConfigurationDto */
+    protected  $configuration;
+
+    /** @var string */
+    protected $hook;
+
+    /** @var TemplateDto|null */
+    protected $template              = null;
+
+    /** @var int|null */
+    protected $whmcs                         = null;
+
+    /** @var bool */
+    private $parsed                          = false;
+
+    /** @var bool|string|Collection|null */
+    protected $client = null;
+
+    /** @var mixed */
+    protected $vars                         = null;
+
+    /** @var array */
+    protected $attachment                   = [];
 
     public function __construct(
         string $hook,
@@ -72,7 +89,7 @@ class HookExecutionStructure
         }
     }
 
-    protected function client(int $id, ?string $index = null): bool|string|Collection|null
+    protected function client(int $id, ?string $index = null): ?Collection
     {
         return (new WhmcsClient($id))
             ->configuration($this->configuration)
@@ -81,11 +98,15 @@ class HookExecutionStructure
 
     protected function log(string $message): void
     {
-        $client = $this->client?->get('whmcs');
+        $client = $this->client->get('whmcs');
+
+        if (!$client) {
+            return;
+        }
 
         $message = str_replace(
             ['{id}', '{name}', '{hook}'],
-            [$client?->id, $client?->fullName, $this->hook],
+            [$client->id, $client->fullName, $this->hook],
             $message
         );
 
@@ -103,7 +124,7 @@ class HookExecutionStructure
         return $this;
     }
 
-    protected function parse(array $methods): void
+    protected function parse(array $methods = []): void
     {
         $parse = new TemplateParseVariable($this->template, $this->client, $this->vars);
 

@@ -92,13 +92,15 @@ function zapme_activate(): array
         $connection = Capsule::connection();
 
         foreach ($templates as $key => $value) {
-            $connection->transaction(fn ($handler) =>$handler->table('mod_zapme_templates')->insert([
-                'code'            => $key,
-                'message'         => $value,
-                'is_active'       => true,
-                'created_at'      => $now,
-                'updated_at'      => $now
-            ]));
+            $connection->transaction(function ($handler) use ($key, $value, $now) {
+                $handler->table('mod_zapme_templates')->insert([
+                    'code'            => $key,
+                    'message'         => $value,
+                    'is_active'       => true,
+                    'created_at'      => $now,
+                    'updated_at'      => $now
+                ]);
+            });
         }
 
         return ['status' => 'success', 'description' => 'Módulo Ativado.'];
@@ -247,7 +249,7 @@ function zapme_output($vars): void
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="inputConfirmPassword">Chave Secreta</label>
-                                    <input type="password" name="secret" class="form-control" value="<?= $module?->secret ?>" placeholder="Insira sua sua Chave Secreta" required>
+                                    <input type="password" name="secret" class="form-control" value="<?= $module->secret ?>" placeholder="Insira sua sua Chave Secreta" required>
                                 </div>
                             </div>
                             <div class="col-md-12">
