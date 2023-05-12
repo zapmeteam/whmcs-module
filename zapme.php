@@ -3,6 +3,8 @@
 require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . '/helper.php';
 
+(Dotenv\Dotenv::createUnsafeImmutable(__DIR__))->load();
+
 use WHMCS\User\Client;
 use WHMCS\Database\Capsule;
 use ZapMe\Whmcs\Module\Template;

@@ -3,3 +3,4 @@
 .DS_Store
 vendor/Expectation.php
 .php-cs-fixer.cache
+.env
