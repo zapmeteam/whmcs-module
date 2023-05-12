@@ -18,7 +18,7 @@ class WhmcsClient
     public function __construct(int $id, ?ConfigurationDto $configuration = null, ?object $client = null)
     {
         $this->configuration = $configuration;
-        $this->client = $client;
+        $this->client        = $client;
 
         $this->client = Client::find($id);
     }

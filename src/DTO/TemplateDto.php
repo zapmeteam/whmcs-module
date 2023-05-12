@@ -7,19 +7,19 @@ use Illuminate\Support\Carbon;
 class TemplateDto
 {
     /** @var int|null */
-    public $id           = null;
+    public $id = null;
 
     /** @var string|null */
-    public $name      = null;
+    public $name = null;
 
     /** @var string|null */
-    public $code      = null;
+    public $code = null;
 
     /** @var string|null */
-    public $message   = null;
+    public $message = null;
 
     /** @var bool|null */
-    public $isActive    = null;
+    public $isActive = null;
 
     /** @var object|null */
     public $structure = null;

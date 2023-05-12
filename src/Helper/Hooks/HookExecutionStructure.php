@@ -20,28 +20,28 @@ class HookExecutionStructure
     protected $zapme;
 
     /** @var ConfigurationDto */
-    protected  $configuration;
+    protected $configuration;
 
     /** @var string */
     protected $hook;
 
     /** @var TemplateDto|null */
-    protected $template              = null;
+    protected $template = null;
 
     /** @var int|null */
-    protected $whmcs                         = null;
+    protected $whmcs = null;
 
     /** @var bool */
-    private $parsed                          = false;
+    private $parsed = false;
 
     /** @var bool|string|Collection|null */
     protected $client = null;
 
     /** @var mixed */
-    protected $vars                         = null;
+    protected $vars = null;
 
     /** @var array */
-    protected $attachment                   = [];
+    protected $attachment = [];
 
     public function __construct(
         string $hook,

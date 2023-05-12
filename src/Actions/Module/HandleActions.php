@@ -13,7 +13,7 @@ class HandleActions
     protected $action = null;
 
     /** @var string|null */
-    protected $type   = null;
+    protected $type = null;
 
     private const ACTIONS = [
         'internal' => [

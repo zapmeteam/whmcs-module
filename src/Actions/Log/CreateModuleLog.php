@@ -11,9 +11,9 @@ class CreateModuleLog
         $now = now()->format('Y-m-d H:i:s');
 
         Capsule::table('mod_zapme_logs')->insert([
-            'code'      => $hook,
-            'client_id' => $client,
-            'message'   => $message,
+            'code'       => $hook,
+            'client_id'  => $client,
+            'message'    => $message,
             'created_at' => $now,
             'updated_at' => $now,
         ]);

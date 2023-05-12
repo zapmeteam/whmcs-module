@@ -29,7 +29,7 @@ class DailyCronJob extends HookExecutionStructure
             Capsule::table('mod_zapme')
                 ->where('id', '=', 1)
                 ->update([
-                    'account' => serialize($response['data']),
+                    'account'    => serialize($response['data']),
                     'updated_at' => now()->format('Y-m-d H:i:s'),
                 ]);
 

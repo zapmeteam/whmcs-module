@@ -17,7 +17,7 @@ class TemplateParseVariable
 
     /** @var mixed */
     protected $vars;
-    
+
     public function __construct(TemplateDto $template, ?Collection $client = null, $vars = null)
     {
         $this->template = $template;
@@ -29,7 +29,7 @@ class TemplateParseVariable
 
     private function default(): void
     {
-        $now        = now();
+        $now           = now();
         $client        = $this->client->get('whmcs');
         $request       = Request::createFromGlobals();
         $configuration = Capsule::table('tblconfiguration')->whereIn('setting', ['CompanyName', 'Domain', 'SystemURL'])->get();

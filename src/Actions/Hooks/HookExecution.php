@@ -8,7 +8,7 @@ use ZapMe\Whmcs\Module\Template;
 class HookExecution
 {
     /** @var string|null */
-    protected $hook            = null;
+    protected $hook = null;
 
     /** @var TemplateDto|null */
     protected $template = null;

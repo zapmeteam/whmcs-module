@@ -70,8 +70,8 @@ class InternalActions
 
             $capsule->where('id', '=', $template)
                 ->update([
-                    'message'   => $post->get('message'),
-                    'is_active' => $post->get('is_active'),
+                    'message'    => $post->get('message'),
+                    'is_active'  => $post->get('is_active'),
                     'updated_at' => now()->format('Y-m-d H:i:s'),
                 ]);
 

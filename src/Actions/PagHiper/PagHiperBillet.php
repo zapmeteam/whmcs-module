@@ -14,7 +14,7 @@ class PagHiperBillet
 
     /** @var object */
     protected $client;
-    
+
     public function __construct(TemplateDto $template, object $client)
     {
         $this->template = $template;
