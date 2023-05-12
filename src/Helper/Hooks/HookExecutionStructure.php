@@ -110,7 +110,7 @@ class HookExecutionStructure
             $message
         );
 
-        if (!ZAPME_MODULE_ACTIVITY_LOG) {
+        if (!getenv('ZAPME_MODULE_ACTIVITY_LOG', true)) {
             return;
         }
 

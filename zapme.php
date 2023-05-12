@@ -3,14 +3,12 @@
 require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . '/helper.php';
 
-(Dotenv\Dotenv::createUnsafeImmutable(__DIR__))->load();
-
 use WHMCS\User\Client;
 use WHMCS\Database\Capsule;
 use ZapMe\Whmcs\Module\Template;
 use ZapMe\Whmcs\Module\Configuration;
-use ZapMe\Whmcs\Actions\Module\HandleActions;
 use Symfony\Component\HttpFoundation\Request;
+use ZapMe\Whmcs\Actions\Module\HandleActions;
 
 if (!defined('WHMCS')) {
     die;
@@ -29,8 +27,8 @@ function zapme_config(): array
 
 function zapme_activate(): array
 {
-    if (($phpVersion = phpversion()) < 8.0) {
-        return ['status'  => 'error', 'description' => "PHP ({$phpVersion}) Incompatível. Versão Desejada: 8.0+"];
+    if (($phpVersion = phpversion()) < 7.3) {
+        return ['status' => 'error', 'description' => "PHP ({$phpVersion}) Incompatível. Versão Desejada: 7.3+"];
     }
 
     try {
@@ -96,11 +94,11 @@ function zapme_activate(): array
         foreach ($templates as $key => $value) {
             $connection->transaction(function ($handler) use ($key, $value, $now) {
                 $handler->table('mod_zapme_templates')->insert([
-                    'code'            => $key,
-                    'message'         => $value,
-                    'is_active'       => true,
-                    'created_at'      => $now,
-                    'updated_at'      => $now
+                    'code'       => $key,
+                    'message'    => $value,
+                    'is_active'  => true,
+                    'created_at' => $now,
+                    'updated_at' => $now
                 ]);
             });
         }
@@ -147,8 +145,10 @@ function zapme_output($vars): void
             break;
     }
 
-    if (!$tab) $fields = Capsule::table('tblcustomfields')->where('type', '=', 'client')->get();
-?>
+    if (!$tab) {
+        $fields = Capsule::table('tblcustomfields')->where('type', '=', 'client')->get();
+    }
+    ?>
     <?php if (!$module->configured) : ?>
         <div class="alert alert-info text-center"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> <b>O módulo não encontra-se configurado para uso!</b> Certifique-se de configurar o módulo para que o mesmo funcione corretamente.</div>
     <?php endif; ?>
@@ -317,7 +317,7 @@ function zapme_output($vars): void
                 </thead>
                 <tbody>
                 <?php /** @var \ZapMe\Whmcs\DTO\TemplateDto $template */
-                    foreach ($templates as $template): ?>
+                        foreach ($templates as $template): ?>
                     <tr>
                         <th><?= $template->id ?></th>
                         <th><?= $template->name ?></th>

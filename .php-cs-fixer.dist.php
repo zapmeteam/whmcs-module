@@ -78,6 +78,7 @@ $rules = [
 $finder = new Finder();
 
 $finder->in([
+    __DIR__,
     __DIR__.'/src',
     __DIR__.'/translations',
 ]);

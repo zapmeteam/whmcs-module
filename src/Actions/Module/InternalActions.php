@@ -20,8 +20,8 @@ class InternalActions
 
         try {
             $response = $this->sdk()
-                ->withApi($api)
-                ->withSecret($secret)
+                ->withApi(configuration('zapme_api_key', $api))
+                ->withSecret(configuration('zapme_api_secret', $secret))
                 ->accountStatus();
 
             if ($response && $response['result'] !== 'success') {

@@ -2,16 +2,15 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-use WHMCS\User\Client;
 use WHMCS\Service\Service;
-use WHMCS\Database\Capsule;
 use Illuminate\Support\Str;
+use WHMCS\Database\Capsule;
 use ZapMe\Whmcs\Module\Template;
-use ZapMe\Whmcs\Actions\Hooks\HookExecution;
 use ZapMe\Whmcs\Module\Configuration;
+use ZapMe\Whmcs\Actions\Hooks\HookExecution;
 
 if (!defined('WHMCS')) {
-	die;
+    die;
 }
 
 $whmcs  = whmcs_version();
@@ -78,7 +77,7 @@ add_hook('DailyCronJob', 1, function ($vars) {
 });
 
 add_hook('EmailPreSend', 1, function ($vars) {
-	$message    = $vars['messagename'];
+    $message    = $vars['messagename'];
     $stringable = Str::of($message);
 
     if (!$stringable->contains('Invoice Overdue Notice')) {

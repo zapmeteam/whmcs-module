@@ -1,21 +1,30 @@
 <?php
 
-use WHMCS\User\Client;
 use WHMCS\Database\Capsule;
 use Illuminate\Support\Carbon;
 
 if (!defined('WHMCS')) {
     die;
 }
+const ZAPME_MODULE_PATH = __DIR__;
 
-const ZAPME_MODULE_PATH         = __DIR__;
-const ZAPME_MODULE_API_URL      = 'http://api.zapme.test';
-const ZAPME_MODULE_ACTIVITY_LOG = true;
+Dotenv\Dotenv::createImmutable(ZAPME_MODULE_PATH)->safeLoad();
+
+require ZAPME_MODULE_PATH . '/configuration.php';
+
+if (!function_exists('configuration')) {
+    function configuration(string $key, $default = null)
+    {
+        $configuration = require ZAPME_MODULE_PATH . '/configuration.php';
+
+        return filled($configuration[$key]) ? $configuration[$key] : $default;
+    }
+}
 
 if (!function_exists('throwlable')) {
     function throwlable(Throwable $exception): void
     {
-        if (!ZAPME_MODULE_ACTIVITY_LOG) {
+        if (!configuration('zapme_module_activity_log')) {
             return;
         }
 
@@ -50,7 +59,7 @@ if (!function_exists('paghiper_active')) {
             ->where('gateway', '=', 'paghiper')
             ->where('setting', '=', 'visible')
             ->first()
-           )->value === 'on';
+        )->value === 'on';
     }
 }
 
@@ -62,7 +71,7 @@ if (!function_exists('whmcs_version')) {
             ->first()
             ->value;
 
-        return substr($value, 0,1);
+        return substr($value, 0, 1);
     }
 }
 

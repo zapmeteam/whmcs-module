@@ -9,11 +9,11 @@ class CreateSdkInstance
 {
     public static function execute(?ConfigurationDto $configuration = null): ZapMeSdk
     {
-        $sdk = (new ZapMeSdk())->toUrl(ZAPME_MODULE_API_URL);
+        $sdk = (new ZapMeSdk())->toUrl(configuration('zapme_api_url'));
 
         if ($configuration && $configuration->configured) {
-            $sdk->withApi($configuration->api)
-                ->withSecret($configuration->secret);
+            $sdk->withApi(configuration('zapme_api_key', $configuration->api))
+                ->withSecret(configuration('zapme_api_secret', $configuration->secret));
         }
 
         return $sdk;
