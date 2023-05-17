@@ -2,6 +2,7 @@
 
 namespace ZapMe\Whmcs\Module;
 
+use DateTime;
 use WHMCS\User\Client;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
@@ -91,10 +92,9 @@ class WhmcsClient
 
     private function new(): bool
     {
-        $now = now();
+        $now     = new DateTime();
+        $compare = new DateTime($this->client->created_at);
 
-        return $now
-            ->parse($this->client->created_at)
-            ->diffInMinutes($now) <= 1;
+        return $compare->diff($now)->i <= 1;
     }
 }

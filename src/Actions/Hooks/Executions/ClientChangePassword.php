@@ -6,7 +6,7 @@ use ZapMe\Whmcs\Helper\Hooks\HookExecutionStructure;
 
 class ClientChangePassword extends HookExecutionStructure
 {
-    public function execute(mixed $vars): bool
+    public function execute($vars): bool
     {
         $this->client = $this->client($vars['userid']);
 

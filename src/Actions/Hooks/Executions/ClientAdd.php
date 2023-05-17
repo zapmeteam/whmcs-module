@@ -7,7 +7,7 @@ use ZapMe\Whmcs\Helper\Hooks\HookExecutionStructure;
 
 class ClientAdd extends HookExecutionStructure
 {
-    public function execute(mixed $vars): bool
+    public function execute($vars): bool
     {
         $this->client = $this->whmcs >= 8 ?
             $this->newest($vars) :
@@ -18,12 +18,12 @@ class ClientAdd extends HookExecutionStructure
         return true;
     }
 
-    private function oldest(mixed $vars): Collection
+    private function oldest($vars): Collection
     {
         return $this->client($vars['userid']);
     }
 
-    private function newest(mixed $vars): Collection
+    private function newest($vars): Collection
     {
         return $this->client($vars['client_id']);
     }

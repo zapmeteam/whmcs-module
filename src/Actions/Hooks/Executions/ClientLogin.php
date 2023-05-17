@@ -7,7 +7,7 @@ use ZapMe\Whmcs\Helper\Hooks\HookExecutionStructure;
 
 class ClientLogin extends HookExecutionStructure
 {
-    public function execute(mixed $vars): bool
+    public function execute($vars): bool
     {
         if ($this->impersonating()) {
             return false;
@@ -22,12 +22,12 @@ class ClientLogin extends HookExecutionStructure
         return true;
     }
 
-    private function oldest(mixed $vars): Collection
+    private function oldest($vars): Collection
     {
         return $this->client($vars['userid']);
     }
 
-    private function newest(mixed $vars): Collection
+    private function newest($vars): Collection
     {
         return $this->client($vars['user']->id);
     }

@@ -20,8 +20,8 @@ class InternalActions
 
         try {
             $response = $this->sdk()
-                ->withApi(configuration('zapme_api_key', $api))
-                ->withSecret(configuration('zapme_api_secret', $secret))
+                ->withApi($_ENV['ZAPME_MODULE_API_KEY'] ?? $api)
+                ->withSecret($_ENV['ZAPME_MODULE_API_SECRET'] ?? $secret)
                 ->accountStatus();
 
             if ($response && $response['result'] !== 'success') {
@@ -29,12 +29,12 @@ class InternalActions
             }
 
             $capsule = Capsule::table('mod_zapme');
-            $now     = now()->format('Y-m-d H:i:s');
+            $now     = date('Y-m-d H:i:s');
 
             $capsule->truncate();
             $capsule->insert([
-                'api'                     => $api,
-                'secret'                  => $secret,
+                'api'                     => encrypt($api),
+                'secret'                  => encrypt($secret),
                 'is_active'               => $post->get('is_active'),
                 'log_system'              => $post->get('log_system'),
                 'log_auto_remove'         => $post->get('log_auto_remove'),
@@ -72,7 +72,7 @@ class InternalActions
                 ->update([
                     'message'    => $post->get('message'),
                     'is_active'  => $post->get('is_active'),
-                    'updated_at' => now()->format('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s'),
                 ]);
 
             return $this->success("Tudo certo! <b>Template atualizado com sucesso.</b>");

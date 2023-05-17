@@ -7,7 +7,7 @@ use ZapMe\Whmcs\Helper\Hooks\HookExecutionStructure;
 
 class AfterModuleReady extends HookExecutionStructure
 {
-    public function execute(mixed $id): bool
+    public function execute($id): bool
     {
         $service      = Service::find($id);
         $this->client = $this->client($service->userid);

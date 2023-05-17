@@ -2,6 +2,7 @@
 
 namespace ZapMe\Whmcs\Module;
 
+use DateTime;
 use WHMCS\Database\Capsule;
 use ZapMe\Whmcs\DTO\ConfigurationDto;
 
@@ -19,16 +20,16 @@ class Configuration
     {
         return (new ConfigurationDto(
             $this->configuration !== null,
-            optional($this->configuration)->api,
-            optional($this->configuration)->secret,
-            optional($this->configuration)->is_active       == 1,
-            optional($this->configuration)->log_system      == 1,
-            optional($this->configuration)->log_auto_remove == 1,
-            optional($this->configuration)->client_phone_field_id,
-            optional($this->configuration)->client_consent_field_id,
+            $this->configuration->api                     ?? null,
+            $this->configuration->secret                  ?? null,
+            $this->configuration->is_active               ?? 0,
+            $this->configuration->log_system              ?? 0,
+            $this->configuration->log_auto_remove         ?? 0,
+            $this->configuration->client_phone_field_id   ?? 0,
+            $this->configuration->client_consent_field_id ?? 0,
             $this->configuration ? unserialize($this->configuration->account) : null,
-            now()->parse(optional($this->configuration)->created_at),
-            now()->parse(optional($this->configuration)->updated_at),
+            (new DateTime($this->configuration->created_at ?? 'now'))->format('Y-m-d H:i:s'),
+            (new DateTime($this->configuration->updated_at ?? 'now'))->format('Y-m-d H:i:s'),
         ));
     }
 }

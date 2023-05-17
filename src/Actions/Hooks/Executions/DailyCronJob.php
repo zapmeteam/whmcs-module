@@ -9,10 +9,12 @@ use ZapMe\Whmcs\Helper\Hooks\HookExecutionStructure;
 
 class DailyCronJob extends HookExecutionStructure
 {
-    public function execute(mixed $vars): bool
+    public function execute($vars): bool
     {
+        $date = (int)date('d');
+
         if (
-            $this->configuration->logAutoRemove && now()->startOfMonth()->isToday()
+            $this->configuration->logAutoRemove && $date === 1
         ) {
             $this->log("Limpeza de Logs");
 
@@ -30,7 +32,7 @@ class DailyCronJob extends HookExecutionStructure
                 ->where('id', '=', 1)
                 ->update([
                     'account'    => serialize($response['data']),
-                    'updated_at' => now()->format('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s'),
                 ]);
 
             $this->log("Atualização de Dados do Serviço");

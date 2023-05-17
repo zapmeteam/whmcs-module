@@ -2,6 +2,7 @@
 
 namespace ZapMe\Whmcs\Helper\Template;
 
+use DateTime;
 use WHMCS\Database\Capsule;
 use ZapMe\Whmcs\DTO\TemplateDto;
 use Illuminate\Support\Collection;
@@ -29,7 +30,7 @@ class TemplateParseVariable
 
     private function default(): void
     {
-        $now           = now();
+        $now           = new DateTime();
         $client        = $this->client->get('whmcs');
         $request       = Request::createFromGlobals();
         $configuration = Capsule::table('tblconfiguration')->whereIn('setting', ['CompanyName', 'Domain', 'SystemURL'])->get();
@@ -73,7 +74,7 @@ class TemplateParseVariable
 
     public function ticket(object $ticket): self
     {
-        $date = now()->parse($ticket->lastreply);
+        $date = new DateTime($ticket->lastreply);
 
         $this->template->message = str_replace('%id%', $ticket->id, $this->template->message);
         $this->template->message = str_replace('%tid%', $ticket->tid, $this->template->message);
@@ -88,7 +89,7 @@ class TemplateParseVariable
     public function invoice(object $invoice): self
     {
         $this->template->message = str_replace('%invoiceid%', $invoice->id, $this->template->message);
-        $this->template->message = str_replace('%duedate%', now()->parse($invoice->duedate)->format('d/m/Y'), $this->template->message);
+        $this->template->message = str_replace('%duedate%', (new DateTime($invoice->duedate))->format('d/m/Y'), $this->template->message);
         $this->template->message = str_replace('%value%', format_number($invoice->total), $this->template->message);
 
         return $this;
@@ -98,7 +99,7 @@ class TemplateParseVariable
     {
         $this->template->message = str_replace('%id%', $service->id, $this->template->message);
         $this->template->message = str_replace('%product%', $service->product->name, $this->template->message);
-        $this->template->message = str_replace('%duedate%', now()->parse($service->nextduedate)->format('d/m/Y'), $this->template->message);
+        $this->template->message = str_replace('%duedate%', (new DateTime($service->nextduedate))->format('d/m/Y'), $this->template->message);
         $this->template->message = str_replace('%value%', format_number($service->amount), $this->template->message);
         $this->template->message = str_replace('%ip%', $service->dedicatedip, $this->template->message);
         $this->template->message = str_replace('%domain%', $service->domain, $this->template->message);

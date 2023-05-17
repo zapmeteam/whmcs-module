@@ -2,6 +2,7 @@
 
 namespace ZapMe\Whmcs\Module;
 
+use DateTime;
 use Illuminate\Support\Str;
 use WHMCS\Database\Capsule;
 use ZapMe\Whmcs\DTO\TemplateDto;
@@ -41,8 +42,8 @@ class Template
                 $item->message,
                 $item->is_active == 1,
                 $item->structure,
-                now()->parse($item->created_at),
-                now()->parse($item->updated_at),
+                (new DateTime($item->created_at ?? 'now'))->format('Y-m-d H:i:s'),
+                (new DateTime($item->updated_at ?? 'now'))->format('Y-m-d H:i:s'),
             ));
         });
     }

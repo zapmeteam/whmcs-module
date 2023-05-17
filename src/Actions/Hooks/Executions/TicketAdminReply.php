@@ -7,7 +7,7 @@ use ZapMe\Whmcs\Helper\Hooks\HookExecutionStructure;
 
 class TicketAdminReply extends HookExecutionStructure
 {
-    public function execute(mixed $vars): bool
+    public function execute($vars): bool
     {
         $ticket = Capsule::table('tbltickets')
             ->where('id', '=', $vars['ticketid'])

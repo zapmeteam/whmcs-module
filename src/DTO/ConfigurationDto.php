@@ -2,8 +2,6 @@
 
 namespace ZapMe\Whmcs\DTO;
 
-use Illuminate\Support\Carbon;
-
 class ConfigurationDto
 {
     /** @var bool */
@@ -33,10 +31,10 @@ class ConfigurationDto
     /** @var array|null */
     public $account = null;
 
-    /** @var Carbon|null */
+    /** @var string|null */
     public $createdAt = null;
 
-    /** @var Carbon|null */
+    /** @var string|null */
     public $updatedAt = null;
 
     public function __construct(
@@ -49,12 +47,12 @@ class ConfigurationDto
         ?int $clientPhoneFieldId = null,
         ?int $clientConsentFieldId = null,
         ?array $account = null,
-        ?Carbon $createdAt = null,
-        ?Carbon $updatedAt = null
+        ?string $createdAt = null,
+        ?string $updatedAt = null
     ) {
         $this->configured           = $configured;
-        $this->api                  = $api;
-        $this->secret               = $secret;
+        $this->api                  = decrypt($api);
+        $this->secret               = decrypt($secret);
         $this->isActive             = $isActive;
         $this->logSystem            = $logSystem;
         $this->logAutoRemove        = $logAutoRemove;

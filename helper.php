@@ -1,7 +1,6 @@
 <?php
 
 use WHMCS\Database\Capsule;
-use Illuminate\Support\Carbon;
 
 if (!defined('WHMCS')) {
     die;
@@ -10,21 +9,10 @@ const ZAPME_MODULE_PATH = __DIR__;
 
 Dotenv\Dotenv::createImmutable(ZAPME_MODULE_PATH)->safeLoad();
 
-require ZAPME_MODULE_PATH . '/configuration.php';
-
-if (!function_exists('configuration')) {
-    function configuration(string $key, $default = null)
-    {
-        $configuration = require ZAPME_MODULE_PATH . '/configuration.php';
-
-        return filled($configuration[$key]) ? $configuration[$key] : $default;
-    }
-}
-
 if (!function_exists('throwlable')) {
     function throwlable(Throwable $exception): void
     {
-        if (!configuration('zapme_module_activity_log')) {
+        if ((bool)$_ENV['ZAPME_MODULE_ACTIVITY_LOG'] === false) {
             return;
         }
 
@@ -33,13 +21,6 @@ if (!function_exists('throwlable')) {
         $file   = $file[1] ?? $source;
 
         logActivity("[ZapMe] Erro: {$exception->getMessage()} | {$file}: {$exception->getLine()}");
-    }
-}
-
-if (!function_exists('now')) {
-    function now(): Carbon
-    {
-        return Carbon::now('America/Sao_Paulo');
     }
 }
 
@@ -53,13 +34,11 @@ if (!function_exists('format_number')) {
 if (!function_exists('paghiper_active')) {
     function paghiper_active(): bool
     {
-        return optional(
-            Capsule::table('tblpaymentgateways')
+        return (Capsule::table('tblpaymentgateways')
             ->select('value')
             ->where('gateway', '=', 'paghiper')
             ->where('setting', '=', 'visible')
-            ->first()
-        )->value === 'on';
+            ->first()->value ?? null) === 'on';
     }
 }
 

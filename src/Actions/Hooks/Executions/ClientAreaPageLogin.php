@@ -2,6 +2,7 @@
 
 namespace ZapMe\Whmcs\Actions\Hooks\Executions;
 
+use DateTime;
 use WHMCS\User\Client;
 use Illuminate\Support\Str;
 use WHMCS\Database\Capsule;
@@ -10,7 +11,7 @@ use ZapMe\Whmcs\Helper\Hooks\HookExecutionStructure;
 
 class ClientAreaPageLogin extends HookExecutionStructure
 {
-    public function execute(mixed $vars): bool
+    public function execute($vars): bool
     {
         if ($this->impersonating()) {
             return false;
@@ -40,11 +41,11 @@ class ClientAreaPageLogin extends HookExecutionStructure
             return null;
         }
 
-        $now = now();
+        $now     = new DateTime();
+        $compare = new DateTime($log->date);
 
         if (
-            $now->parse($log->date)
-                ->diffInMinutes($now) > 2
+            $compare->diff($now)->i > 2
         ) {
             return null;
         }

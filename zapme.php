@@ -33,7 +33,7 @@ function zapme_activate(): array
     }
 
     try {
-        $now    = now()->format('Y-m-d H:i:s');
+        $now    = date('Y-m-d H:i:s');
         $schema = Capsule::schema();
 
         foreach (['mod_zapme', 'mod_zapme_templates', 'mod_zapme_logs'] as $table) {

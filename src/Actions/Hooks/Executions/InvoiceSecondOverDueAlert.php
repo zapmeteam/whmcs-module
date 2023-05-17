@@ -7,7 +7,7 @@ use ZapMe\Whmcs\Helper\Hooks\HookExecutionStructure;
 
 class InvoiceSecondOverDueAlert extends HookExecutionStructure
 {
-    public function execute(mixed $vars): bool
+    public function execute($vars): bool
     {
         $invoice = Capsule::table('tblinvoices')
             ->where('id', $vars['relid'])

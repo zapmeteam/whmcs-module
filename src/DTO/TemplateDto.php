@@ -2,8 +2,6 @@
 
 namespace ZapMe\Whmcs\DTO;
 
-use Illuminate\Support\Carbon;
-
 class TemplateDto
 {
     /** @var int|null */
@@ -24,10 +22,10 @@ class TemplateDto
     /** @var object|null */
     public $structure = null;
 
-    /** @var Carbon|null */
+    /** @var string|null */
     public $createdAt = null;
 
-    /** @var Carbon|null */
+    /** @var string|null */
     public $updatedAt = null;
 
     public function __construct(
@@ -37,8 +35,8 @@ class TemplateDto
         ?string $message = null,
         ?bool $isActive = null,
         ?object $structure = null,
-        ?Carbon $createdAt = null,
-        ?Carbon $updatedAt = null
+        ?string $createdAt = null,
+        ?string $updatedAt = null
     ) {
         $this->id        = $id;
         $this->name      = $name;

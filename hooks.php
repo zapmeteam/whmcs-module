@@ -120,7 +120,7 @@ add_hook('AdminClientServicesTabFields', 1, function ($vars) use ($module) {
 
     $template = (new Template('AfterModuleReady'))->dto()->first();
 
-    if (!optional($template)->isActive) {
+    if (!$template->isActive) {
         return;
     }
 

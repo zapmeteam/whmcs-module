@@ -22,7 +22,7 @@ class HookExecution
         $this->template = $template;
     }
 
-    public function dispatch(mixed $vars): bool
+    public function dispatch($vars): bool
     {
         if ($this->template && !$this->template->isActive) {
             logActivity("[ZapMe][Hook: {$this->template->code}] Envio Abortado. Template Desabilitado.");
