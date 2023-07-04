@@ -112,7 +112,7 @@ class WhmcsClient
         }
 
         return array_values(array_filter($fields, function ($field) use ($id) {
-            if ((int) $field['fieldid'] === $id) {
+            if ((int)$field['fieldid'] === $id) {
                 return $field;
             }
         }))[0]['value'] ?? null;

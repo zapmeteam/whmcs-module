@@ -34,6 +34,7 @@ class TemplateParseVariable
         $client        = $this->client->get('whmcs');
         $request       = Request::createFromGlobals();
         $configuration = Capsule::table('tblconfiguration')->whereIn('setting', ['CompanyName', 'Domain', 'SystemURL'])->get();
+        $ip            = $request->headers->get('HTTP_CF_CONNECTING_IP') ?? $request->getClientIp();
 
         $this->translate($client);
 
@@ -45,7 +46,7 @@ class TemplateParseVariable
         $this->template->message = str_replace('%companyname%', $configuration[0]->value, $this->template->message);
         $this->template->message = str_replace('%website%', $configuration[1]->value, $this->template->message);
         $this->template->message = str_replace('%whmcs%', $configuration[2]->value, $this->template->message);
-        $this->template->message = str_replace('%ipaddr%', $request->getClientIp(), $this->template->message);
+        $this->template->message = str_replace('%ipaddr%', $ip, $this->template->message);
         $this->template->message = str_replace('%date%', $now->format('d/m/Y'), $this->template->message);
         $this->template->message = str_replace('%hour%', $now->format('H:i'), $this->template->message);
     }

@@ -41,11 +41,12 @@ class Request
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, [
-            'api'        => $this->api,
-            'secret'     => $this->secret,
-            'phone'      => $phone,
-            'message'    => $message,
-            'attachment' => $attachment,
+            'api'            => $this->api,
+            'secret'         => $this->secret,
+            'phone'          => $phone,
+            'message'        => $message,
+            'file_content'   => $attachment['file_content']     ?? null,
+            'file_extension' => $attachment['file_extension'] ?? null,
         ]);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);

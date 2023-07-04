@@ -33,15 +33,13 @@ class PagHiperBillet
 
     private function parse(object $invoice): array
     {
-        if (
-            !paghiper_active() || strpos($invoice->paymentmethod, 'paghiper') === false || $invoice->total < 3.00
-        ) {
+        if (!paghiper_active() || $invoice->paymentmethod !== 'paghiper' || $invoice->total < 3.00) {
             $this->erase();
 
             return [];
         }
 
-        [$code, $pdf] = $this->create($invoice);
+        [$code, $pdf] = $this->extract($invoice);
 
         if (!$code || !$pdf) {
             $this->erase();
@@ -51,13 +49,13 @@ class PagHiperBillet
 
         $this->template->message = str_replace('%paghiper_codigo%', $code, $this->template->message);
 
-        if (($generate = strpos($this->template->message, '%paghiper_boleto%')) === false) {
+        if (strpos($this->template->message, '%paghiper_boleto%') === false) {
             $this->erase('boleto');
 
             return [];
         }
 
-        $billet = $generate ? $this->pdf($pdf) : null;
+        $billet = $this->pdf($pdf);
 
         if (!$billet) {
             return [];
@@ -71,7 +69,7 @@ class PagHiperBillet
         ];
     }
 
-    private function create(object $invoice): array
+    private function extract(object $invoice): array
     {
         try {
             $whmcs  = rtrim(App::getSystemUrl(), "/");
@@ -81,8 +79,8 @@ class PagHiperBillet
         }
 
         return [
-            $billet['bank_slip']['digitable_line'] ?? null,
-            $billet['bank_slip']['url_slip_pdf']   ?? null,
+            $billet['bank_slip']['digitable_line'] ?? $billet['digitable_line'] ?? null,
+            $billet['bank_slip']['url_slip_pdf']   ?? $billet['url_slip_pdf'] ?? null,
         ];
     }
 
@@ -99,9 +97,9 @@ class PagHiperBillet
         return $billet;
     }
 
-    private function erase(string $what = null): void
+    private function erase(?string $specific = null): void
     {
-        $words = $what ? ["%paghiper_{$what}%"] : ['%paghiper_codigo%', '%paghiper_boleto%'];
+        $words = $specific ? ["%paghiper_{$specific}%"] : ['%paghiper_codigo%', '%paghiper_boleto%'];
 
         $this->template->message = str_replace($words, '', $this->template->message);
     }

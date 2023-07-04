@@ -125,7 +125,7 @@ function zapme_deactivate(): array
 
 function zapme_output($vars): void
 {
-    $ignored = ['configuration', 'manualmessage', 'invoicereminder'];
+    $ignored = ['configuration', 'manualmessage', 'serviceready', 'invoicereminder'];
 
     $request = Request::createFromGlobals();
 
