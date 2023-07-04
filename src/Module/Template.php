@@ -3,7 +3,6 @@
 namespace ZapMe\Whmcs\Module;
 
 use DateTime;
-use Illuminate\Support\Str;
 use WHMCS\Database\Capsule;
 use ZapMe\Whmcs\DTO\TemplateDto;
 use Illuminate\Support\Collection;
@@ -32,7 +31,7 @@ class Template
 
     public function dto(): Collection
     {
-        return $this->template->transform(function (object $item) {
+        return (new Collection($this->template))->transform(function (object $item) {
             $item = $this->structure($item);
 
             return (new TemplateDto(
@@ -52,15 +51,13 @@ class Template
     {
         collect(glob(ZAPME_MODULE_PATH . "/src/Helper/Template/Structures/*.php"))
             ->filter(function (string $file) use (&$template) {
-                return Str::of($file)->contains($template->code);
+                return strpos($file, $template->code) !== false;
             })
             ->each(function (string $file) use (&$template) {
-                $class = Str::of($file)
-                    ->afterLast('/')
-                    ->beforeLast('.php')
-                    ->__toString();
+                $file = basename($file);
+                $file = str_replace('.php', '', $file);
 
-                $class               = "ZapMe\\Whmcs\\Helper\\Template\\Structures\\" . $class;
+                $class               = "ZapMe\\Whmcs\\Helper\\Template\\Structures\\" . $file;
                 $template->structure = (new $class())::execute();
             });
 

@@ -4,7 +4,6 @@ namespace ZapMe\Whmcs\Module;
 
 use DateTime;
 use WHMCS\User\Client;
-use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use ZapMe\Whmcs\DTO\ConfigurationDto;
 
@@ -61,9 +60,13 @@ class WhmcsClient
             return true;
         }
 
-        $value = Str::of($fields->firstWhere('id', '=', optional($this->configuration->clientConsentFieldId)->value ?? ''))
-            ->lower()
-            ->replace('ã', 'a');
+        $value = $fields->where('id', '=', optional($this->configuration->clientConsentFieldId)->value ?? '')->first();
+
+        if (!$value) {
+            return true;
+        }
+
+        $value = str_replace('ã', 'a', strtolower($value));
 
         return in_array($value, ['s', 'sim']);
     }
@@ -78,7 +81,7 @@ class WhmcsClient
             return $original;
         }
 
-        $value = $fields->firstWhere('id', '=', optional($this->configuration->clientPhoneFieldId)->value ?? null);
+        $value = $fields->where('id', '=', optional($this->configuration->clientPhoneFieldId)->value ?? null)->first();
 
         if (!$value) {
             return $original;

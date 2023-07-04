@@ -2,15 +2,15 @@
 
 namespace ZapMe\Whmcs\Traits;
 
-use ZapMeSdk\Base as ZapMeSdk;
+use ZapMe\Whmcs\Module\Request;
 use ZapMe\Whmcs\DTO\ConfigurationDto;
-use ZapMe\Whmcs\Actions\Sdk\CreateSdkInstance;
+use ZapMe\Whmcs\Actions\Sdk\CreateRequestInstance;
 
 trait InteractWithModuleActions
 {
-    public function sdk(?ConfigurationDto $configuration = null): ZapMeSdk
+    public function request(?ConfigurationDto $configuration = null): Request
     {
-        return CreateSdkInstance::execute($configuration);
+        return CreateRequestInstance::execute($configuration);
     }
 
     public function success(string $message): string

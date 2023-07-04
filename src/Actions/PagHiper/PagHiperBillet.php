@@ -4,7 +4,6 @@ namespace ZapMe\Whmcs\Actions\PagHiper;
 
 use App;
 use Exception;
-use Illuminate\Support\Str;
 use ZapMe\Whmcs\DTO\TemplateDto;
 
 class PagHiperBillet
@@ -35,7 +34,7 @@ class PagHiperBillet
     private function parse(object $invoice): array
     {
         if (
-            !paghiper_active() || !Str::of($invoice->paymentmethod)->contains('paghiper') || $invoice->total < 3.00
+            !paghiper_active() || strpos($invoice->paymentmethod, 'paghiper') === false || $invoice->total < 3.00
         ) {
             $this->erase();
 
@@ -52,7 +51,7 @@ class PagHiperBillet
 
         $this->template->message = str_replace('%paghiper_codigo%', $code, $this->template->message);
 
-        if (($generate = Str::of($this->template->message)->contains('%paghiper_boleto%')) === false) {
+        if (($generate = strpos($this->template->message, '%paghiper_boleto%')) === false) {
             $this->erase('boleto');
 
             return [];

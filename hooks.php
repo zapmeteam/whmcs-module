@@ -3,7 +3,6 @@
 require __DIR__ . '/vendor/autoload.php';
 
 use WHMCS\Service\Service;
-use Illuminate\Support\Str;
 use WHMCS\Database\Capsule;
 use ZapMe\Whmcs\Module\Template;
 use ZapMe\Whmcs\Module\Configuration;
@@ -77,14 +76,13 @@ add_hook('DailyCronJob', 1, function ($vars) {
 });
 
 add_hook('EmailPreSend', 1, function ($vars) {
-    $message    = $vars['messagename'];
-    $stringable = Str::of($message);
+    $message = $vars['messagename'];
 
-    if (!$stringable->contains('Invoice Overdue Notice')) {
+    if (strpos($message, 'Invoice Overdue Notice') === false) {
         return;
     }
 
-    $hook = ucfirst($stringable->explode(' ')->first());
+    $hook = ucfirst(explode(' ', $message)[0]);
 
     if (!in_array($hook, ['First', 'Second', 'Third'])) {
         return;

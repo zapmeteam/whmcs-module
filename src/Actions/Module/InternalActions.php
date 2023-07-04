@@ -19,7 +19,7 @@ class InternalActions
         $secret = $post->get('secret');
 
         try {
-            $response = $this->sdk()
+            $response = $this->request()
                 ->withApi($_ENV['ZAPME_MODULE_API_KEY'] ?? $api)
                 ->withSecret($_ENV['ZAPME_MODULE_API_SECRET'] ?? $secret)
                 ->accountStatus();

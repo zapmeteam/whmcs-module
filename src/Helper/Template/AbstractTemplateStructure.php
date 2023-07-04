@@ -2,8 +2,6 @@
 
 namespace ZapMe\Whmcs\Helper\Template;
 
-use Illuminate\Support\Str;
-
 abstract class AbstractTemplateStructure
 {
     public static function execute(): object
@@ -40,7 +38,7 @@ abstract class AbstractTemplateStructure
         $paghiper = paghiper_active();
 
         foreach ($variables as $key => $value) {
-            if (!$paghiper && Str::of($key)->contains('paghiper')) {
+            if (!$paghiper && strpos($key, 'paghiper') !== false) {
                 continue;
             }
 

@@ -4,7 +4,6 @@ namespace ZapMe\Whmcs\Actions\Hooks\Executions;
 
 use DateTime;
 use WHMCS\User\Client;
-use Illuminate\Support\Str;
 use WHMCS\Database\Capsule;
 use Illuminate\Support\Collection;
 use ZapMe\Whmcs\Helper\Hooks\HookExecutionStructure;
@@ -37,7 +36,7 @@ class ClientAreaPageLogin extends HookExecutionStructure
             ->latest('date')
             ->first();
 
-        if (!$log || !Str::of($log->description)->contains('Failed Login Attempt')) {
+        if (!$log || strpos($log->description, 'Failed Login Attempt') === false) {
             return null;
         }
 

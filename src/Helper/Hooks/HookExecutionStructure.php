@@ -3,21 +3,21 @@
 namespace ZapMe\Whmcs\Helper\Hooks;
 
 use Throwable;
-use ZapMeSdk\Base as ZapMeSdk;
+use ZapMe\Whmcs\Module\Request;
 use ZapMe\Whmcs\DTO\TemplateDto;
 use Illuminate\Support\Collection;
 use ZapMe\Whmcs\Module\WhmcsClient;
 use ZapMe\Whmcs\DTO\ConfigurationDto;
 use ZapMe\Whmcs\Module\Configuration;
 use ZapMe\Whmcs\Actions\Log\CreateModuleLog;
-use ZapMe\Whmcs\Actions\Sdk\CreateSdkInstance;
+use ZapMe\Whmcs\Actions\Sdk\CreateRequestInstance;
 use ZapMe\Whmcs\Actions\PagHiper\PagHiperBillet;
 use ZapMe\Whmcs\Helper\Template\TemplateParseVariable;
 
 class HookExecutionStructure
 {
-    /** @var ZapMeSdk */
-    protected $zapme;
+    /** @var Request */
+    protected $request;
 
     /** @var ConfigurationDto */
     protected $configuration;
@@ -49,7 +49,7 @@ class HookExecutionStructure
         ?int $whmcs = null
     ) {
         $this->configuration = (new Configuration())->dto();
-        $this->zapme         = CreateSdkInstance::execute($this->configuration);
+        $this->request       = CreateRequestInstance::execute($this->configuration);
         $this->hook          = $hook;
         $this->template      = $template;
         $this->whmcs         = $whmcs;
@@ -73,7 +73,7 @@ class HookExecutionStructure
         }
 
         try {
-            $this->zapme->sendMessage($this->client->get('phone'), $this->template->message, $this->attachment);
+            $this->request->sendMessage($this->client->get('phone'), $this->template->message, $this->attachment);
 
             if (!$this->configuration->logSystem) {
                 return;
@@ -110,7 +110,7 @@ class HookExecutionStructure
             $message
         );
 
-        if (!getenv('ZAPME_MODULE_ACTIVITY_LOG', true)) {
+        if ((bool)$_ENV['ZAPME_MODULE_ACTIVITY_LOG'] === false) {
             return;
         }
 

@@ -54,7 +54,7 @@ class ExternalActions
         $message = str_replace('%company%', $client->companyName, $message);
 
         try {
-            $this->sdk($configuration)->sendMessage($whmcs->get('phone'), $message);
+            $this->request($configuration)->sendMessage($whmcs->get('phone'), $message);
 
             if ($configuration->logSystem) {
                 CreateModuleLog::execute(
