@@ -61,10 +61,7 @@ class InternalActions
         try {
             $capsule = Capsule::table('mod_zapme_templates');
 
-            if (
-                $capsule->where('id', '=', $template)
-                    ->doesntExist()
-            ) {
+            if (!$capsule->where('id', '=', $template)->exists()) {
                 return $this->danger("<b>Ops!</b> O template solicitado para edição não existe no banco de dados.");
             }
 

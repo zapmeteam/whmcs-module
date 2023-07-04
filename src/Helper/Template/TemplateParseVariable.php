@@ -42,9 +42,9 @@ class TemplateParseVariable
         $this->template->message = str_replace('%lastname%', $client->lastname, $this->template->message);
         $this->template->message = str_replace('%email%', $client->email, $this->template->message);
         $this->template->message = str_replace('%company%', $client->companyName, $this->template->message);
-        $this->template->message = str_replace('%website%', $configuration->firstWhere('setting', '=', 'Domain')->value, $this->template->message);
-        $this->template->message = str_replace('%companyname%', $configuration->firstWhere('setting', '=', 'CompanyName')->value, $this->template->message);
-        $this->template->message = str_replace('%whmcs%', $configuration->firstWhere('setting', '=', 'SystemURL')->value, $this->template->message);
+        $this->template->message = str_replace('%companyname%', $configuration[0]->value, $this->template->message);
+        $this->template->message = str_replace('%website%', $configuration[1]->value, $this->template->message);
+        $this->template->message = str_replace('%whmcs%', $configuration[2]->value, $this->template->message);
         $this->template->message = str_replace('%ipaddr%', $request->getClientIp(), $this->template->message);
         $this->template->message = str_replace('%date%', $now->format('d/m/Y'), $this->template->message);
         $this->template->message = str_replace('%hour%', $now->format('H:i'), $this->template->message);

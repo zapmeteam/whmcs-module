@@ -42,14 +42,18 @@ class WhmcsClient
             return null;
         }
 
-        return collect([
+        $collect = collect([
             'whmcs'   => $this->client,
             'phone'   => $this->phone(),
             'consent' => $this->consent(),
             'new'     => $this->new(),
-        ])->when($index, function (Collection $collection) use ($index) {
-            return $collection->get($index);
-        });
+        ]);
+
+        if ($index) {
+            return $collect->get($index);
+        }
+
+        return $collect;
     }
 
     private function consent(): bool
@@ -60,7 +64,7 @@ class WhmcsClient
             return true;
         }
 
-        $value = $fields->where('id', '=', optional($this->configuration->clientConsentFieldId)->value ?? '')->first();
+        $value = $this->find($fields->toArray(), $this->configuration->clientConsentFieldId);
 
         if (!$value) {
             return true;
@@ -81,7 +85,7 @@ class WhmcsClient
             return $original;
         }
 
-        $value = $fields->where('id', '=', optional($this->configuration->clientPhoneFieldId)->value ?? null)->first();
+        $value = $this->find($fields->toArray(), $this->configuration->clientPhoneFieldId);
 
         if (!$value) {
             return $original;
@@ -99,5 +103,18 @@ class WhmcsClient
         $compare = new DateTime($this->client->created_at);
 
         return $compare->diff($now)->i <= 1;
+    }
+
+    private function find(array $fields, int $id): ?string
+    {
+        if (empty($fields)) {
+            return null;
+        }
+
+        return array_values(array_filter($fields, function ($field) use ($id) {
+            if ((int) $field['fieldid'] === $id) {
+                return $field;
+            }
+        }))[0]['value'] ?? null;
     }
 }
