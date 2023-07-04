@@ -112,7 +112,10 @@ add_hook('AdminInvoicesControlsOutput', 1, function ($vars) use ($module) {
 });
 
 add_hook('AdminClientServicesTabFields', 1, function ($vars) use ($module) {
-    if (!$module || !$module->isActive || Service::find($vars['id'])->domainStatus !== 'Active') {
+    $service = Service::find($vars['id']);
+    $user    = $service->clientId;
+
+    if (!$module || !$module->isActive || $service->domainStatus !== 'Active') {
         return;
     }
 
@@ -124,7 +127,7 @@ add_hook('AdminClientServicesTabFields', 1, function ($vars) use ($module) {
 
     echo "<div class=\"row\">
             <div class=\"col-md-1\" style=\"margin-bottom: 10px !important;\">
-                <a href=\"addonmodules.php?module=zapme&action=serviceready&type=external&service={$vars['id']}\" class=\"btn btn-warning\">
+                <a href=\"addonmodules.php?module=zapme&action=serviceready&type=external&userid={$user}\&service={$vars['id']}\" class=\"btn btn-warning\">
                     <i class=\"fa fa-bell\"></i>
                     Serviço Pronto
                 </a>

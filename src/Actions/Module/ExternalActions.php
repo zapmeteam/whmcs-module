@@ -21,6 +21,10 @@ class ExternalActions
             ->where('id', '=', $request->get('invoiceid'))
             ->first();
 
+        if (!(new WhmcsClient($invoice->userid))->get('consent')) {
+            return $this->danger("Ops! <b>O procedimento não foi realizado!</b> O cliente não deseja receber alertas via WhatsApp.");
+        }
+
         if ($invoice->status !== 'Unpaid') {
             return $this->danger("Ops! <b>O procedimento não foi realizado!</b> A fatura não está em aberto.");
         }
@@ -75,6 +79,10 @@ class ExternalActions
     public function sendServiceReadyMessage(Request $request): string
     {
         $result = (new HookExecution('AfterModuleReady'))->dispatch($request->get('service'));
+
+        if (!(new WhmcsClient($request->get('userid')))->get('consent')) {
+            return $this->danger("Ops! <b>O procedimento não foi realizado!</b> O cliente não deseja receber alertas via WhatsApp.");
+        }
 
         if ($result) {
             return $this->success("Tudo certo! <b>Procedimento efetuado com sucesso.</b>");
