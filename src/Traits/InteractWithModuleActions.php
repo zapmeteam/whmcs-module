@@ -2,15 +2,15 @@
 
 namespace ZapMe\Whmcs\Traits;
 
-use ZapMe\Whmcs\Module\Request;
+use ZapMe\Whmcs\Module\Api;
 use ZapMe\Whmcs\DTO\ConfigurationDto;
-use ZapMe\Whmcs\Actions\Sdk\CreateRequestInstance;
+use ZapMe\Whmcs\Actions\Sdk\CreateApiInstance;
 
 trait InteractWithModuleActions
 {
-    public function request(?ConfigurationDto $configuration = null): Request
+    public function request(?ConfigurationDto $configuration = null): Api
     {
-        return CreateRequestInstance::execute($configuration);
+        return CreateApiInstance::execute($configuration);
     }
 
     public function success(string $message): string

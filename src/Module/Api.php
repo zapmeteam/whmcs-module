@@ -2,7 +2,7 @@
 
 namespace ZapMe\Whmcs\Module;
 
-class Request
+class Api
 {
     /** @var string */
     protected $url;
@@ -45,7 +45,7 @@ class Request
             'secret'         => $this->secret,
             'phone'          => $phone,
             'message'        => $message,
-            'file_content'   => $attachment['file_content']     ?? null,
+            'file_content'   => $attachment['file_content']   ?? null,
             'file_extension' => $attachment['file_extension'] ?? null,
         ]);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);

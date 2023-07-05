@@ -3,21 +3,21 @@
 namespace ZapMe\Whmcs\Helper\Hooks;
 
 use Throwable;
-use ZapMe\Whmcs\Module\Request;
+use ZapMe\Whmcs\Module\Api;
 use ZapMe\Whmcs\DTO\TemplateDto;
 use Illuminate\Support\Collection;
 use ZapMe\Whmcs\Module\WhmcsClient;
 use ZapMe\Whmcs\DTO\ConfigurationDto;
 use ZapMe\Whmcs\Module\Configuration;
 use ZapMe\Whmcs\Actions\Log\CreateModuleLog;
+use ZapMe\Whmcs\Actions\Sdk\CreateApiInstance;
 use ZapMe\Whmcs\Actions\PagHiper\PagHiperBillet;
-use ZapMe\Whmcs\Actions\Sdk\CreateRequestInstance;
 use ZapMe\Whmcs\Helper\Template\TemplateParseVariable;
 
 class HookExecutionStructure
 {
-    /** @var Request */
-    protected $request;
+    /** @var Api */
+    protected $api;
 
     /** @var ConfigurationDto */
     protected $configuration;
@@ -52,7 +52,7 @@ class HookExecutionStructure
         $this->template      = $template;
         $this->whmcs         = $whmcs;
         $this->configuration = (new Configuration())->dto();
-        $this->request       = CreateRequestInstance::execute($this->configuration);
+        $this->api           = CreateApiInstance::execute($this->configuration);
     }
 
     public function impersonating(): bool
@@ -73,7 +73,7 @@ class HookExecutionStructure
         }
 
         try {
-            $this->request->sendMessage($this->client->get('phone'), $this->template->message, $this->attachment);
+            $this->api->sendMessage($this->client->get('phone'), $this->template->message, $this->attachment);
 
             if (!$this->configuration->logSystem) {
                 return;

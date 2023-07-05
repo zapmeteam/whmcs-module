@@ -22,7 +22,7 @@ class DailyCronJob extends HookExecutionStructure
         }
 
         try {
-            $response = $this->zapme->accountStatus();
+            $response = $this->api->accountStatus();
 
             if (!data_get($response, 'status')) {
                 throw new Exception('Não foi possível validar a API.');
