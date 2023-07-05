@@ -34,7 +34,7 @@ class TemplateParseVariable
         $client        = $this->client->get('whmcs');
         $request       = Request::createFromGlobals();
         $configuration = Capsule::table('tblconfiguration')->whereIn('setting', ['CompanyName', 'Domain', 'SystemURL'])->get();
-        $ip            = $request->headers->get('HTTP_CF_CONNECTING_IP') ?? $request->getClientIp();
+        $ip            = $request->server->get('HTTP_CF_CONNECTING_IP', $request->getClientIp());
 
         $this->translate($client);
 

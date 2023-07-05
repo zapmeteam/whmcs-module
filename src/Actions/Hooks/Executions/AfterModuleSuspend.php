@@ -9,7 +9,7 @@ class AfterModuleSuspend extends HookExecutionStructure
 {
     public function execute($vars): bool
     {
-        $service      = Service::find($vars['service']);
+        $service      = Service::find($vars['params']['serviceid']);
         $this->client = $this->client($service->userid);
 
         $this->parse(['service' => $service]);

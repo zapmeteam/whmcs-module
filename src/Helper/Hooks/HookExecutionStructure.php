@@ -48,11 +48,11 @@ class HookExecutionStructure
         ?TemplateDto $template = null,
         ?int $whmcs = null
     ) {
-        $this->configuration = (new Configuration())->dto();
-        $this->request       = CreateRequestInstance::execute($this->configuration);
         $this->hook          = $hook;
         $this->template      = $template;
         $this->whmcs         = $whmcs;
+        $this->configuration = (new Configuration())->dto();
+        $this->request       = CreateRequestInstance::execute($this->configuration);
     }
 
     public function impersonating(): bool
