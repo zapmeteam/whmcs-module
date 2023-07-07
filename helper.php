@@ -20,7 +20,7 @@ if (!function_exists('throwlable')) {
         $file   = explode('zapme/whmcs', $source);
         $file   = $file[1] ?? $source;
 
-        logActivity("[ZapMe] Erro: {$exception->getMessage()} | {$file}: {$exception->getLine()}");
+        logActivity("[ZapMe] Erro: {$exception->getMessage()} | {$file}: {$exception->getLine()} | {$exception->getTraceAsString()}");
     }
 }
 

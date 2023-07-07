@@ -16,7 +16,7 @@ class DailyCronJob extends HookExecutionStructure
         if (
             $this->configuration->logAutoRemove && $date === 1
         ) {
-            $this->log("Limpeza de Logs");
+            $this->log("Limpeza de Logs", false);
 
             Capsule::table('mod_zapme_logs')->truncate();
         }
@@ -35,7 +35,7 @@ class DailyCronJob extends HookExecutionStructure
                     'updated_at' => date('Y-m-d H:i:s'),
                 ]);
 
-            $this->log("Atualização de Dados do Serviço");
+            $this->log("Atualização de Dados do Serviço", false);
         } catch (Throwable $e) {
             throwlable($e);
         }

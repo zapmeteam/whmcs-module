@@ -96,19 +96,23 @@ class HookExecutionStructure
             ->get($index);
     }
 
-    protected function log(string $message): void
+    protected function log(string $message, bool $parse = true): void
     {
-        $client = $this->client->get('whmcs');
+        $client = null;
 
-        if (!$client) {
-            return;
+        if ($parse) {
+            $client = $this->client->get('whmcs');
+
+            if (!$client) {
+                return;
+            }
+
+            $message = str_replace(
+                ['{id}', '{name}', '{hook}'],
+                [$client->id, $client->fullName, $this->hook],
+                $message
+            );
         }
-
-        $message = str_replace(
-            ['{id}', '{name}', '{hook}'],
-            [$client->id, $client->fullName, $this->hook],
-            $message
-        );
 
         if ((bool)$_ENV['ZAPME_MODULE_ACTIVITY_LOG'] === false) {
             return;
