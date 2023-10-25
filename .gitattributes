@@ -5,5 +5,5 @@
 *.md diff=markdown
 *.php diff=php
 
-/tools                 export-ignore
+/tools                  export-ignore
 .php-cs-fixer.dist.php  export-ignore
