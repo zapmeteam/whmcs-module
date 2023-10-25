@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
-        'name' => 'zapmeteam/whmcs',
+        'name' => 'zapmeteam/whmcs-module',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '77d8859d019f8320e891e1394a67019ef827f9b9',
+        'reference' => '97e75e7cf171e9dd39b8b1f5ef28b738b63ffcff',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'graham-campbell/result-type' => array(
             'pretty_version' => '1.1.x-dev',
             'version' => '1.1.9999999.9999999-dev',
-            'reference' => 'a878d45c1914464426dc94da61c9e1d36ae262a8',
+            'reference' => '60c5f57bee20beb1a4a3cc5fe9170de4a64521d2',
             'type' => 'library',
             'install_path' => __DIR__ . '/../graham-campbell/result-type',
             'aliases' => array(),
@@ -22,7 +22,7 @@
         'phpoption/phpoption' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'dc5ff11e274a90cc1c743f66c9ad700ce50db9ab',
+            'reference' => 'dd3a383e599f49777d8b628dadbb90cae435b87e',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpoption/phpoption',
             'aliases' => array(
@@ -33,40 +33,40 @@
         'symfony/polyfill-ctype' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '6fd1b9a79f6e3cf65f9e679b23af304cd9e010d4',
+            'reference' => 'ea208ce43cbb04af6867b4fdddb1bdbf84cc28cb',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/polyfill-ctype',
             'aliases' => array(
-                0 => '1.26.x-dev',
+                0 => '1.28.x-dev',
             ),
             'dev_requirement' => false,
         ),
         'symfony/polyfill-mbstring' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '9344f9cb97f3b19424af1a21a3b0e75b0a7d8d7e',
+            'reference' => 'f9c7affe77a00ae32ca127ca6833d034e6d33f25',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/polyfill-mbstring',
             'aliases' => array(
-                0 => '1.26.x-dev',
+                0 => '1.28.x-dev',
             ),
             'dev_requirement' => false,
         ),
         'symfony/polyfill-php80' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'cfa0ae98841b9e461207c13ab093d76b0fa7bace',
+            'reference' => '6caa57379c4aec19c0a12a38b59b26487dcfe4b5',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/polyfill-php80',
             'aliases' => array(
-                0 => '1.26.x-dev',
+                0 => '1.28.x-dev',
             ),
             'dev_requirement' => false,
         ),
         'symfony/var-dumper' => array(
             'pretty_version' => '5.4.x-dev',
             'version' => '5.4.9999999.9999999-dev',
-            'reference' => 'b8f306d7b8ef34fb3db3305be97ba8e088fb4861',
+            'reference' => '4684507543cf80a3819bb36dc868a6ff35a5eec7',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/var-dumper',
             'aliases' => array(),
@@ -75,27 +75,18 @@
         'vlucas/phpdotenv' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'dd46c263f277573244c517bac125a78f67b83a98',
+            'reference' => '1a7ea2afc49c3ee6d87061f5a233e3a035d0eae7',
             'type' => 'library',
             'install_path' => __DIR__ . '/../vlucas/phpdotenv',
             'aliases' => array(
-                0 => '5.4.x-dev',
+                0 => '5.5.x-dev',
             ),
             'dev_requirement' => false,
         ),
-        'zapmeteam/php-sdk' => array(
-            'pretty_version' => '1.0.0',
-            'version' => '1.0.0.0',
-            'reference' => 'dcc14f5642b051e403e47e03581a27a1c5f33320',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../zapmeteam/php-sdk',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'zapmeteam/whmcs' => array(
+        'zapmeteam/whmcs-module' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '77d8859d019f8320e891e1394a67019ef827f9b9',
+            'reference' => '97e75e7cf171e9dd39b8b1f5ef28b738b63ffcff',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

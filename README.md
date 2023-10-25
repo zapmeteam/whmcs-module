@@ -10,4 +10,4 @@ To learn how to use it, see the documentation:
 https://docs.zapme.com.br/tutoriais/whmcs.html
 
 ### Contributing
-You can contribute to the module by submitting a PR with some tweak, improvement, increment or fix. <b>All PR submitted will be analyzed and can be accepted or rejected.</b>
+You can contribute to the module by submitting a PR with some tweak, improvement, increment or fix. <b>All PR submitted will be analyzed and can be accepted or rejected by the ZapMe development team.</b>

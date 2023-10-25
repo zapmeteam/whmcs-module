@@ -10,5 +10,5 @@ return array(
     'a4a119a56e50fbb293281d9a48007e0e' => $vendorDir . '/symfony/polyfill-php80/bootstrap.php',
     '320cde22f66dd4f5d3fd621d3e88b98f' => $vendorDir . '/symfony/polyfill-ctype/bootstrap.php',
     '667aeda72477189d0494fecd327c3641' => $vendorDir . '/symfony/var-dumper/Resources/functions/dump.php',
-    '6d2fd5cacdbbcc2ddd514868446191f5' => $baseDir . '/helper.php',
+    '876f2f2f80b8a2adb3351f83145f286e' => $baseDir . '/helper.php',
 );
